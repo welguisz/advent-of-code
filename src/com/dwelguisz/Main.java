@@ -13,10 +13,30 @@ public class Main {
 
 
     public static void main(String[] args) {
-        List<Integer> depths = readFile("/home/dwelguisz/advent_of_coding/src/resources/input1.txt");
-        List<Integer> sums = calculateWindow(depths);
-        int increased = calculateIncreases(sums);
-        System.out.println(String.format("number of increases: %d", increased));
+//        List<Integer> depths = readFile("/home/dwelguisz/advent_of_coding/src/resources/input1.txt");
+//        List<Integer> sums = calculateWindow(depths);
+//        int increased = calculateIncreases(sums);
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/input2.txt");
+        System.out.println(String.format("Multiplied depth and horizontal: %d", calculateLocation(instructions)));
+    }
+
+    static private Integer calculateLocation(List<String> instructions) {
+        int horizontal = 0;
+        int depth = 0;
+        int aim = 0;
+        for(int i = 0; i < instructions.size(); i++) {
+            String[] parseInstruction = instructions.get(i).split(" ");
+            int step = parseInt(parseInstruction[1]);
+            if ("forward".equals(parseInstruction[0])) {
+                horizontal += step;
+                depth = depth + (step*aim);
+            } else if ("down".equals(parseInstruction[0])) {
+                aim += step;
+            } else if ("up".equals(parseInstruction[0])) {
+                aim -= step;
+            }
+        }
+        return horizontal*depth;
     }
 
     static private Integer calculateIncreases(List<Integer> values) {
@@ -34,14 +54,14 @@ public class Main {
         return increased;
     }
 
-    static private List<Integer> readFile(String fileName) {
-        List<Integer> numbers = new ArrayList<>();
+    static private List<String> readFile(String fileName) {
+        List<String> instructions = new ArrayList<>();
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-            stream.forEach(line -> numbers.add(parseInt(line)));
+            stream.forEach(line -> instructions.add(line));
         } catch (IOException e) {
             System.out.println("Exception caught\n" + e);
         }
-        return numbers;
+        return instructions;
     }
 
     static private List<Integer> calculateWindow(List<Integer> depths) {
