@@ -4,25 +4,49 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.Integer.parseInt;
 
 public class Main {
 
+    static private List<Integer> numbersCalled;
+    static private List<BingoCard> bingoCards;
+    static private int winner = -1;
 
     public static void main(String[] args) {
 //        List<Integer> depths = readFile("/home/dwelguisz/advent_of_coding/src/resources/input1.txt");
 //        List<Integer> sums = calculateWindow(depths);
 //        int increased = calculateIncreases(sums);
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/input3.txt");
-        int oxygen = getRating(instructions, '1', true);
-        int carbondioxide = getRating(instructions, '0', false);
-        System.out.println(String.format("Oxygen: %d", oxygen));
-        System.out.println(String.format("Carbon Dioxide: %d", carbondioxide));
-        System.out.println(String.format("Multiplied oxygen and carbon dioxide: %d", oxygen * carbondioxide));
+        readFile("/home/dwelguisz/advent_of_coding/src/resources/input4.txt");
+        int pos = 0;
+        while (winner < 0) {
+            List<Boolean> status = new ArrayList<>();
+            for (int i = 0; i < bingoCards.size(); i++) {
+                status.add(false);
+            }
+            for (int i = 0; i < bingoCards.size(); i++) {
+                status.set(i,bingoCards.get(i).doesCardHaveNumber(numbersCalled.get(pos)));
+            }
+            if (pos >= 5) {
+                for(int i = 0; i < bingoCards.size(); i++) {
+                    if(status.get(i)) {
+                        int bingoCardSum = bingoCards.get(i).sumOfNonMarkedValues();
+                        int lastNumber = numbersCalled.get(pos);
+                        winner = bingoCardSum * lastNumber;
+                        System.out.println(String.format("Bingo Card Sum:     %d", bingoCardSum));
+                        System.out.println(String.format("Last Number Called: %d", lastNumber));
+                        System.out.println(String.format("Winner Number:      %d", winner));
+                        break;
+                    }
+                }
+            }
+            pos++;
+        }
     }
 
     static private Integer getRating(final List<String> binaryValues, final char midVal, final boolean oxygen) {
@@ -139,14 +163,34 @@ public class Main {
         return increased;
     }
 
-    static private List<String> readFile(String fileName) {
+    static private void readFile(String fileName) {
         List<String> instructions = new ArrayList<>();
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
             stream.forEach(line -> instructions.add(line));
         } catch (IOException e) {
             System.out.println("Exception caught\n" + e);
         }
-        return instructions;
+        List<List<Integer>> card = new ArrayList<>();
+        bingoCards = new ArrayList<>();
+        for (int i = 0; i < instructions.size(); i++) {
+            if (i == 0) {
+                numbersCalled = Arrays.stream(instructions.get(0).split(",")).map(str -> parseInt(str)).collect(Collectors.toList());
+            } else if (instructions.get(i).length() < 2) {
+                if (card.size() == 5) {
+                    bingoCards.add(new BingoCard(card));
+                }
+                card = new ArrayList<>();
+            } else {
+                List<Integer> row = Arrays.stream(instructions.get(i).split("\\s+"))
+                        .filter(str -> str.length() > 0)
+                        .map(str -> parseInt(str))
+                        .collect(Collectors.toList());
+                card.add(row);
+            }
+        }
+        if (card.size() == 5) {
+            bingoCards.add(new BingoCard(card));
+        }
     }
 
     static private List<Integer> calculateWindow(List<Integer> depths) {
