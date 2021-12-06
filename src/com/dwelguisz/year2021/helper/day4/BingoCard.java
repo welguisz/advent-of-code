@@ -1,4 +1,4 @@
-package com.dwelguisz;
+package com.dwelguisz.year2021.helper.day4;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,15 +10,27 @@ public class BingoCard {
     private List<List<Integer>> card;
     private List<Map<Integer, Boolean>> rows;
     private List<Map<Integer, Boolean>> cols;
+    private int winner = 0;
 
     public BingoCard(final List<List<Integer>> card) {
         this.card = card;
         createRows();
         createCols();
+        winner = 0;
+    }
+
+    public int getWinner() {
+        return this.winner;
     }
 
     public boolean insertNewNumber(final int value) {
-        return doesCardHaveNumber(value);
+        if (this.winner != 0) {
+            if (doesCardHaveNumber(value)) {
+                this.winner = value * sumOfNonMarkedValues();
+                return true;
+            }
+        }
+        return false;
     }
 
     public int sumOfNonMarkedValues() {
@@ -36,14 +48,23 @@ public class BingoCard {
         return sum;
     }
 
+    public boolean winningCard() {
+        for (int i = 0; i < 5; i++) {
+            if (rows.get(i).entrySet().stream().allMatch(entry -> entry.getValue())
+                    || (cols.get(i).entrySet().stream().allMatch(entry -> entry.getValue()))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean doesCardHaveNumber(final int value) {
         for(int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 if (card.get(i).get(j) == value) {
                     rows.get(i).put(value, true);
                     cols.get(j).put(value, true);
-                    return (rows.get(i).entrySet().stream().allMatch(entry -> entry.getValue()))
-                            || (cols.get(j).entrySet().stream().allMatch(entry -> entry.getValue()));
+                    return winningCard();
                 }
             }
         }
