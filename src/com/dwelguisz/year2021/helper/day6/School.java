@@ -14,7 +14,9 @@ public class School {
     public School(String counts) {
         fishes = new Long[SPAWN_TIME+3];
         Arrays.fill(fishes, 0L);
-        List<Integer> numbers = Arrays.stream(counts.split(",")).map(str -> parseInt(str)).collect(Collectors.toList());
+        List<Integer> numbers = Arrays.stream(counts.split(","))
+                .map(str -> parseInt(str))
+                .collect(Collectors.toList());
         for (Integer num : numbers) {
             fishes[num]++;
         }

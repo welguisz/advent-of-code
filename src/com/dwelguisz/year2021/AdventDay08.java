@@ -5,7 +5,6 @@ import com.dwelguisz.year2021.helper.day8.SevenWireDisplay;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 
