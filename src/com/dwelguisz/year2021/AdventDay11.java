@@ -25,7 +25,7 @@ public class AdventDay11 {
         Long part1 = solutionPart1();
         Long part2 = solutionPart2();
         System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2+100));
+        System.out.println(String.format("Part 2 Answer: %d", part2));
     }
 
     public static Long solutionPart1() {
@@ -39,7 +39,7 @@ public class AdventDay11 {
     }
 
     public static Long solutionPart2() {
-        Long step = 0L;
+        Long step = 100L;
         while (!allFlash()) {
             increaseEnergyLevel();
             resetGrid();
