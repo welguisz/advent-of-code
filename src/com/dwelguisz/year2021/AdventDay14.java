@@ -1,10 +1,14 @@
 package com.dwelguisz.year2021;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.dwelguisz.year2021.helper.ReadFile.readFile;
@@ -12,19 +16,13 @@ import static java.util.stream.Collectors.counting;
 
 public class AdventDay14 {
     public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day14/testcase.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day14/input.txt");
         List<String> equations = lines.stream().filter(str -> (str.contains(" -> "))).collect(Collectors.toList());
         Map<String, List<String>> newStrings = createMap(equations);
-        Long part1 = bruteForceMethod(newStrings, lines.get(0), 1);
-        Long part1Check = elegantSolution(newStrings, lines.get(0),1);
-        if (part1 != part1Check) {
-            System.out.println(String.format("Part 1 Answer: %d", part1));
-            System.out.println(String.format("Part 1 Efficient Answer: %d", part1Check));
-        } else {
-            Long part2 = bruteForceMethod(newStrings, lines.get(0), 40);
-            System.out.println(String.format("Part 1 Answer: %d", part1));
-            System.out.println(String.format("Part 1 Answer: %d", part2));
-        }
+        Long part1 = elegantSolution(newStrings, lines.get(0), 10);
+        Long part2 = elegantSolution(newStrings, lines.get(0), 40);
+        System.out.println(String.format("Part 1 Answer: %d", part1));
+        System.out.println(String.format("Part 2 Answer: %d", part2));
     }
 
     public static Map<String, List<String>> createMap(List<String> equations) {
@@ -66,58 +64,48 @@ public class AdventDay14 {
     }
 
     public static Long elegantSolution(Map<String, List<String>> equations, String line, int steps) {
-        List<String> breakString = new ArrayList<>();
+        Set<String> breakString = new HashSet<>();
+        //We will be double counting letters in the middle, so let's just keep these around to add in at the very end.
+        List<String> tempStrings = new ArrayList<>();
+        tempStrings.add(line.substring(0,1));
+        tempStrings.add(line.substring(line.length()-1));
         // line "NNCB" --> breakString: ["NN", "NC", "CB"]
         for (int i = 0; i < line.length() - 1; i++) {
             breakString.add(line.substring(i, i+2));
         }
         Map<String, Long> counts = new HashMap<>();
-        // counts = {"NN":1, "NC":1, "CB":1}
         for (String str : breakString) {
-            Long tmp = counts.getOrDefault(str, 0L);
-            tmp++;
-            counts.put(str, tmp);
+            counts.put(str, (long) StringUtils.countMatches(line, str));
         }
-        Map<String, Long> previousCounts = new HashMap<>();
-
         for (int i = 0; i < steps; i++) {
-            // For run 1, previousCounts = {"NN":1, "NC":1, "CB":1}
-            previousCounts = new HashMap<>(counts);
             counts = elegantSolutionRunOnce(counts, equations);
-            // counts after run 1: {"NC" : 1, "CN": 1, "NB": 1, "BC": 1, "CH": 1, "HB" : 1}
         }
-        Map<String, Long> finalCounts = new HashMap<>();
-        // We will have a double count of the new characters in this set up.
-        // So let's remove the double counts, e.g. "NN" -> ["NC", "CN], so "C" will be counted twice
-        for (String prevCount : previousCounts.keySet()) {
-            String key = equations.get(prevCount).get(0).substring(1,2);
-            Long tmp = finalCounts.getOrDefault(key, 0L);
-            tmp -= previousCounts.get(prevCount);
-            finalCounts.put(key, tmp);
-        }
-        // After subtracting the double characters, lets add all characters
+        final Map<String, Long> finalCounts = new HashMap<>();
+        final Map<String, Long> finCounts = new HashMap(counts);
         for (String fin : counts.keySet()) {
             String[] keyChars = fin.split("");
             for (int i = 0; i < keyChars.length; i++) {
-                Long tmp = finalCounts.getOrDefault(keyChars[i], 0L);
-                tmp += counts.get(fin);
-                finalCounts.put(keyChars[i], tmp);
+                finalCounts.computeIfPresent(keyChars[i], (k,v) -> v + finCounts.get(fin));
+                finalCounts.computeIfAbsent(keyChars[i], k -> finCounts.get(fin));
             }
         }
-        Long maxValue = finalCounts.entrySet().stream().map(entry -> entry.getValue()).max(Long::compareTo).get();
-        Long minValue = finalCounts.entrySet().stream().map(entry -> entry.getValue()).min(Long::compareTo).get();
+        for (String tempStr : tempStrings) {
+            finalCounts.computeIfPresent(tempStr, (k, v) -> v++);
+        }
+
+        Long maxValue = finalCounts.entrySet().stream().map(entry -> (entry.getValue()/2)).max(Long::compareTo).get();
+        Long minValue = finalCounts.entrySet().stream().map(entry -> (entry.getValue()/2)).min(Long::compareTo).get();
         return maxValue - minValue;
     }
 
 
-    public static Map<String, Long> elegantSolutionRunOnce(Map<String, Long> counts, Map<String, List<String>> equations) {
+    public static Map<String, Long> elegantSolutionRunOnce(final Map<String, Long> counts, Map<String, List<String>> equations) {
         Map<String, Long> newCounts = new HashMap<>();
         for(String countStr : counts.keySet()) {
             List<String> countOnce = equations.get(countStr);
             for (String one : countOnce) {
-                Long tmp = newCounts.getOrDefault(one, 0L);
-                tmp += counts.get(countStr);
-                newCounts.put(one, tmp);
+                newCounts.computeIfPresent(one, (k, v) -> v + counts.get(countStr));
+                newCounts.computeIfAbsent(one, k -> counts.get(countStr));
             }
         }
         return newCounts;
