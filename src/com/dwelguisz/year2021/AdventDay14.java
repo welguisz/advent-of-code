@@ -85,8 +85,7 @@ public class AdventDay14 {
         for (String fin : counts.keySet()) {
             String[] keyChars = fin.split("");
             for (int i = 0; i < keyChars.length; i++) {
-                finalCounts.computeIfPresent(keyChars[i], (k,v) -> v + finCounts.get(fin));
-                finalCounts.computeIfAbsent(keyChars[i], k -> finCounts.get(fin));
+                finalCounts.merge(keyChars[i], finCounts.get(fin), Long::sum);
             }
         }
         for (String tempStr : tempStrings) {
@@ -104,8 +103,7 @@ public class AdventDay14 {
         for(String countStr : counts.keySet()) {
             List<String> countOnce = equations.get(countStr);
             for (String one : countOnce) {
-                newCounts.computeIfPresent(one, (k, v) -> v + counts.get(countStr));
-                newCounts.computeIfAbsent(one, k -> counts.get(countStr));
+                newCounts.merge(one, counts.get(countStr), Long::sum);
             }
         }
         return newCounts;
