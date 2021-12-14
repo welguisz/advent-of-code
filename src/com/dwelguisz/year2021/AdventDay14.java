@@ -12,7 +12,7 @@ import static java.util.stream.Collectors.counting;
 
 public class AdventDay14 {
     public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day14/input.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day14/testcase.txt");
         List<String> equations = lines.stream().filter(str -> (str.contains(" -> "))).collect(Collectors.toList());
         Map<String, List<String>> newStrings = createMap(equations);
         Long part1 = bruteForceMethod(newStrings, lines.get(0), 1);
@@ -67,28 +67,35 @@ public class AdventDay14 {
 
     public static Long elegantSolution(Map<String, List<String>> equations, String line, int steps) {
         List<String> breakString = new ArrayList<>();
-        // line "NNCB" --> ["NN", "NC", "CB"]
+        // line "NNCB" --> breakString: ["NN", "NC", "CB"]
         for (int i = 0; i < line.length() - 1; i++) {
             breakString.add(line.substring(i, i+2));
         }
         Map<String, Long> counts = new HashMap<>();
+        // counts = {"NN":1, "NC":1, "CB":1}
         for (String str : breakString) {
             Long tmp = counts.getOrDefault(str, 0L);
             tmp++;
             counts.put(str, tmp);
         }
         Map<String, Long> previousCounts = new HashMap<>();
+
         for (int i = 0; i < steps; i++) {
+            // For run 1, previousCounts = {"NN":1, "NC":1, "CB":1}
             previousCounts = new HashMap<>(counts);
             counts = elegantSolutionRunOnce(counts, equations);
+            // counts after run 1: {"NC" : 1, "CN": 1, "NB": 1, "BC": 1, "CH": 1, "HB" : 1}
         }
         Map<String, Long> finalCounts = new HashMap<>();
+        // We will have a double count of the new characters in this set up.
+        // So let's remove the double counts, e.g. "NN" -> ["NC", "CN], so "C" will be counted twice
         for (String prevCount : previousCounts.keySet()) {
             String key = equations.get(prevCount).get(0).substring(1,2);
             Long tmp = finalCounts.getOrDefault(key, 0L);
             tmp -= previousCounts.get(prevCount);
             finalCounts.put(key, tmp);
         }
+        // After subtracting the double characters, lets add all characters
         for (String fin : counts.keySet()) {
             String[] keyChars = fin.split("");
             for (int i = 0; i < keyChars.length; i++) {
