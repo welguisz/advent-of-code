@@ -21,9 +21,9 @@ public class AdventDay09 {
     public static void main(String[] args) {
         List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2015/day09/input.txt");
         createMap(lines);
-        //Integer part1 = solutionPart1();
+        Integer part1 = solutionPart1();
         Integer part2 = solutionPart2();
-        //System.out.println(String.format("Part 1 Answer: %d", part1));
+        System.out.println(String.format("Part 1 Answer: %d", part1));
         System.out.println(String.format("Part 2 Answer: %d", part2));
     }
 
