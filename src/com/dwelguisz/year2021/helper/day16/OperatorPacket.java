@@ -19,6 +19,29 @@ public class OperatorPacket extends Packet{
         return sum;
     }
 
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        switch (packetId) {
+            case 0: sb.append("ADD(");break;
+            case 1: sb.append("MULTIPLY(");break;
+            case 2: sb.append("MAX(");break;
+            case 3: sb.append("MIN(");break;
+            case 5: sb.append("GREATER_THAN(");break;
+            case 6: sb.append("LESS_THAN(");break;
+            case 7: sb.append("EQUALS(");break;
+            default: sb.append("");break;
+        }
+        for (int i = 0; i < subPackets.size(); i++) {
+            sb.append(subPackets.get(i).toString());
+            if (i != subPackets.size() - 1) {
+                sb.append(",");
+            }
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+
     public Long getValue() {
         switch (packetId) {
             case 0: return getSum();

@@ -11,4 +11,8 @@ public class NumberPacket extends Packet{
         return value;
     }
 
+    @Override
+    public String toString() {
+        return value.toString();
+    }
 }

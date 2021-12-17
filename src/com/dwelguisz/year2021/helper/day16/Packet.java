@@ -17,4 +17,9 @@ public class Packet {
         throw new NullPointerException("Bad place");
     }
 
+    @Override
+    public String toString() {
+        return "";
+    }
+
 }

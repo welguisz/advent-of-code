@@ -1,4 +1,4 @@
-package com.dwelguisz.year2021;
+package com.dwelguisz.year2021.helper;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -7,17 +7,14 @@ import com.dwelguisz.year2021.helper.day16.Packet;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dwelguisz.year2021.CommonConversions.convertHexToBin;
+import static com.dwelguisz.year2021.helper.CommonConversions.convertHexToBin;
 import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Long.parseLong;
 
 public class AdventDay16 {
 
-    static List<Integer> versions;
-
     public static void main(String[] args) {
-        versions = new ArrayList<>();
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day16/input.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day16/testcase.txt");
         String hex2bin = convertHexToBin(lines.get(0));
         List<Object> objects = readPacket(hex2bin, 0);
         Packet finalPacket = (Packet) objects.get(1);
@@ -26,6 +23,8 @@ public class AdventDay16 {
         System.out.println(String.format("Final position: %d", finalPosition));
         System.out.println(String.format("Final Packet Version Sum: %d", finalPacket.versionSum()));
         System.out.println(String.format("Final Packet Value: %d", finalPacket.getValue()));
+        System.out.println("\n\nDecoded string:\n");
+        System.out.println(finalPacket);
     }
 
     public static List<Long> readNumber(String hex2bin, Integer pos) {

@@ -13,4 +13,9 @@ import lombok.Value;
 public class Point {
     public Integer x;
     public Integer y;
+
+    @Override
+    public String toString() {
+        return String.format("< %d, %d>", x, y);
+    }
 }
