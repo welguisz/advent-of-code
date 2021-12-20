@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Scanner {
     private Integer id;
-    private Set<Beacon> beacons;
+    private Set<Coordinate> beacons;
     private List<Scanner> alternateScanners;
     private Integer alternateScannerIdx;
 
@@ -70,11 +70,11 @@ public class Scanner {
         return id;
     }
 
-    public Set<Beacon> getBeacons() {
+    public Set<Coordinate> getBeacons() {
         return beacons;
     }
 
-    public void addNewBeacon(Beacon beacon) {
+    public void addNewBeacon(Coordinate beacon) {
         beacons.add(beacon);
     }
 
@@ -85,53 +85,23 @@ public class Scanner {
     public void generateAlternateOrientation() {
         for (Integer[][] rot : ROTATIONS) {
             Scanner newScanner = new Scanner(id);
-            for (Beacon beacon : beacons) {
+            for (Coordinate beacon : beacons) {
                 newScanner.addNewBeacon(doRotation(beacon, rot[0], rot[1], rot[2]));
             }
             alternateScanners.add(newScanner);
         }
     }
 
-    private Beacon doRotation(Beacon beacon, Integer[] xRotation, Integer[] yRotation, Integer[] zRotation) {
-        Integer newX = beacon.getX() * xRotation[0] + beacon.getY() + xRotation[1] + beacon.getZ() * xRotation[2];
-        Integer newY = beacon.getX() * yRotation[0] + beacon.getY() + yRotation[1] + beacon.getZ() * yRotation[2];
-        Integer newZ = beacon.getX() * zRotation[0] + beacon.getY() + zRotation[1] + beacon.getZ() * zRotation[2];
-        return new Beacon(newX, newY, newZ);
+    private Coordinate doRotation(Coordinate beacon, Integer[] xRotation, Integer[] yRotation, Integer[] zRotation) {
+        Integer newX = beacon.x * xRotation[0] + beacon.y + xRotation[1] + beacon.z * xRotation[2];
+        Integer newY = beacon.x * yRotation[0] + beacon.y + yRotation[1] + beacon.z * yRotation[2];
+        Integer newZ = beacon.x * zRotation[0] + beacon.y + zRotation[1] + beacon.z * zRotation[2];
+        return new Coordinate(newX, newY, newZ);
     }
 
-    public void addAllBeacons(Set<Beacon> beacons) {
+    public void addAllBeacons(Set<Coordinate> beacons) {
         beacons.addAll(beacons);
     }
 
-
-//    public static class Coordinate {
-//        public int x,y,z;
-//        public List<Double> relativeDistances;
-//        private Coordinate(String line) {
-//            var split = line.split(",");
-//            x = Integer.parseInt(split[0]);
-//            y = Integer.parseInt(split[1]);
-//            z = Integer.parseInt(split[2]);
-//            relativeDistances = new ArrayList<>();
-//        }
-//
-//        public Coordinate(int x, int y, int z) {
-//            this.x = x;
-//            this.y = y;
-//            this.z = z;
-//            relativeDistances = new ArrayList<>();
-//        }
-//
-//        public Integer manhattanDistance(Coordinate c) {
-//            return Math.abs(x - c.x) + Math.abs(y - c.y) + Math.abs(z - c.z);
-//        }
-//
-//        public void addDistance(Coordinate c) {
-//            Double value = Math.sqrt(Math.pow(c.x -x, 2) + Math.pow(c.y-y,2) + Math.pow(c.z-z,2));
-//            relativeDistances.add(value);
-//        }
-//
-//        public Coordinate determineNewPosition
-//    }
-
+    
 }

@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode
@@ -13,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class ScannerMatch {
-    private Beacon beaconOffset;
+    private Coordinate beaconOffset;
     private Scanner removeScanner;
-    private Set<Beacon> beacons;
+    private Set<Coordinate> beacons;
 }
