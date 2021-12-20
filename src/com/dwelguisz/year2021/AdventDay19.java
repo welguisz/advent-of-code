@@ -2,7 +2,6 @@ package com.dwelguisz.year2021;
 
 import com.dwelguisz.year2021.helper.day19.Coordinate;
 import com.dwelguisz.year2021.helper.day19.Scanner;
-import com.dwelguisz.year2021.helper.day19.ScannerMatch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,20 +26,27 @@ public class AdventDay19 {
         System.out.println(String.format("Solution Part1: %d",answers.get(1)));
     }
 
+    public static Scanner findScannerById(List<Scanner> scanners, Integer scannerId) {
+        return scanners.stream().filter(scanner -> scanner.getId() == scannerId).findFirst().get();
+    }
+
     public static List<Integer> solutionPart1() {
-        Scanner knownScanner = new Scanner(-5);
+        // Going with 6812, the first MCU that I programmed on....
+        Scanner knownScanner = new Scanner(6812);
         List<Scanner> toHandleScanners = new ArrayList<>(scanners);
         Scanner first = scanners.get(0);
-        knownScanner = first;
+        knownScanner.addAllBeacons(first.getBeacons());
         toHandleScanners.remove(first);
         List<Coordinate> offsets = new ArrayList<>();
         offsets.add(new Coordinate(0,0,0));
+
         while (!toHandleScanners.isEmpty()) {
             System.out.println(String.format("%d scanners left", toHandleScanners.size()));
-            ScannerMatch matched = findScannerMatches(knownScanner, scanners);
-            if (matched != null) {
-                knownScanner.addAllBeacons(matched.getBeacons());
-                toHandleScanners.remove(matched.getRemoveScanner());
+            Scanner finalScanner = findScannerMatches(knownScanner, toHandleScanners);
+            if (finalScanner != null) {
+                Scanner findScanner = findScannerById(toHandleScanners, finalScanner.getId());
+                knownScanner.addAllBeacons(finalScanner.getBeacons());
+                toHandleScanners.remove(findScanner);
             }
             else {
                 return List.of(-15,-16);
@@ -58,24 +64,60 @@ public class AdventDay19 {
         return List.of(knownScanner.getBeacons().size(), manhattan);
     }
 
-    public static ScannerMatch findScannerMatches(Scanner knownScanner, List<Scanner> unknownScanners) {
+    public static Scanner findScannerMatches(Scanner knownScanner, List<Scanner> unknownScanners) {
         for (Scanner scanner : unknownScanners) {
-            // Get all rotations
-            for (Scanner altScanner : scanner.getAlternateScanners()) {
-                // Let's start looking at each knownBeacon and compare to the current scanner and orientation
-                for (Coordinate currentBeacon : knownScanner.getBeacons()) {
-                    //Have to test this known alternate scanner individually
-                    for (Coordinate testBeacon : altScanner.getBeacons()) {
-                        Coordinate possibleScannerLoc = currentBeacon.subtract(testBeacon);
-                        Set<Coordinate> newCoordinates = beaconLocationsGivenNewScannerLoc(possibleScannerLoc, altScanner.getBeacons());
-                        if (checkBeacons(knownScanner.getBeacons(), newCoordinates)) {
-                            return new ScannerMatch(possibleScannerLoc, altScanner, altScanner.getBeacons());
-                        }
-                    }
-                }
+            List<List<Coordinate>> reallyGoodMatches = getMatches(knownScanner, scanner);
+            if (reallyGoodMatches.size() >= 12) {
+                return determinedRotation(knownScanner, scanner);
             }
         }
         return null;
+    }
+
+    public static List<List<Coordinate>> getMatches(Scanner known, Scanner maybe) {
+        List<List<Coordinate>> coordinateList = new ArrayList<>();
+        known.getBeacons().forEach(coordinate -> {
+            maybe.getBeacons().forEach(coordinate2 -> {
+                List<Double> distances = coordinate.getRelativeDistance().stream()
+                        .filter(distance -> coordinate2.relativeDistances.contains(distance))
+                        .collect(Collectors.toList());
+                if (distances.size() > 10) {
+                    coordinateList.add(List.of(coordinate, coordinate2));
+                }
+            });
+        });
+        return coordinateList;
+    }
+
+    // 0 - scannerId (Integer)
+    // 1 - rotatedId (Integer)
+    // 2 - new scannerLocation (Coordinate)
+    public static Scanner determinedRotation(Scanner knownScanner, Scanner matched) {
+        List<Scanner> matchedRotation = matched.getAlternateScanners().stream()
+                .filter(rotated -> isMatch(knownScanner, rotated) != null)
+                .collect(Collectors.toList());
+        assert matchedRotation.size() == 1;
+        Scanner matchedScanner = matchedRotation.get(0);
+        Coordinate matchedCoordinate = isMatch(knownScanner, matchedScanner);
+        return matchedScanner.add(matchedCoordinate);
+    }
+
+    public static Coordinate isMatch(Scanner known, Scanner rotatedScanner) {
+        List<List<Coordinate>> matches = getMatches(known, rotatedScanner);
+        return isMatching(matches);
+    }
+
+    public static Coordinate isMatching(List<List<Coordinate>> list) {
+        Coordinate matchScannerPosition = null;
+        for(List<Coordinate> value : list) {
+            Coordinate temp = value.get(1).determineNewPosition(value.get(0));
+            if (matchScannerPosition == null) {
+                matchScannerPosition = temp;
+            } else if (!matchScannerPosition.equals(temp)) {
+                return null;
+            }
+        }
+        return matchScannerPosition;
     }
 
     public static Set<Coordinate> beaconLocationsGivenNewScannerLoc(Coordinate scanner, Set<Coordinate> beacons) {
