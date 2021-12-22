@@ -1,100 +1,100 @@
 package com.dwelguisz.year2021.helper.day19;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
+import static java.util.stream.Collectors.toList;
+
+@SuppressWarnings("SuspiciousNameCombination")
+@EqualsAndHashCode
 public class Scanner {
-    private Integer id;
-    private Set<Coordinate> beacons;
-    private List<Scanner> alternateScanners;
-    private Integer alternateScannerIdx;
-    private Coordinate scannerLocation;
+    // To understand these functions, go to https://www.euclideanspace.com/maths/algebra/matrix/transforms/examples/index.htm
+    public static final List<Function<Coordinate, Coordinate>> ROTATION_FUNCTIONS = List.of(
+            Function.identity(),
+            c -> new Coordinate(-c.y, c.x, c.z),
+            c -> new Coordinate(-c.x, -c.y, c.z),
+            c -> new Coordinate(c.y, -c.x, c.z));
+    public static final List<Function<Coordinate, Coordinate>> DIRECTION_FUNCTIONS = List.of(
+            Function.identity(),
+            c -> new Coordinate(c.x, -c.y, -c.z),
+            c -> new Coordinate(c.x, -c.z, c.y),
+            c -> new Coordinate(-c.y, -c.z, c.x),
+            c -> new Coordinate(-c.x, -c.z, -c.y),
+            c -> new Coordinate(c.y, -c.z, -c.x));
+    private final Integer number;
+    private final List<Coordinate> coordinates;
+    private final Coordinate scannerLocation;
 
-    private static Integer[][] ROTATIONS = {
-            {0,1,2,1,1,1},
-            {0,1,2,1,1,-1},
-            {0,1,2,1,-1,1},
-            {0,1,2,1,-1,-1},
-            {0,1,2,-1,1,1},
-            {0,1,2,-1,1,-1},
-            {0,1,2,-1,-1,1},
-            {0,1,2,-1,-1,-1},
-
-            {0,2,1,1,1,1},
-            {0,2,1,1,1,-1},
-            {0,2,1,1,-1,1},
-            {0,2,1,1,-1,-1},
-            {0,2,1,-1,1,1},
-            {0,2,1,-1,1,-1},
-            {0,2,1,-1,-1,1},
-            {0,2,1,-1,-1,-1},
-
-            {1,0,2,1,1,1},
-            {1,0,2,1,1,-1},
-            {1,0,2,1,-1,1},
-            {1,0,2,1,-1,-1},
-            {1,0,2,-1,1,1},
-            {1,0,2,-1,1,-1},
-            {1,0,2,-1,-1,1},
-            {1,0,2,-1,-1,-1},
-
-            {1,2,0,1,1,1},
-            {1,2,0,1,1,-1},
-            {1,2,0,1,-1,1},
-            {1,2,0,1,-1,-1},
-            {1,2,0,-1,1,1},
-            {1,2,0,-1,1,-1},
-            {1,2,0,-1,-1,1},
-            {1,2,0,-1,-1,-1},
-
-            {2,0,1,1,1,1},
-            {2,0,1,1,1,-1},
-            {2,0,1,1,-1,1},
-            {2,0,1,1,-1,-1},
-            {2,0,1,-1,1,1},
-            {2,0,1,-1,1,-1},
-            {2,0,1,-1,-1,1},
-            {2,0,1,-1,-1,-1},
-
-            {2,1,0,1,1,1},
-            {2,1,0,1,1,-1},
-            {2,1,0,1,-1,1},
-            {2,1,0,1,-1,-1},
-            {2,1,0,-1,1,1},
-            {2,1,0,-1,1,-1},
-            {2,1,0,-1,-1,1},
-            {2,1,0,-1,-1,-1},
-
-    };
-
-    public Scanner (Integer id) {
-        this.id = id;
-        beacons = new HashSet<>();
-        alternateScanners = new ArrayList<>();
-        alternateScannerIdx = -1;
-        scannerLocation = new Coordinate(0,0,0);
+    public Scanner(List<String> inputList) {
+        number = Integer.parseInt(inputList.get(0).split(" ")[2]);
+        coordinates = new ArrayList<>();
+        for (int i = 1; i < inputList.size(); i++) {
+            var line = inputList.get(i).trim();
+            if (line.length() > 0) {
+                coordinates.add(new Coordinate(line));
+            }
+        }
+        // During matching, we should have a list of distances between beacons.
+        // By having the distances between the beacons, we can just compare the distances
+        // of the two coordinates.  If both coordinates have 12 or more relative distances to other
+        // beacons, we know that these scanners are overlapping.
+        coordinates.forEach(coordinate ->
+                coordinates.forEach(other -> {
+                    if (coordinate != other) {
+                        coordinate.addDistance(other);
+                    }
+                })
+        );
+        //We are the center of the universe!!! AND DON'T TELL ME OTHERWISE
+        scannerLocation = new Coordinate(0, 0, 0);
     }
 
-    public Scanner clone() {
-        Scanner newScanner = new Scanner(this.id);
-        newScanner.addAllBeacons(this.beacons);
-        newScanner.setAlternateScannerIdx(this.alternateScannerIdx);
-        newScanner.setAlternateScanners(this.alternateScanners);
-        return newScanner;
-    }
-
-    public void setAlternateScanners(List<Scanner> alternateScanners) {
-        this.alternateScanners = alternateScanners;
-    }
-    public void setAlternateScannerIdx(Integer alternateScannerIdx) {
-        this.alternateScannerIdx = alternateScannerIdx;
-    }
-
-    public void setScannerLocation(Coordinate scannerLocation) {
+    public Scanner(Integer number, List<Coordinate> coordinates, Coordinate scannerLocation) {
+        this.number = number;
+        this.coordinates = coordinates;
+        coordinates.forEach(coordinate ->
+                coordinates.forEach(other -> {
+                    if (coordinate != other) {
+                        coordinate.addDistance(other);
+                    }
+                })
+        );
         this.scannerLocation = scannerLocation;
+    }
+
+    public Set<Scanner> rotate() {
+        Set<Scanner> scanners = new HashSet<>();
+        for (Function<Coordinate, Coordinate> rotFunction : ROTATION_FUNCTIONS) {
+            for(Function<Coordinate, Coordinate> dirFunction : DIRECTION_FUNCTIONS) {
+                List<Coordinate> copied = coordinates.stream()
+                        .map(dirFunction)
+                        .map(rotFunction)
+                        .collect(toList());
+                scanners.add(new Scanner(number, copied, null));
+            }
+        }
+        return scanners;
+    }
+
+    public Scanner add(Coordinate offset) {
+        return new Scanner(number, coordinates.stream()
+                .map(coordinate -> new Coordinate(coordinate.x + offset.x, coordinate.y + offset.y, coordinate.z + offset.z))
+                .collect(toList()), offset);
+    }
+
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public List<Coordinate> getCoordinates() {
+        return coordinates;
     }
 
     public Coordinate getScannerLocation() {
@@ -103,72 +103,9 @@ public class Scanner {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer(String.format("--- Scanner %d ----",id));
-        return sb.toString();
+        return "Scanner{" +
+                "number=" + number +
+                ", coordinates=" + coordinates +
+                '}';
     }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Set<Coordinate> getBeacons() {
-        return beacons;
-    }
-
-    public void addNewBeacon(Coordinate beacon) {
-        beacons.add(beacon);
-        beacons.forEach(b ->
-                beacons.forEach(c -> {
-                        if (b != c) {
-                            beacon.addDistance(c);
-                        }
-        }));
-    }
-
-    public List<Scanner> getAlternateScanners() {
-        return alternateScanners;
-    }
-
-    public void generateAlternateOrientation() {
-        Integer altId = 0;
-        for (Integer[] rot : ROTATIONS) {
-            Scanner newScanner = new Scanner(altId);
-            for (Coordinate beacon : beacons) {
-                newScanner.addNewBeacon(doRotation(beacon, rot));
-            }
-            alternateScanners.add(newScanner);
-            altId++;
-        }
-    }
-
-    public Scanner add(Coordinate o) {
-        Scanner movedScanner = new Scanner(id);
-        movedScanner.addAllBeacons(beacons.stream().map(c -> new Coordinate(c.x+o.x,c.y+o.y,c.z+o.z)).collect(Collectors.toSet()));
-        movedScanner.setScannerLocation(o);
-        return movedScanner;
-    }
-
-    private Coordinate doRotation(Coordinate beacon, Integer[] rotation) {
-        Integer newX = beacon.getValue(rotation[0]);
-        Integer newY = beacon.getValue(rotation[1]);
-        Integer newZ = beacon.getValue(rotation[2]);
-        newX *= rotation[3];
-        newY *= rotation[4];
-        newZ *= rotation[5];
-        return new Coordinate(newX, newY, newZ);
-    }
-
-
-    public void addAllBeacons(Set<Coordinate> beacons) {
-        this.beacons.addAll(beacons);
-        this.beacons.forEach(b -> {
-            this.beacons.forEach(c -> {
-                if (b != c) {
-                    b.addDistance(c);
-                }
-            });
-        });
-    }
-
-    
 }
