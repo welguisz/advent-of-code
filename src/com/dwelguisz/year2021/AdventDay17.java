@@ -69,9 +69,10 @@ public class AdventDay17 {
         //Find interesting velocities where we shoot the probe as high as possible and the probe is falling straight
         //down.  We need to calculate Velocities which will land in the target area.
         List<Integer> interestingVelocitiesY = interestingVelocities(velocityToDistanceMap, Math.abs(maxY), Math.abs(minY));
-        for (int y = 18; y <= minY *-1; y++) {
+        for (int y = minY; y <= -minY; y++) {
             interestingVelocitiesY.add(y);
         }
+        interestingVelocitiesY = removeUninterestingYs(interestingVelocitiesY);
         foundPoints.addAll(deadXSteps(interestingVelocitiesX, interestingVelocitiesY));
 
         Integer maxStep = velocityToDistanceMap.entrySet().stream().map(entry -> entry.getKey()).max(Integer::compareTo).get();
@@ -90,12 +91,29 @@ public class AdventDay17 {
     // ----
     // So looking at this, we can calculate the different velocities that might cause the probe to fall in the area
     //    New locations = -1*sumMap(step) + (-1*v)*step
-    public static Set<Integer> calculateInterestingYs(Map<Integer, Integer> sumMap) {
-        Set<Integer> lookAtTheseVs = new HashSet<>();
-        for (int v = 0; v <= (-1 * minY); v ++) {
-
+    public static List<Integer> removeUninterestingYs(List<Integer> velocities) {
+        List<Integer> goodVelocities = new ArrayList<>();
+        for (Integer v: velocities) {
+            if (v <= 0) {
+                if (isInYTarget(0,v)){
+                    goodVelocities.add(v);
+                }
+            }
+            else if (isInYTarget(0,-1 * (v+1))) {
+                goodVelocities.add(v);
+            }
         }
-        return lookAtTheseVs;
+        return goodVelocities;
+    }
+
+    public static Boolean isInYTarget(Integer y, Integer vy) {
+        if (y > minY) {
+            return false;
+        }
+        if (y >= maxY) {
+            return true;
+        }
+        return isInYTarget(y+vy,vy-1);
     }
 
     public static Boolean isInYTarget(Map<Integer, Integer> sumMap, Integer initialVelocity) {
