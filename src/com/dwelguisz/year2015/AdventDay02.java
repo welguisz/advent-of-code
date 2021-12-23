@@ -9,7 +9,7 @@ import static java.lang.Integer.parseInt;
 
 public class AdventDay02 {
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2015/day02/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day02/input.txt");
         Long part1 = solutionPart1(instructions);
         Long part2 = solutionPart2(instructions);
         System.out.println(String.format("Part 1 Answer: %d", part1));

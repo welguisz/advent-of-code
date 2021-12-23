@@ -19,7 +19,7 @@ public class AdventDay03 {
     }
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2015/day03/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day03/input.txt");
         Long part1 = solutionPart1(Arrays.asList(instructions.get(0).split("")));
         Long part2 = solutionPart2(Arrays.asList(instructions.get(0).split("")));
         System.out.println(String.format("Part 1 Answer: %d", part1));

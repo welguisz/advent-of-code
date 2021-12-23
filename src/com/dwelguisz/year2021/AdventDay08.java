@@ -14,7 +14,7 @@ public class AdventDay08 {
     static List<List<String>> output;
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day8/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day8/input.txt");
         parseString(instructions);
         int part1 = countEasyNumbers(output);
         int part2 = SumNumbers(input, output);

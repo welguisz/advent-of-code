@@ -13,7 +13,7 @@ public class AdventDay11 {
     static Integer[][] grid = new Integer[MAX_ROW][MAX_ROW];
 
     public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day11/input.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day11/input.txt");
         int x = 0;
         for (String line : lines) {
             List<Integer> row = Arrays.stream(line.split("")).map(str -> parseInt(str)).collect(Collectors.toList());

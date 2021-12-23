@@ -23,13 +23,6 @@ public class AdventDay21 {
     public static void main(String[] args) {
         Integer player1SP = 8;
         Integer player2SP = 1;
-//        DIRAC_UNIVERSE_DISTRIBUTION.add(new Tuple(3,1));
-//        DIRAC_UNIVERSE_DISTRIBUTION.add(new Tuple(4,3));
-//        DIRAC_UNIVERSE_DISTRIBUTION.add(new Tuple(5,6));
-//        DIRAC_UNIVERSE_DISTRIBUTION.add(new Tuple(6,7));
-//        DIRAC_UNIVERSE_DISTRIBUTION.add(new Tuple(7,6));
-//        DIRAC_UNIVERSE_DISTRIBUTION.add(new Tuple(8,3));
-//        DIRAC_UNIVERSE_DISTRIBUTION.add(new Tuple(9,1));
         createDiracUniverseDistribution();
         Long part1 = playGame(player1SP, player2SP);
         Long part2 = playQuantumGame(player1SP, player2SP);

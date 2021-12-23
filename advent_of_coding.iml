@@ -10,5 +10,6 @@
     <orderEntry type="library" name="projectlombok.lombok" level="project" />
     <orderEntry type="library" name="apache.commons.lang3" level="project" />
     <orderEntry type="library" name="json" level="project" />
+    <orderEntry type="library" name="apache.commons.lang31" level="project" />
   </component>
 </module>

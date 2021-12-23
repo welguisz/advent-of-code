@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.counting;
 
 public class AdventDay14 {
     public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day14/input.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day14/input.txt");
         List<String> equations = lines.stream().filter(str -> (str.contains(" -> "))).collect(Collectors.toList());
         Map<String, List<String>> newStrings = createMap(equations);
         Long part1 = elegantSolution(newStrings, lines.get(0), 10);

@@ -16,7 +16,7 @@ public class AdventDay09 {
     static int width;
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day9/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day9/input.txt");
         createRows(instructions);
         int part1 = findAnswer(false);
         int part2 = findAnswer(true);

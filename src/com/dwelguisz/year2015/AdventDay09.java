@@ -19,7 +19,7 @@ public class AdventDay09 {
     static Integer[][] distances;
 
     public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2015/day09/input.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day09/input.txt");
         createMap(lines);
         Integer part1 = solutionPart1();
         Integer part2 = solutionPart2();

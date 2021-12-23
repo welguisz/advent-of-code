@@ -11,7 +11,7 @@ public class AdventDay08 {
     static Pattern pattern = Pattern.compile("\\\\(\\\\|\\\"|x[0123456789abcdef]{2})");
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2015/day08/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day08/input.txt");
         Long part1 = solutionPart1(instructions);
         Long part2 = solutionPart2(instructions);
         System.out.println(String.format("Part 1 Answer: %d", part1));

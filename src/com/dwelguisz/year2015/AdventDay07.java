@@ -24,7 +24,7 @@ public class AdventDay07 {
     }
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2015/day07/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day07/input.txt");
         Map<String, Integer> values = new HashMap<>();
         values = part1(instructions, values);
         System.out.println(values);

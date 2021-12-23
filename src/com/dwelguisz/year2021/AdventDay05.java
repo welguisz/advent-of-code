@@ -11,7 +11,7 @@ import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 public class AdventDay05 {
 
     public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day5/input.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day5/input.txt");
         Board board1 = new Board(lines, false);
         Board board2 = new Board(lines, true);
         int part1 = board1.avoidSpaces();

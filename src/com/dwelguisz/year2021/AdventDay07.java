@@ -15,7 +15,7 @@ public class AdventDay07 {
     private static Integer[] crabsPerLoc;
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day7/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day7/input.txt");
         createArray(instructions.get(0));
         Long part1 = findMinSteps(false);
         Long part2 = findMinSteps(true);

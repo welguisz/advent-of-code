@@ -17,7 +17,7 @@ public class AdventDay13 {
     static List<String> processInstructions = new ArrayList<>();
 
     public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day13/input.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day13/input.txt");
         Set<Point> points = processLines(lines);
         Integer part1 = part1(points, processInstructions);
         System.out.println(String.format("Part 1 Answer: %d", part1));

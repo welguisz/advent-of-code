@@ -9,7 +9,7 @@ import static java.lang.Integer.parseInt;
 public class AdventDay03 {
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day3/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day3/input.txt");
         int oxygen = getRating(instructions, '1', true);
         int carbondioxide = getRating(instructions, '0', false);
         int part1 = calculateBinary(instructions);

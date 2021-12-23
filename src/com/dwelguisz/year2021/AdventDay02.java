@@ -8,7 +8,7 @@ import static java.lang.Integer.parseInt;
 public class AdventDay02 {
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day2/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day2/input.txt");
         int part1 = calculateLocation(instructions);
         int part2 = calculateLocationWithAim(instructions);
         System.out.println(String.format("Part 1 Answer: %d", part1));

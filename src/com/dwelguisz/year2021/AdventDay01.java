@@ -10,7 +10,7 @@ import static java.lang.Integer.parseInt;
 public class AdventDay01 {
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day1/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day1/input.txt");
         List<Integer> values = instructions.stream().map(str -> parseInt(str)).collect(Collectors.toList());
         int roughCalculation = calculateIncreases(values);
         List<Integer> windowValues = calculateWindow(values);

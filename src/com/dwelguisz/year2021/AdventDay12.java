@@ -14,7 +14,7 @@ public class AdventDay12 {
     static HashMap<String, Cave> caveMap;
 
     public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day12/input.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day12/input.txt");
         createMap(lines);
         Integer part1 = solution(false);
         Integer part2 = solution(true);

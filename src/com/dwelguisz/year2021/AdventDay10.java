@@ -32,7 +32,7 @@ public class AdventDay10 {
         scoreMap.put("<", 4);
     }
     public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day10/input.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day10/input.txt");
         Long part1 = parseLines(lines, false);
         Long part2 = parseLines(lines, true);
         System.out.println(String.format("Part 1 Answer: %d", part1));

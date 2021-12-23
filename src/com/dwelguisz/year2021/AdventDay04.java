@@ -18,7 +18,7 @@ public class AdventDay04 {
     static private List<Integer> orderedWinnersValue;
 
     public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_coding/src/resources/year2021/day4/input.txt");
+        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day4/input.txt");
         createGame(instructions);
         playThroughAllWinners();
         int part1 = orderedWinnersValue.get(0);
