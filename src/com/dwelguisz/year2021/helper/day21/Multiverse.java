@@ -1,6 +1,5 @@
 package com.dwelguisz.year2021.helper.day21;
 
-import com.dwelguisz.year2021.AdventDay21;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
