@@ -1,5 +1,6 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day4.BingoCard;
 
 import java.util.ArrayList;
@@ -7,18 +8,25 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay04 {
+public class GiantSquid extends AoCDay {
 
-    static private List<Integer> numbersCalled;
-    static private List<BingoCard> bingoCards;
-    static private List<BingoCard> orderedWinners;
-    static private List<Integer> orderedWinnersValue;
+    private List<Integer> numbersCalled;
+    private List<BingoCard> bingoCards;
+    private List<BingoCard> orderedWinners;
+    private List<Integer> orderedWinnersValue;
 
-    public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day4/input.txt");
+    public GiantSquid() {
+        super();
+        this.numbersCalled = new ArrayList<>();
+        this.bingoCards = new ArrayList<>();
+        this.orderedWinners = new ArrayList<>();
+        this.orderedWinnersValue = new ArrayList<>();
+    }
+
+    public void solve() {
+        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day4/input.txt");
         createGame(instructions);
         playThroughAllWinners();
         int part1 = orderedWinnersValue.get(0);
@@ -27,7 +35,7 @@ public class AdventDay04 {
         System.out.println(String.format("Part 2 Answer: %d", part2));
     }
 
-    private static void createGame(List<String> instructions) {
+    private void createGame(List<String> instructions) {
         List<List<Integer>> card = new ArrayList<>();
         bingoCards = new ArrayList<>();
         for (int i = 0; i < instructions.size(); i++) {
@@ -52,9 +60,7 @@ public class AdventDay04 {
 
     }
 
-    private static void playThroughAllWinners() {
-        orderedWinners = new ArrayList<>();
-        orderedWinnersValue = new ArrayList<>();
+    private void playThroughAllWinners() {
         for (int pos = 0; pos < numbersCalled.size(); pos++) {
             List<Boolean> status = new ArrayList<>();
             for (int i = 0; i < bingoCards.size(); i++) {

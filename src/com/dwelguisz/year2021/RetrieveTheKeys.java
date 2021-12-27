@@ -25,6 +25,18 @@ public class RetrieveTheKeys extends AoCYear {
                 aoCDay = new BinaryDiagnostic();
                 break;
             }
+            case 4 : {
+                aoCDay = new GiantSquid();
+                break;
+            }
+            case 5: {
+                aoCDay = new HydrothermalVenture();
+                break;
+            }
+            case 6 : {
+                aoCDay = new LanternFish();
+                break;
+            }
         }
         aoCDay.solve();
     }
