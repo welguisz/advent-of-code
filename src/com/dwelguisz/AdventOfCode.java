@@ -17,6 +17,10 @@ public class AdventOfCode {
         switch(year) {
             case 2021 : aoCYear = new RetrieveTheKeys(2021);
         }
-        aoCYear.runOneDay(day);
+        if (day > 0) {
+            aoCYear.runOneDay(day);
+        } else {
+            aoCYear.runAllDays();
+        }
     }
 }

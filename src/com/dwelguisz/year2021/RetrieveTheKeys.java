@@ -37,6 +37,42 @@ public class RetrieveTheKeys extends AoCYear {
                 aoCDay = new LanternFish();
                 break;
             }
+            case 7: {
+                aoCDay = new TreacheryOfWhales();
+                break;
+            }
+            case 8: {
+                aoCDay = new SevenSegmentSearch();
+                break;
+            }
+            case 9: {
+                aoCDay = new SmokeBasin();
+                break;
+            }
+            case 10: {
+                aoCDay = new SyntaxScoring();
+                break;
+            }
+            case 11: {
+                aoCDay = new DumboOctopus();
+                break;
+            }
+            case 12: {
+                aoCDay = new PassagePathing();
+                break;
+            }
+            case 13: {
+                aoCDay = new TransparentOrigami();
+                break;
+            }
+            case 14: {
+                aoCDay = new ExtendedPolymerization();
+                break;
+            }
+            case 25: {
+                aoCDay = new SeaCucumber();
+                break;
+            }
         }
         aoCDay.solve();
     }

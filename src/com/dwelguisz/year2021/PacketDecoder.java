@@ -1,5 +1,6 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day16.NumberPacket;
 import com.dwelguisz.year2021.helper.day16.OperatorPacket;
 import com.dwelguisz.year2021.helper.day16.Packet;
@@ -8,12 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.dwelguisz.year2021.helper.CommonConversions.convertHexToBin;
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Long.parseLong;
 
-public class AdventDay16 {
+public class PacketDecoder extends AoCDay {
 
-    public static void main(String[] args) {
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day16/testcase.txt");
         String hex2bin = convertHexToBin(lines.get(0));
         List<Object> objects = readPacket(hex2bin, 0);

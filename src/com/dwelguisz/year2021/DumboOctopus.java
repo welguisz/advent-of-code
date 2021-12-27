@@ -1,19 +1,24 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay11 {
+public class DumboOctopus extends AoCDay {
 
-    static Integer MAX_ROW = 10;
-    static Integer[][] grid = new Integer[MAX_ROW][MAX_ROW];
+    private static Integer MAX_ROW = 10;
+    private Integer[][] grid;
 
-    public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day11/input.txt");
+    public DumboOctopus() {
+        grid = new Integer[MAX_ROW][MAX_ROW];
+    }
+
+    public void solve() {
+        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day11/input.txt");
         int x = 0;
         for (String line : lines) {
             List<Integer> row = Arrays.stream(line.split("")).map(str -> parseInt(str)).collect(Collectors.toList());
@@ -28,17 +33,16 @@ public class AdventDay11 {
         System.out.println(String.format("Part 2 Answer: %d", part2));
     }
 
-    public static Long solutionPart1() {
+    private Long solutionPart1() {
         Long total = 0L;
         for (int i = 0; i < 100; i++) {
             total += increaseEnergyLevel();
             resetGrid();
         }
-        //drawBoard();
         return total;
     }
 
-    public static Long solutionPart2() {
+    private Long solutionPart2() {
         Long step = 100L;
         while (!allFlash()) {
             increaseEnergyLevel();
@@ -48,7 +52,7 @@ public class AdventDay11 {
         return step;
     }
 
-    public static boolean allFlash() {
+    private boolean allFlash() {
         for (int x = 0; x < MAX_ROW; x++) {
             for (int y = 0; y < MAX_ROW; y++) {
                 if (grid[x][y] != 0) {
@@ -59,7 +63,7 @@ public class AdventDay11 {
         return true;
     }
 
-    public static Long increaseEnergyLevel() {
+    private Long increaseEnergyLevel() {
         Long total = 0L;
         for (int x = 0; x < MAX_ROW; x++) {
             for (int y = 0; y < MAX_ROW; y++) {
@@ -69,7 +73,7 @@ public class AdventDay11 {
         return total;
     }
 
-    public static void drawBoard() {
+    private void drawBoard() {
         for (int x = 0; x < MAX_ROW; x++) {
             StringBuffer line = new StringBuffer();
             for (int y = 0; y < MAX_ROW; y++) {
@@ -79,7 +83,7 @@ public class AdventDay11 {
         }
     }
 
-    public static Long increaseEnergyLevelOneSpot(int x, int y) {
+    private Long increaseEnergyLevelOneSpot(int x, int y) {
         Long total = 0L;
         grid[x][y]++;
         if (grid[x][y] == 10) {
@@ -116,7 +120,7 @@ public class AdventDay11 {
         return total;
     }
 
-    public static void resetGrid() {
+    private void resetGrid() {
         for (int x = 0; x < MAX_ROW; x++) {
             for (int y = 0; y < MAX_ROW; y++) {
                 if(grid[x][y] > 9) {

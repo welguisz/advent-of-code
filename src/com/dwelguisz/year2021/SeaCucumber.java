@@ -1,35 +1,42 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 
-public class SeaCucumber {
-    public static void main(String[] args) {
+public class SeaCucumber extends AoCDay {
+
+    String[][] grid;
+    Boolean atLeastOneMoved;
+
+    public SeaCucumber() {
+        super();
+        grid = new String[1][1];
+        atLeastOneMoved = true;
+    }
+
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day25/input.txt");
-        String[][] grid = createGrid(lines);
-        Integer part1 = solutionPart1(grid);
+        grid = createGrid(lines);
+        Integer part1 = solutionPart1();
         System.out.println(String.format("Solution Part1: %d",part1));
     }
 
-    public static Integer solutionPart1(String[][] grid) {
+    public Integer solutionPart1() {
         Integer count = 0;
-        boolean atLeastOneMoved = true;
         while (atLeastOneMoved) {
-            Pair<Boolean, String[][]> result = oneStep(grid);
-            atLeastOneMoved = result.getLeft();
-            grid = result.getRight();
+            oneStep();
             count++;
         }
         return count;
     }
 
-    public static Pair<Boolean, String[][]> oneStep(String[][] grid)  {
-        Boolean atLeastOneMoved = false;
+    public void oneStep()  {
         String[][] newGrid = copy2DArray(grid);
+        atLeastOneMoved = false;
         // move to the right
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
@@ -60,7 +67,7 @@ public class SeaCucumber {
                 atLeastOneMoved = true;
             }
         }
-        return Pair.of(atLeastOneMoved, newGrid);
+        grid = copy2DArray(newGrid);
     }
 
     public static String[][] copy2DArray(String [][] source) {

@@ -1,5 +1,6 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -11,21 +12,22 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.util.stream.Collectors.counting;
 
-public class AdventDay14 {
-    public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day14/input.txt");
+public class ExtendedPolymerization extends AoCDay {
+
+    public void solve() {
+        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day14/input.txt");
         List<String> equations = lines.stream().filter(str -> (str.contains(" -> "))).collect(Collectors.toList());
         Map<String, List<String>> newStrings = createMap(equations);
         Long part1 = elegantSolution(newStrings, lines.get(0), 10);
         Long part2 = elegantSolution(newStrings, lines.get(0), 40);
+        System.out.println("--------- Day 14: Extended Polymerization------------");
         System.out.println(String.format("Part 1 Answer: %d", part1));
         System.out.println(String.format("Part 2 Answer: %d", part2));
     }
 
-    public static Map<String, List<String>> createMap(List<String> equations) {
+    private Map<String, List<String>> createMap(List<String> equations) {
         Map<String, List<String>> map = new HashMap<>();
         for(String equation : equations) {
             String[] puts = equation.split(" -> ");
@@ -39,7 +41,7 @@ public class AdventDay14 {
         return map;
     }
 
-    public static Long bruteForceMethod(Map<String, List<String>> equations, String line, int steps) {
+    private Long bruteForceMethod(Map<String, List<String>> equations, String line, int steps) {
         String newStr = line;
         for (int i = 0; i < steps; i++) {
             newStr = bruteForceRunOnce(equations, newStr);
@@ -50,7 +52,7 @@ public class AdventDay14 {
         return maxValue - minValue;
     }
 
-    public static String bruteForceRunOnce(Map<String, List<String>> equations, String line) {
+    private String bruteForceRunOnce(Map<String, List<String>> equations, String line) {
         StringBuffer sb = new StringBuffer(line.substring(0,1));
         List<String> breakString = new ArrayList<>();
         for (int i = 0; i < line.length() - 1; i++) {
@@ -63,7 +65,7 @@ public class AdventDay14 {
         return sb.toString();
     }
 
-    public static Long elegantSolution(Map<String, List<String>> equations, String line, int steps) {
+    private Long elegantSolution(Map<String, List<String>> equations, String line, int steps) {
         Set<String> breakString = new HashSet<>();
         //We will be double counting letters in the middle, so let's just keep these around to add in at the very end.
         List<String> tempStrings = new ArrayList<>();
@@ -98,7 +100,7 @@ public class AdventDay14 {
     }
 
 
-    public static Map<String, Long> elegantSolutionRunOnce(final Map<String, Long> counts, Map<String, List<String>> equations) {
+    private Map<String, Long> elegantSolutionRunOnce(final Map<String, Long> counts, Map<String, List<String>> equations) {
         Map<String, Long> newCounts = new HashMap<>();
         for(String countStr : counts.keySet()) {
             List<String> countOnce = equations.get(countStr);

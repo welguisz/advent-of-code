@@ -1,22 +1,30 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay09 {
+public class SmokeBasin extends AoCDay {
 
-    static int[][] grid;
-    static int height;
-    static int width;
+    int[][] grid;
+    int height;
+    int width;
 
-    public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day9/input.txt");
+    public SmokeBasin() {
+        super();
+        grid = new int[1][1];
+        height = 1;
+        width = 1;
+    }
+
+    public void solve() {
+        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day9/input.txt");
         createRows(instructions);
         int part1 = findAnswer(false);
         int part2 = findAnswer(true);
@@ -24,7 +32,7 @@ public class AdventDay09 {
         System.out.println(String.format("Part 2 Answer: %d", part2));
     }
 
-    public static int findAnswer(boolean part2) {
+    public int findAnswer(boolean part2) {
         List<Integer> basinCounts = new ArrayList<>();
         int total = 0;
         boolean[][] basinGrid = new boolean[width][height];
@@ -53,7 +61,7 @@ public class AdventDay09 {
         return basinCounts.get(0) * basinCounts.get(1) * basinCounts.get(2);
     }
 
-    static Integer getBasinCount(int x, int y, int[][] grid, boolean[][] basinGrid) {
+    Integer getBasinCount(int x, int y, int[][] grid, boolean[][] basinGrid) {
         if (basinGrid[x][y] || grid[x][y] == 9) {
             return 0;
         }
@@ -75,7 +83,7 @@ public class AdventDay09 {
         return count;
     }
 
-    public static int[] nextToMe(int x, int y) {
+    public int[] nextToMe(int x, int y) {
         int roof = (x == 0) ? 12 : grid[x-1][y];
         int floor =(x == height-1) ? 12 : grid[x+1][y];
         int left = (y == 0) ? 12 : grid[x][y-1];
@@ -84,11 +92,11 @@ public class AdventDay09 {
 
     }
 
-    public static boolean isMin(int current, int roof, int floor, int left, int right) {
+    public boolean isMin(int current, int roof, int floor, int left, int right) {
         return ((current < roof ) && (current < floor) && (current < left)  && (current < right));
     }
 
-    public static void createRows(List<String> input) {
+    public void createRows(List<String> input) {
         List<List<Integer>> rows = new ArrayList<>();
         for(String in: input) {
             List<Integer> row = Arrays.stream(in.split("")).map(str -> parseInt(str)).collect(Collectors.toList());

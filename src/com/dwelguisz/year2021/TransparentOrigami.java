@@ -1,5 +1,6 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day13.Point;
 
 import java.util.ArrayList;
@@ -12,19 +13,26 @@ import java.util.stream.Collectors;
 import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay13 {
+public class TransparentOrigami extends AoCDay {
 
-    static List<String> processInstructions = new ArrayList<>();
+    List<String> processInstructions;
 
-    public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day13/input.txt");
+    public TransparentOrigami() {
+        super();
+        processInstructions = new ArrayList<>();
+    }
+
+    public void solve() {
+        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day13/input.txt");
         Set<Point> points = processLines(lines);
         Integer part1 = part1(points, processInstructions);
+        System.out.println("--------- Day 13: Transparent Origami------------");
         System.out.println(String.format("Part 1 Answer: %d", part1));
+        System.out.println("Part 2:");
         part2(points, processInstructions);
     }
 
-    public static Set<Point> processLines(List<String> strings) {
+    private Set<Point> processLines(List<String> strings) {
         Set<Point> points = new HashSet<>();
         for (String str : strings) {
             if (str.length() == 0) {
@@ -41,7 +49,7 @@ public class AdventDay13 {
         return points;
     }
 
-    public static void printGrid(Set<Point> points) {
+    private void printGrid(Set<Point> points) {
         Integer minX = Integer.MAX_VALUE;
         Integer minY = Integer.MAX_VALUE;
         Integer maxX= Integer.MIN_VALUE;
@@ -66,19 +74,19 @@ public class AdventDay13 {
         }
     }
 
-    public static int part1(Set<Point> points, List<String> lines) {
+    private int part1(Set<Point> points, List<String> lines) {
         points = foldOnce(points, lines.get(0));
         return points.size();
     }
 
-    public static void part2(Set<Point> points, List<String> lines) {
+    private void part2(Set<Point> points, List<String> lines) {
         for (String line : lines) {
             points = foldOnce(points, line);
         }
         printGrid(points);
     }
 
-    public static Set<Point> foldOnce(Set<Point> points, String line) {
+    private Set<Point> foldOnce(Set<Point> points, String line) {
         String[] foldLine = line.split(" ");
         String[] foldInstr = foldLine[2].split("=");
         String axis = foldInstr[0];
