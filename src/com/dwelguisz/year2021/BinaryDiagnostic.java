@@ -1,15 +1,16 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay03 {
+public class BinaryDiagnostic extends AoCDay {
 
-    public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day3/input.txt");
+    public void solve() {
+        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day3/input.txt");
         int oxygen = getRating(instructions, '1', true);
         int carbondioxide = getRating(instructions, '0', false);
         int part1 = calculateBinary(instructions);

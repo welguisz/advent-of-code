@@ -1,14 +1,15 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.List;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay02 {
+public class Dive extends AoCDay {
 
-    public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day2/input.txt");
+    public void solve() {
+        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day2/input.txt");
         int part1 = calculateLocation(instructions);
         int part2 = calculateLocationWithAim(instructions);
         System.out.println(String.format("Part 1 Answer: %d", part1));
@@ -16,7 +17,7 @@ public class AdventDay02 {
 
     }
 
-    static private Integer calculateLocation(List<String> instructions) {
+    private Integer calculateLocation(List<String> instructions) {
         int horizontal = 0;
         int depth = 0;
         for(int i = 0; i < instructions.size(); i++) {
@@ -34,7 +35,7 @@ public class AdventDay02 {
     }
 
 
-    static private Integer calculateLocationWithAim(List<String> instructions) {
+    private Integer calculateLocationWithAim(List<String> instructions) {
         int horizontal = 0;
         int depth = 0;
         int aim = 0;

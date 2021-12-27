@@ -1,17 +1,15 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
-import static java.lang.Integer.parseInt;
+public class SonarSweep extends AoCDay {
 
-public class AdventDay01 {
-
-    public static void main(String[] args) {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2021/day1/input.txt");
-        List<Integer> values = instructions.stream().map(str -> parseInt(str)).collect(Collectors.toList());
+    public void solve() {
+        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day1/input.txt");
+        List<Integer> values = convertStringsToInts(instructions);
         int roughCalculation = calculateIncreases(values);
         List<Integer> windowValues = calculateWindow(values);
         int betterCalculation = calculateIncreases(windowValues);
@@ -19,12 +17,10 @@ public class AdventDay01 {
         System.out.println(String.format("Part 2 Answer: %d", betterCalculation));
     }
 
-    static private Integer calculateIncreases(List<Integer> values) {
+    private Integer calculateIncreases(List<Integer> values) {
         int increased = 0;
-        boolean skipFirst = true;
         for(int i = 0; i < values.size(); i++) {
-            if (skipFirst) {
-                skipFirst = false;
+            if (i == 0) {
                 continue;
             }
             if (values.get(i) > values.get(i-1)) {
@@ -34,7 +30,7 @@ public class AdventDay01 {
         return increased;
     }
 
-    static private List<Integer> calculateWindow(List<Integer> depths) {
+    private List<Integer> calculateWindow(List<Integer> depths) {
         List<Integer> sums = new ArrayList<>();
         for(int i = 0; i < depths.size(); i++) {
             if (i < 2) {
