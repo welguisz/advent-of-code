@@ -69,6 +69,26 @@ public class RetrieveTheKeys extends AoCYear {
                 aoCDay = new ExtendedPolymerization();
                 break;
             }
+            case 18: {
+                aoCDay = new Snailfish();
+                break;
+            }
+            case 19: {
+                aoCDay = new BeaconScanner();
+                break;
+            }
+            case 20: {
+                aoCDay = new TrenchMap();
+                break;
+            }
+            case 21: {
+                aoCDay = new DiracDice();
+                break;
+            }
+            case 22 : {
+                aoCDay = new ReactorReboot();
+                break;
+            }
             case 25: {
                 aoCDay = new SeaCucumber();
                 break;

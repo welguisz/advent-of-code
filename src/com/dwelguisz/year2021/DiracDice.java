@@ -1,5 +1,6 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.Tuple;
 import com.dwelguisz.year2021.helper.day21.Multiverse;
 
@@ -9,29 +10,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.lang.Integer.parseInt;
 import static java.util.stream.Collectors.counting;
 
-public class AdventDay21 {
+public class DiracDice extends AoCDay {
     //Dirac Die universe
     // 111 - 3 : 112 - 4 : 113 - 5 : 121 - 4 : 122 - 5 : 123 - 6 : 131 - 5 : 132 - 6 : 133 : 7
     // 211 - 4 : 212 - 5 : 213 - 6 : 221 - 5 : 222 - 6 : 223 - 7 : 231 - 6 : 232 - 7 : 233 : 8
     // 311 - 5 : 312 - 6 : 313 - 7 : 321 - 6 : 322 - 7 : 323 - 8 : 331 - 7 : 332 - 8 : 333 : 9
-    public static Map<Integer, Long> DIRAC_UNIVERSE_DISTRIBUTION = new HashMap<>();
-    public static Integer QUANTUM_FINAL_SCORE_WIN = 21;
+    private Map<Integer, Long> DIRAC_UNIVERSE_DISTRIBUTION = new HashMap<>();
+    private static Integer QUANTUM_FINAL_SCORE_WIN = 21;
 
-    public static void main(String[] args) {
+    public DiracDice() {
+        super();
+        createDiracUniverseDistribution();
+    }
+
+    public void solve() {
         Integer player1SP = 8;
         Integer player2SP = 1;
         createDiracUniverseDistribution();
         Long part1 = playGame(player1SP, player2SP);
         Long part2 = playQuantumGame(player1SP, player2SP);
+        System.out.println("--------- Day 21: Dirac Dice------------");
         System.out.println(String.format("Solution Part1: %d",part1));
-        System.out.println(String.format("Solution Part1: %d",part2));
+        System.out.println(String.format("Solution Part2: %d",part2));
 
     }
 
-    public static void createDiracUniverseDistribution() {
+    private void createDiracUniverseDistribution() {
         List<Integer> arraySum = new ArrayList<>();
         for (int roll1 = 1; roll1 <= 3; roll1++) {
             for (int roll2 = 1; roll2 <= 3; roll2++) {
@@ -43,7 +49,7 @@ public class AdventDay21 {
         DIRAC_UNIVERSE_DISTRIBUTION = arraySum.stream().collect(Collectors.groupingBy(val -> val,counting()));
     }
 
-    public static Long playQuantumGame(Integer player1SP, Integer player2SP) {
+    private Long playQuantumGame(Integer player1SP, Integer player2SP) {
         Long player1Wins = 0L;
         Long player2Wins = 0L;
         Map<Tuple<Multiverse, Boolean>, Long> multiverse = new HashMap();
@@ -85,7 +91,7 @@ public class AdventDay21 {
     }
 
 
-    public static Long playGame(Integer player1SP, Integer player2SP) {
+    private Long playGame(Integer player1SP, Integer player2SP) {
         Long p1Score = 0L;
         Long p2Score = 0L;
         Integer currentP1Position = player1SP;
@@ -110,7 +116,7 @@ public class AdventDay21 {
         return (loserScore * (dieRoll-1));
     }
 
-    public static Integer oneRoll(Integer currentPosition, Integer dieRoll) {
+    private Integer oneRoll(Integer currentPosition, Integer dieRoll) {
         Integer unit = dieRoll % 10;
         Integer spaceJumps = ((3*unit) + 3) % 10;
         Integer tmpScore = ((currentPosition + spaceJumps) % 10);

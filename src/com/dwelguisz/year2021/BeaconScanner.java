@@ -1,5 +1,6 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.Tuple;
 import com.dwelguisz.year2021.helper.day19.Coordinate;
 import com.dwelguisz.year2021.helper.day19.Scanner;
@@ -9,22 +10,27 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.util.stream.Collectors.toList;
 
-public class AdventDay19 {
-    public static List<Scanner> scannerList = new ArrayList<>();
+public class BeaconScanner extends AoCDay {
+    private List<Scanner> scannerList;
 
-    public static void main(String[] args) {
+    public BeaconScanner() {
+        super();
+        scannerList = new ArrayList<>();
+    }
+
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day19/input.txt");
         parseLines(lines);
         System.out.println(String.format("Number of scanners: %d", scannerList.size()));
         Tuple<Set<Coordinate>,Integer> answers = compare();
+        System.out.println("--------- Day 19: Beacon Scanner------------");
         System.out.println(String.format("Solution Part1: %d",answers.x.size()));
         System.out.println(String.format("Solution Part1: %d",answers.y));
     }
 
-    public static void parseLines(List<String> lines) {
+    private void parseLines(List<String> lines) {
         List<String> inputLines = new ArrayList<>();
         for (String line: lines) {
             if (line.contains("---")) {
@@ -40,7 +46,7 @@ public class AdventDay19 {
         scannerList.add(newScanner);
     }
 
-    public static Tuple<Set<Coordinate>, Integer> compare() {
+   private Tuple<Set<Coordinate>, Integer> compare() {
         List<Scanner> resolvedScanners = new ArrayList<>();
         List<Scanner> toHandleScanners = new ArrayList<>(scannerList);
         Scanner first = scannerList.get(0);
@@ -71,7 +77,7 @@ public class AdventDay19 {
 
     }
 
-    private static Scanner getNewMatchedScanner(List<Scanner> resolvedScanners, List<Scanner> toHandleScanners) {
+    private Scanner getNewMatchedScanner(List<Scanner> resolvedScanners, List<Scanner> toHandleScanners) {
         for (Scanner scanner : resolvedScanners) {
             for (Scanner matchScanner : toHandleScanners) {
                 List<Tuple<Coordinate, Coordinate>> coordinateList = getMatches(scanner, matchScanner);
@@ -84,7 +90,7 @@ public class AdventDay19 {
         return null;
     }
 
-    private static List<Tuple<Coordinate, Coordinate>> getMatches(Scanner scanner, Scanner matchScanner) {
+    private List<Tuple<Coordinate, Coordinate>> getMatches(Scanner scanner, Scanner matchScanner) {
         List<Tuple<Coordinate, Coordinate>> coordinateList = new ArrayList<>();
         scanner.getCoordinates().forEach(coordinate -> {
                     matchScanner.getCoordinates().forEach(coordinate2 -> {
@@ -100,7 +106,7 @@ public class AdventDay19 {
         return coordinateList;
     }
 
-    private static Scanner determine(Scanner scanner, Scanner matchScanner) {
+    private Scanner determine(Scanner scanner, Scanner matchScanner) {
         Set<Scanner> rotatedScanners = matchScanner.rotate();
 
         List<Scanner> matchedScanner = rotatedScanners.stream()
@@ -114,12 +120,12 @@ public class AdventDay19 {
         return matched.add(matchedCoordinate);
     }
 
-    private static Coordinate isMatch(Scanner scanner, Scanner matchScanner) {
+    private Coordinate isMatch(Scanner scanner, Scanner matchScanner) {
         List<Tuple<Coordinate, Coordinate>> matches = getMatches(scanner, matchScanner);
         return isMatching(matches);
     }
 
-    private static Coordinate isMatching(List<Tuple<Coordinate, Coordinate>> list) {
+    private Coordinate isMatching(List<Tuple<Coordinate, Coordinate>> list) {
         Coordinate matchScannerPosition = null;
         for (Tuple<Coordinate, Coordinate> tuple : list) {
             Coordinate temp = tuple.y.determineNewPosition(tuple.x);
@@ -131,6 +137,5 @@ public class AdventDay19 {
         }
         return matchScannerPosition;
     }
-
 
 }

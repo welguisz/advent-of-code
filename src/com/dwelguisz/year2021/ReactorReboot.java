@@ -1,5 +1,6 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day19.Coordinate;
 import com.dwelguisz.year2021.helper.day22.Cubiod;
 
@@ -10,24 +11,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
-import static java.lang.Integer.parseInt;
-
-public class AdventDay22 {
+public class ReactorReboot extends AoCDay {
 
     public static Integer MAX_RANGE_PART1 = 50;
 
-    public static void main(String[] args) {
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day22/input.txt");
         List<Cubiod> data = parseInput(lines);
         Long part1 = elegantSolution(data, true);
         Long part2 = elegantSolution(data, false);
-
+        System.out.println("--------- Day 22: Reactor Reboot------------");
         System.out.println(String.format("Solution Part1 using Part2: %d",part1));
         System.out.println(String.format("Solution Part2: %d",part2));
     }
 
-    public static List<Cubiod> parseInput(List<String> lines){
+    private List<Cubiod> parseInput(List<String> lines){
         List<Cubiod> data = new ArrayList<>();
         for (String line : lines) {
             data.add(new Cubiod(line));
@@ -35,7 +33,7 @@ public class AdventDay22 {
         return data;
     }
 
-    public static Long bruteForce(List<Cubiod> data) {
+    private Long bruteForce(List<Cubiod> data) {
         Map<Coordinate,Boolean> reactor = new HashMap<>();
         for (Cubiod datum : data) {
             if (!((-MAX_RANGE_PART1 <= datum.xMin) && (datum.xMin <= MAX_RANGE_PART1))) {
@@ -52,14 +50,14 @@ public class AdventDay22 {
         return reactor.entrySet().stream().filter(entry -> entry.getValue()).count();
     }
 
-    public static List<Cubiod> mergeTwoArrayLists(List<Cubiod> cubiods1, List<Cubiod> cubiods2) {
+    private List<Cubiod> mergeTwoArrayLists(List<Cubiod> cubiods1, List<Cubiod> cubiods2) {
         List<Cubiod> newList = new ArrayList<>();
         newList.addAll(cubiods1);
         newList.addAll(cubiods2);
         return newList;
     }
 
-    public static Long elegantSolution(List<Cubiod> data, boolean part1) {
+    private Long elegantSolution(List<Cubiod> data, boolean part1) {
         TreeMap<Integer, List<Cubiod>> levels = new TreeMap<>(Collections.reverseOrder());
         for (Cubiod datum : data) {
             if (part1) {
