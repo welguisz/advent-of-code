@@ -1,5 +1,7 @@
 package com.dwelguisz.year2020;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,10 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
-
-public class CustomCustoms {
-    public static void main(String[] args) {
+public class CustomCustoms extends AoCDay {
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day06/input.txt");
         Integer part1 = solutionPart1(lines);
         Long part2 = solutionPart2(lines);
@@ -19,7 +19,7 @@ public class CustomCustoms {
         System.out.println(String.format("Solution Part2: %d",part2));
     }
 
-    public static Integer solutionPart1(List<String> lines) {
+    private Integer solutionPart1(List<String> lines) {
         Set<String> groupAnswers = new HashSet<>();
         Integer runningSum = 0;
         for (String line : lines) {
@@ -37,7 +37,7 @@ public class CustomCustoms {
         return runningSum;
     }
 
-    public static Long solutionPart2(List<String> lines) {
+    private Long solutionPart2(List<String> lines) {
         Map<String, Integer> groupAnswers = new HashMap<>();
         Integer totalPeopleinGroup = 0;
         Long runningSum = 0L;

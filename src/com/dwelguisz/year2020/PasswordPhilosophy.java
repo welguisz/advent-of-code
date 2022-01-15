@@ -1,13 +1,13 @@
 package com.dwelguisz.year2020;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.List;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
-import static java.lang.Integer.max;
 import static java.lang.Integer.parseInt;
 
-public class PasswordPhilosophy {
-    public static void main(String[] args) {
+public class PasswordPhilosophy extends AoCDay {
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day02/input.txt");
         validPassword("1-3 a: abcde",true);
         validPassword("1-3 b: cdefg", true);
@@ -18,7 +18,7 @@ public class PasswordPhilosophy {
         System.out.println(String.format("Solution Part2: %d",part2));
     }
 
-    public static boolean validPassword(String str, boolean part2) {
+    private boolean validPassword(String str, boolean part2) {
         String[] splitLine = str.split(": ");
         String password = splitLine[1];
         char requiredChar = splitLine[0].split(" ")[1].charAt(0);
@@ -31,12 +31,12 @@ public class PasswordPhilosophy {
         }
     }
 
-    public static boolean validPasswordPart1(String password, char requiredChar, Integer minRequireChar, Integer maxRequiredChar) {
+    private boolean validPasswordPart1(String password, char requiredChar, Integer minRequireChar, Integer maxRequiredChar) {
         Long requiredCharCount = password.chars().filter(ch -> ch == requiredChar).count();
         return ((minRequireChar <= requiredCharCount) && (requiredCharCount <= maxRequiredChar));
     }
 
-    public static boolean validPasswordPart2(String password, char requiredChar, Integer minRequireChar, Integer maxRequiredChar) {
+    private boolean validPasswordPart2(String password, char requiredChar, Integer minRequireChar, Integer maxRequiredChar) {
         char charAtMinLoc = password.charAt(minRequireChar-1);
         char charAtMaxLoc = password.charAt(maxRequiredChar-1);
         Integer value = 0;

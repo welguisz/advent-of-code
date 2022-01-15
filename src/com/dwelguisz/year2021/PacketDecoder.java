@@ -14,7 +14,7 @@ import static java.lang.Long.parseLong;
 public class PacketDecoder extends AoCDay {
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day16/testcase.txt");
+        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day16/input.txt");
         String hex2bin = convertHexToBin(lines.get(0));
         List<Object> objects = readPacket(hex2bin, 0);
         Packet finalPacket = (Packet) objects.get(1);

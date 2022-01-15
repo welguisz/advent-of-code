@@ -1,16 +1,16 @@
 package com.dwelguisz.year2020;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.Tuple;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
 //Year 2021, Day 01
-public class ReportRepair {
-    public static void main(String[] args) {
+public class ReportRepair extends AoCDay {
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day01/input.txt");
         List<Integer> values = lines.stream().map(str -> parseInt(str)).collect(Collectors.toList());
         Tuple<Integer, Integer> answer = findValues(values);
@@ -21,7 +21,7 @@ public class ReportRepair {
 
     }
 
-    public static Tuple<Integer, Integer> findValues(List<Integer> values) {
+    private Tuple<Integer, Integer> findValues(List<Integer> values) {
         Tuple<Integer, Integer> answer = new Tuple(0,0);
         for (int i = 0; i < values.size(); i++) {
             for (int j = i + 1; j < values.size(); j++) {
@@ -33,7 +33,7 @@ public class ReportRepair {
         return answer;
     }
 
-    public static Long findValuesPart2(List<Integer> values) {
+    private Long findValuesPart2(List<Integer> values) {
 
         for (int i = 0; i < values.size(); i++) {
             for (int j = i + 1; j < values.size(); j++) {

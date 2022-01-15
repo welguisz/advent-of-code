@@ -69,6 +69,10 @@ public class RetrieveTheKeys extends AoCYear {
                 aoCDay = new ExtendedPolymerization();
                 break;
             }
+            case 16: {
+                aoCDay = new PacketDecoder();
+                break;
+            }
             case 18: {
                 aoCDay = new Snailfish();
                 break;

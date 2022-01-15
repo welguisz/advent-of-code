@@ -1,25 +1,25 @@
 package com.dwelguisz.year2020;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class HandyHaversacks {
-    public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day07/testcase.txt");
+public class HandyHaversacks extends AoCDay {
+    public void solve() {
+        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day07/input.txt");
         Map<String,Map<String,Integer>> rules = createBagRules(lines);
-        Integer part1 = solutionPart1(rules,"shiny gold");
+        Integer part1 = solutionPart1(rules,"shiny gold").size();
+        Long part2 = solutionPart2(rules,"shiny gold");
         System.out.println(String.format("Solution Part1: %d",part1));
+        System.out.println(String.format("Solution Part2: %d",part2));
     }
 
-    public static Integer solutionPart1(Map<String,Map<String,Integer>> rules, String importantKey) {
+   private Set<String> solutionPart1(Map<String,Map<String,Integer>> rules, String importantKey) {
         Set<String> foundBags = new HashSet<>();
         Boolean runAgain = true;
         while(runAgain) {
@@ -35,17 +35,34 @@ public class HandyHaversacks {
             }
             if (!newBags.isEmpty()) {
                 runAgain = true;
+                for(String bag : newBags) {
+                    foundBags.addAll(solutionPart1(rules, bag));
+                }
                 foundBags.addAll(newBags);
             }
         }
-        return foundBags.size();
+        return foundBags;
     }
 
-    public static Map<String,Map<String,Integer>> createBagRules(List<String> lines) {
+    private Long solutionPart2(Map<String,Map<String,Integer>> rules, String importantKey) {
+        Map<String, Integer> innerBags = rules.get(importantKey);
+        if (innerBags.isEmpty()) {
+            return 0L;
+        }
+        Long innerBagSize = 0L;
+        for(Map.Entry<String, Integer> innerBag : innerBags.entrySet()) {
+            innerBagSize += innerBag.getValue();
+            innerBagSize += innerBag.getValue() * solutionPart2(rules, innerBag.getKey());
+        }
+
+        return innerBagSize;
+    }
+
+    private Map<String,Map<String,Integer>> createBagRules(List<String> lines) {
         Map<String,Map<String,Integer>> rules = new HashMap<>();
         for (String line : lines) {
             String[] outerBagRules = line.split(" contain ");
-            String outerkey = outerBagRules[0];
+            String outerkey = outerBagRules[0].replace(" bags", "");
             outerkey = outerkey.replace("bags ","").replace("bag ","");
             String [] innerBags = outerBagRules[1].split(", ");
             Map<String, Integer> innerBagRules = new HashMap<>();

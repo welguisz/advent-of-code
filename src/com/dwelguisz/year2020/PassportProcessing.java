@@ -1,5 +1,6 @@
 package com.dwelguisz.year2020;
 
+import com.dwelguisz.base.AoCDay;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ import java.util.regex.Pattern;
 import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class PassportProcessing {
-    public static void main(String[] args) {
+public class PassportProcessing extends AoCDay {
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day04/input.txt");
         List<Map<String, String>> passports = processLines(lines);
         Long part1 = solutionPart1(passports);
@@ -24,15 +25,15 @@ public class PassportProcessing {
 
     }
 
-    public static Long solutionPart1(List<Map<String,String>> passports) {
+    private Long solutionPart1(List<Map<String,String>> passports) {
         return passports.stream().filter(passport -> validPassport(passport)).count();
     }
 
-    public static Long solutionPart2(List<Map<String,String>> passports) {
+    private Long solutionPart2(List<Map<String,String>> passports) {
         return passports.stream().filter(passport -> validPassport(passport)).filter(passport -> validate(passport)).count();
     }
 
-    public static Boolean validate(Map<String, String> passport) {
+    private Boolean validate(Map<String, String> passport) {
         return  (validateYear(passport.get("byr"),1920,2002)) &&
                 (validateYear(passport.get("iyr"), 2010, 2020)) &&
                 (validateYear(passport.get("eyr"), 2020, 2030)) &&
@@ -42,7 +43,7 @@ public class PassportProcessing {
                 (validatePassPortId(passport.get("pid")));
     }
 
-    public static Boolean validateYear(String value, Integer minYear, Integer maxYear) {
+    private Boolean validateYear(String value, Integer minYear, Integer maxYear) {
         if (value.length() != 4) {
             return false;
         }
@@ -53,7 +54,7 @@ public class PassportProcessing {
         return false;
     }
 
-    private static Boolean validateHeight(String value) {
+    private Boolean validateHeight(String value) {
         if (value.contains("cm")) {
             Integer loc = value.indexOf("cm");
             String val = value.substring(0,loc);
@@ -74,30 +75,30 @@ public class PassportProcessing {
         return false;
     }
 
-    private static Boolean validateHairColor(String value) {
+    private Boolean validateHairColor(String value) {
         Pattern pattern = Pattern.compile("^\\#[\\dabcdef]{6}");
         Matcher matcher = pattern.matcher(value);
         return matcher.matches();
     }
 
-    private static Boolean validateEyeColor(String value) {
+    private Boolean validateEyeColor(String value) {
         List<String> validEyeColor = List.of("amb","blu","brn","gry","grn","hzl","oth");
         return (validEyeColor.stream().filter(ve -> ve.equals(value)).count() == 1L);
     }
 
-    private static Boolean validatePassPortId(String value) {
+    private Boolean validatePassPortId(String value) {
         Pattern pattern = Pattern.compile("^\\d{9}");
         Matcher matcher = pattern.matcher(value);
         return matcher.matches();
     }
 
-    public static boolean validPassport(Map<String,String> passport) {
+    public boolean validPassport(Map<String,String> passport) {
         String[] validKeys = new String[] {"byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"};
         Long count = Arrays.stream(validKeys).filter(key -> passport.containsKey(key)).count();
         return (count == 7L);
     }
 
-    public static List<Map<String,String>> processLines(List<String> lines) {
+    public List<Map<String,String>> processLines(List<String> lines) {
         List<Map<String,String>> passports = new ArrayList<>();
         Map<String, String> passport = new HashMap<>();
         for(String line : lines) {

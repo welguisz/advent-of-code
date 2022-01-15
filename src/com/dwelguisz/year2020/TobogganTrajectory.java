@@ -1,5 +1,7 @@
 package com.dwelguisz.year2020;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +10,8 @@ import java.util.stream.Collectors;
 import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class TobogganTrajectory {
-    public static void main(String[] args) {
+public class TobogganTrajectory extends AoCDay {
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day03/input.txt");
         Integer[][] sampleMap = createMap(lines);
         Long part1 = solutionPart1(sampleMap);
@@ -18,11 +20,11 @@ public class TobogganTrajectory {
         System.out.println(String.format("Solution Part1: %d",part2));
     }
 
-    public static Long solutionPart1(Integer[][] map) {
+    private Long solutionPart1(Integer[][] map) {
         return checkSlopes(map, 3, 1);
     }
 
-    public static Long solutionPart2(Integer[][] map) {
+    private Long solutionPart2(Integer[][] map) {
         Long slope1 = checkSlopes(map, 1,1);
         Long slope2 = checkSlopes(map, 3,1);
         Long slope3 = checkSlopes(map, 5,1);
@@ -31,7 +33,7 @@ public class TobogganTrajectory {
         return slope1*slope2*slope3*slope4*slope5;
     }
 
-    public static Long checkSlopes(Integer[][] map, Integer xSlope, Integer ySlope) {
+    private Long checkSlopes(Integer[][] map, Integer xSlope, Integer ySlope) {
         Long treesHit = 0L;
         Integer x = 0;
         Integer y = 0;
@@ -46,7 +48,7 @@ public class TobogganTrajectory {
         return treesHit;
     }
 
-    public static Integer[][] createMap(List<String> lines) {
+    private Integer[][] createMap(List<String> lines) {
         Map<Character, Integer> treeValues = Map.of('.',0,'#',1);
         Integer[][] map = new Integer[lines.size()][];
         for (int y = 0; y < lines.size(); y++) {

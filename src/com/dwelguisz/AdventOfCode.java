@@ -1,6 +1,7 @@
 package com.dwelguisz;
 
 import com.dwelguisz.base.AoCYear;
+import com.dwelguisz.year2020.Vacation;
 import com.dwelguisz.year2021.RetrieveTheKeys;
 
 import static java.lang.Integer.parseInt;
@@ -15,7 +16,14 @@ public class AdventOfCode {
         Integer year = parseInt(args[0]);
         Integer day = parseInt(args[1]);
         switch(year) {
-            case 2021 : aoCYear = new RetrieveTheKeys(2021);
+            case 2020 : {
+                aoCYear = new Vacation(2020);
+                break;
+            }
+            case 2021 : {
+                aoCYear = new RetrieveTheKeys(2021);
+                break;
+            }
         }
         if (day > 0) {
             aoCYear.runOneDay(day);
