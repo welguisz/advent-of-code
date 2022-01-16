@@ -44,6 +44,10 @@ public class Vacation extends AoCYear {
                 aocDay = new HandheldHalting();
                 break;
             }
+            case 9: {
+                aocDay = new EncodingError();
+                break;
+            }
         }
         aocDay.solve();
     }
