@@ -40,6 +40,10 @@ public class Vacation extends AoCYear {
                 aocDay = new HandyHaversacks();
                 break;
             }
+            case 8: {
+                aocDay = new HandheldHalting();
+                break;
+            }
         }
         aocDay.solve();
     }
