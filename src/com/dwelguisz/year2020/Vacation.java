@@ -48,6 +48,10 @@ public class Vacation extends AoCYear {
                 aocDay = new EncodingError();
                 break;
             }
+            case 10: {
+                aocDay = new AdapterArray();
+                break;
+            }
         }
         aocDay.solve();
     }
