@@ -70,13 +70,6 @@ public class SeaCucumber extends AoCDay {
         grid = copy2DArray(newGrid);
     }
 
-    public static String[][] copy2DArray(String [][] source) {
-        String[][] newGrid = Arrays.stream(source)
-                .map((String[] row) -> row.clone())
-                .toArray((int length) -> new String[length][]);
-        return newGrid;
-    }
-
     public static String[][] createGrid(List<String> lines) {
         String[][] grid = new String[lines.size()][lines.get(0).length()];
         Integer i = 0;

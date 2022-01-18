@@ -52,6 +52,10 @@ public class Vacation extends AoCYear {
                 aocDay = new AdapterArray();
                 break;
             }
+            case 11: {
+                aocDay = new SeatingSystem();
+                break;
+            }
         }
         aocDay.solve();
     }
