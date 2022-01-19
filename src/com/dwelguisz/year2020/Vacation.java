@@ -56,6 +56,10 @@ public class Vacation extends AoCYear {
                 aocDay = new SeatingSystem();
                 break;
             }
+            case 12: {
+                aocDay = new RainRisk();
+                break;
+            }
         }
         aocDay.solve();
     }
