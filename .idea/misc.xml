@@ -1,12 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="EntryPointsManager">
-    <entry_points version="2.0" />
-  </component>
   <component name="ProjectKey">
     <option name="state" value="project://e2804f05-5315-4fc6-a121-c522a6c26470" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="corretto-11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="UnattendedHostPersistenceState">
+    <option name="openedFilesInfos">
+      <list>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="23" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day13/testcase.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="313" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/RainRisk.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="529" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="1681" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/Vacation.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="154" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day13/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="210" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/base/ChineseRemainderTheorem.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="355" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/ShuttleSearch.java" />
+        </OpenedFileInfo>
+      </list>
+    </option>
   </component>
 </project>

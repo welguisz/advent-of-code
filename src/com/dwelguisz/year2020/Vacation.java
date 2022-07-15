@@ -60,6 +60,10 @@ public class Vacation extends AoCYear {
                 aocDay = new RainRisk();
                 break;
             }
+            case 13: {
+                aocDay = new ShuttleSearch();
+                break;
+            }
         }
         aocDay.solve();
     }
