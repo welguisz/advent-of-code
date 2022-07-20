@@ -3,6 +3,8 @@ package com.dwelguisz.year2020;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.base.AoCYear;
 
+import javax.print.Doc;
+
 public class Vacation extends AoCYear {
     public Vacation(int year) {
         super(year);
@@ -62,6 +64,10 @@ public class Vacation extends AoCYear {
             }
             case 13: {
                 aocDay = new ShuttleSearch();
+                break;
+            }
+            case 14: {
+                aocDay = new DockingData();
                 break;
             }
         }
