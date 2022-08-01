@@ -70,6 +70,14 @@ public class Vacation extends AoCYear {
                 aocDay = new DockingData();
                 break;
             }
+            case 15: {
+                aocDay = new RambunctiousRecitation();
+                break;
+            }
+            case 16: {
+                aocDay = new TicketTranslation();
+                break;
+            }
         }
         aocDay.solve();
     }

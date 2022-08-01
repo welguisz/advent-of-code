@@ -3,9 +3,7 @@ package com.dwelguisz.year2020;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.sql.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DockingData extends AoCDay {
     public void solve() {

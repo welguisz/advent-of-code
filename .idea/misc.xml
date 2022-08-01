@@ -10,44 +10,24 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="313" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/RainRisk.java" />
+          <option name="caretOffset" value="2341" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/TicketTranslation.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="763" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/ShuttleSearch.java" />
+          <option name="caretOffset" value="0" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day16/testcase.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
           <option name="caretOffset" value="529" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1810" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/Vacation.java" />
+          <option name="caretOffset" value="116" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day16/testcase2.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="154" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day13/input.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="210" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/base/ChineseRemainderTheorem.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="79" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day14/testcase.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="13263" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day14/input.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="113" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day14/testcase2.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="2422" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/DockingData.java" />
+          <option name="caretOffset" value="19530" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day16/input.txt" />
         </OpenedFileInfo>
       </list>
     </option>
