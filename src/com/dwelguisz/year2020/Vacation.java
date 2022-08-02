@@ -86,6 +86,10 @@ public class Vacation extends AoCYear {
                 aocDay = new OperationOrder();
                 break;
             }
+            case 19: {
+                aocDay = new MonsterMessages();
+                break;
+            }
         }
         aocDay.solve();
     }

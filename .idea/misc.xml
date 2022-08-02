@@ -10,52 +10,24 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="529" />
+          <option name="caretOffset" value="572" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="2259" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/Vacation.java" />
+          <option name="caretOffset" value="415" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/EasterBunny.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="184" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day18/testcase.txt" />
+          <option name="caretOffset" value="14" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2016/day01/testcase.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="19321" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day18/input.txt" />
+          <option name="caretOffset" value="652" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2016/day01/input.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="2341" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/TicketTranslation.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="150" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/helper/operation/order/Expression.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="2874" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/helper/conwaycube/Board.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="1643" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/ConwayCubes.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="239" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/helper/operation/order/IntegerExpression.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="394" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/helper/operation/order/OperationExpression.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="527" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/helper/operation/order/ArithmeticExpression.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="2509" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/OperationOrder.java" />
+          <option name="caretOffset" value="3649" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/NoTimeForATaxicab.java" />
         </OpenedFileInfo>
       </list>
     </option>
