@@ -10,6 +10,10 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
+          <option name="caretOffset" value="629" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day16/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
           <option name="caretOffset" value="2341" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/TicketTranslation.java" />
         </OpenedFileInfo>
@@ -26,8 +30,24 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day16/testcase2.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="19530" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day16/input.txt" />
+          <option name="caretOffset" value="11" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day17/testcase.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="71" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2020/day17/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="2139" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/Vacation.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="1416" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/helper/ConwayCubeBoard.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="1672" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2020/ConwayCubes.java" />
         </OpenedFileInfo>
       </list>
     </option>
