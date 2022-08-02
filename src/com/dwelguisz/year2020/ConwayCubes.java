@@ -1,7 +1,7 @@
 package com.dwelguisz.year2020;
 
 import com.dwelguisz.base.AoCDay;
-import com.dwelguisz.year2020.helper.ConwayCubeBoard;
+import com.dwelguisz.year2020.helper.conwaycube.Board;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 public class ConwayCubes extends AoCDay {
 
-    ConwayCubeBoard board = new ConwayCubeBoard();
+    Board board = new Board();
 
     public void solve() {
         List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2020/day17/input.txt");
         parseLines(lines);
         Long part1 = solutionPart1();
-        board = new ConwayCubeBoard();
+        board = new Board();
         parseLinesPart2(lines);
         Long part2 = solutionPart2();
         System.out.println(String.format("Part 1 Answer: %d",part1));

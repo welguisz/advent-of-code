@@ -1,12 +1,12 @@
-package com.dwelguisz.year2020.helper;
+package com.dwelguisz.year2020.helper.conwaycube;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ConwayCubeBoard {
+public class Board {
     Set<List<Integer>> cells;
 
-    public ConwayCubeBoard() {
+    public Board() {
         cells = new HashSet<>();
     }
 
@@ -23,7 +23,7 @@ public class ConwayCubeBoard {
     }
 
 
-    public ConwayCubeBoard step() {
+    public Board step() {
         Map<List<Integer>, Integer> neighborhoods = new HashMap<>();
         for(List<Integer> point: cells) {
             int x = point.get(0);
@@ -44,7 +44,7 @@ public class ConwayCubeBoard {
                 }
             }
         }
-        ConwayCubeBoard newBoard = new ConwayCubeBoard();
+        Board newBoard = new Board();
         for(Map.Entry<List<Integer>, Integer> point : neighborhoods.entrySet()) {
             if ((point.getValue() == 3) ||
                     ((point.getValue() == 4) && cells.contains(point.getKey()))) {
@@ -54,7 +54,7 @@ public class ConwayCubeBoard {
         return newBoard;
     }
 
-    public ConwayCubeBoard stepPart2() {
+    public Board stepPart2() {
         Map<List<Integer>, Integer> neighborhoods = new HashMap<>();
         for(List<Integer> point: cells) {
             int x = point.get(0);
@@ -78,7 +78,7 @@ public class ConwayCubeBoard {
                 }
             }
         }
-        ConwayCubeBoard newBoard = new ConwayCubeBoard();
+        Board newBoard = new Board();
         for(Map.Entry<List<Integer>, Integer> point : neighborhoods.entrySet()) {
             if ((point.getValue() == 3) ||
                     ((point.getValue() == 4) && cells.contains(point.getKey()))) {
@@ -87,6 +87,5 @@ public class ConwayCubeBoard {
         }
         return newBoard;
     }
-
 
 }

@@ -82,6 +82,10 @@ public class Vacation extends AoCYear {
                 aocDay = new ConwayCubes();
                 break;
             }
+            case 18: {
+                aocDay = new OperationOrder();
+                break;
+            }
         }
         aocDay.solve();
     }
