@@ -28,6 +28,10 @@ public class EasterBunny extends AoCYear {
                 aocDay = new SecurityThroughObscurity();
                 break;
             }
+            case 5: {
+                aocDay = new NiceGameOfChess();
+                break;
+            }
         }
         aocDay.solve();
     }
