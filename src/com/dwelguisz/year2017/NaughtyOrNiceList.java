@@ -16,6 +16,10 @@ public class NaughtyOrNiceList extends AoCYear {
                 aocDay = new InverseCaptcha();
                 break;
             }
+            case 2: {
+                aocDay = new CorruptionChecksum();
+                break;
+            }
         }
         aocDay.solve();
     }
