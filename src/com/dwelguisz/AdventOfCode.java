@@ -2,6 +2,7 @@ package com.dwelguisz;
 
 import com.dwelguisz.base.AoCYear;
 import com.dwelguisz.year2016.EasterBunny;
+import com.dwelguisz.year2017.NaughtyOrNiceList;
 import com.dwelguisz.year2020.Vacation;
 import com.dwelguisz.year2021.RetrieveTheKeys;
 
@@ -19,6 +20,10 @@ public class AdventOfCode {
         switch(year) {
             case 2016 : {
                 aoCYear = new EasterBunny(2016);
+                break;
+            }
+            case 2017: {
+                aoCYear = new NaughtyOrNiceList(2017);
                 break;
             }
             case 2020 : {

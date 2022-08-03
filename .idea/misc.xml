@@ -10,11 +10,11 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="572" />
+          <option name="caretOffset" value="621" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="858" />
+          <option name="caretOffset" value="343" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/EasterBunny.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -42,6 +42,10 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/SecurityThroughObscurity.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
+          <option name="caretOffset" value="1299" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/NiceGameOfChess.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
           <option name="caretOffset" value="159" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2015/AdventDay01.java" />
         </OpenedFileInfo>
@@ -58,8 +62,16 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2015/AdventDay04.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="357" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/NiceGameOfChess.java" />
+          <option name="caretOffset" value="480" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/NaughtyOrNiceList.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="2110" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day01/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="342" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/InverseCaptcha.java" />
         </OpenedFileInfo>
       </list>
     </option>
