@@ -10,7 +10,7 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="621" />
+          <option name="caretOffset" value="670" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -18,7 +18,7 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/EasterBunny.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="752" />
+          <option name="caretOffset" value="354" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/NaughtyOrNiceList.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -30,24 +30,24 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/CorruptionChecksum.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="749" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/SquareWithThreeSides.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
           <option name="caretOffset" value="1242" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/SpiralMemory.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day04/testcase.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="23032" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day04/input.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="585" />
+          <option name="caretOffset" value="2361" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/HighEntropyPassphrases.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="415" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/TemporalAnomalies.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="307" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/ChronalCalibration.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="3677" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2018/day01/input.txt" />
         </OpenedFileInfo>
       </list>
     </option>
