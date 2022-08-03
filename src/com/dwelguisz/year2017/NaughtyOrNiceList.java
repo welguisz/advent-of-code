@@ -24,6 +24,10 @@ public class NaughtyOrNiceList extends AoCYear {
                 aocDay = new SpiralMemory();
                 break;
             }
+            case 4: {
+                aocDay = new HighEntropyPassphrases();
+                break;
+            }
         }
         aocDay.solve();
     }
