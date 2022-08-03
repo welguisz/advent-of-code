@@ -14,32 +14,32 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="523" />
+          <option name="caretOffset" value="751" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/EasterBunny.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="2359" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/NoTimeForATaxicab.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
           <option name="caretOffset" value="14" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2016/day01/testcase.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="652" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2016/day01/input.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2016/day02/input.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
           <option name="caretOffset" value="21" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2016/day02/testcase.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="329" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/BathroomSecurity.java" />
+          <option name="caretOffset" value="31869" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2016/day03/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="139" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2016/day04/testcase.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="41720" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2016/day04/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="2294" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2016/SecurityThroughObscurity.java" />
         </OpenedFileInfo>
       </list>
     </option>

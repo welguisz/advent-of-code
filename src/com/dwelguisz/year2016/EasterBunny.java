@@ -20,6 +20,14 @@ public class EasterBunny extends AoCYear {
                 aocDay = new BathroomSecurity();
                 break;
             }
+            case 3: {
+                aocDay = new SquareWithThreeSides();
+                break;
+            }
+            case 4: {
+                aocDay = new SecurityThroughObscurity();
+                break;
+            }
         }
         aocDay.solve();
     }
