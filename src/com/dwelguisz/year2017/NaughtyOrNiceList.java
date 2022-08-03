@@ -20,6 +20,10 @@ public class NaughtyOrNiceList extends AoCYear {
                 aocDay = new CorruptionChecksum();
                 break;
             }
+            case 3: {
+                aocDay = new SpiralMemory();
+                break;
+            }
         }
         aocDay.solve();
     }
