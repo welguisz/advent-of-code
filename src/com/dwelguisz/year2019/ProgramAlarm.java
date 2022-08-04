@@ -1,6 +1,7 @@
 package com.dwelguisz.year2019;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.year2019.IntCodeComputer.IntCodeComputer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,28 +26,11 @@ public class ProgramAlarm extends AoCDay {
     }
 
     public Integer solutionPart1(Map<Integer, Integer> intCode, int noun, int verb) {
-        int programCounter = 0;
-        Integer currentInstruction = intCode.getOrDefault(programCounter,-1);
         intCode.put(1,noun);
         intCode.put(2,verb);
-        List<Integer> validOpCodes = new ArrayList<>();
-        validOpCodes.add(1);
-        validOpCodes.add(2);
-        while ((currentInstruction != 99) && (validOpCodes.contains(currentInstruction))) {
-            Integer opPointer1 = intCode.getOrDefault(programCounter + 1, -1);
-            Integer opPointer2 = intCode.getOrDefault(programCounter + 2, -1);
-            Integer storePointer = intCode.getOrDefault(programCounter + 3, -1);
-            Integer value1 = intCode.getOrDefault(opPointer1, -1);
-            Integer value2 = intCode.getOrDefault(opPointer2, -1);
-            if (currentInstruction == 1) {
-                intCode.put(storePointer, value1 + value2);
-            } else if (currentInstruction == 2) {
-                intCode.put(storePointer, value1 * value2);
-            }
-            programCounter += 4;
-            currentInstruction = intCode.getOrDefault(programCounter, -1);
-        }
-        return intCode.getOrDefault(0, -1);
+        IntCodeComputer intCodeComputer = new IntCodeComputer(intCode);
+        intCodeComputer.run();
+        return intCodeComputer.getMemoryLocation(0);
     }
 
     public Integer solutionPart2(Map<Integer, Integer> intCode) {

@@ -26,6 +26,10 @@ public class SolarSystem extends AoCYear {
                 aoCDay = new SecureContainer();
                 break;
             }
+            case 5: {
+                aoCDay = new ChanceOfAsteriods();
+                break;
+            }
         }
         aoCDay.solve();
     }
