@@ -18,23 +18,27 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/SolarSystem.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1663" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/SecureContainer.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
           <option name="caretOffset" value="3290" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/CrossedWires.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="141" />
+          <option name="caretOffset" value="1104" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/ChanceOfAsteriods.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1816" />
+          <option name="caretOffset" value="1425" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/ProgramAlarm.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="628" />
+          <option name="caretOffset" value="2548" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2019/day05/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="152" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2019/day05/testcase.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="2309" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/IntCodeComputer/IntCodeComputer.java" />
         </OpenedFileInfo>
       </list>
