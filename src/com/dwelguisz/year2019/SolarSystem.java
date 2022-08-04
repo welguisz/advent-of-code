@@ -18,6 +18,10 @@ public class SolarSystem extends AoCYear {
                 aoCDay = new ProgramAlarm();
                 break;
             }
+            case 3: {
+                aoCDay = new CrossedWires();
+                break;
+            }
         }
         aoCDay.solve();
     }
