@@ -10,7 +10,7 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="670" />
+          <option name="caretOffset" value="713" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -38,16 +38,32 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/HighEntropyPassphrases.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
+          <option name="caretOffset" value="3677" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2018/day01/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
           <option name="caretOffset" value="415" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/TemporalAnomalies.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="307" />
+          <option name="caretOffset" value="471" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/ChronalCalibration.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="3677" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2018/day01/input.txt" />
+          <option name="caretOffset" value="425" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/SolarSystem.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="0" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2019/day01/testcase.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="651" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2019/day01/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="493" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/RocketEquation.java" />
         </OpenedFileInfo>
       </list>
     </option>

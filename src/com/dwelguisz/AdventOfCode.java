@@ -4,6 +4,7 @@ import com.dwelguisz.base.AoCYear;
 import com.dwelguisz.year2016.EasterBunny;
 import com.dwelguisz.year2017.NaughtyOrNiceList;
 import com.dwelguisz.year2018.TemporalAnomalies;
+import com.dwelguisz.year2019.SolarSystem;
 import com.dwelguisz.year2020.Vacation;
 import com.dwelguisz.year2021.RetrieveTheKeys;
 
@@ -29,6 +30,10 @@ public class AdventOfCode {
             }
             case 2018: {
                 aoCYear = new TemporalAnomalies(2018);
+                break;
+            }
+            case 2019: {
+                aoCYear = new SolarSystem(2019);
                 break;
             }
             case 2020 : {
