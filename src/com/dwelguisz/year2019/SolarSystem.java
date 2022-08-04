@@ -14,6 +14,10 @@ public class SolarSystem extends AoCYear {
                 aoCDay = new RocketEquation();
                 break;
             }
+            case 2: {
+                aoCDay = new ProgramAlarm();
+                break;
+            }
         }
         aoCDay.solve();
     }

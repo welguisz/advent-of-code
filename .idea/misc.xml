@@ -50,7 +50,7 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/ChronalCalibration.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="425" />
+          <option name="caretOffset" value="529" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/SolarSystem.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -62,8 +62,20 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2019/day01/input.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="493" />
+          <option name="caretOffset" value="1171" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/RocketEquation.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="409" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2019/day02/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="10" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2019/day02/testcase.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="1065" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/ProgramAlarm.java" />
         </OpenedFileInfo>
       </list>
     </option>
