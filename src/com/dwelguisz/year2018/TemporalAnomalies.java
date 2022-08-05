@@ -17,6 +17,10 @@ public class TemporalAnomalies extends AoCYear {
                 aocDay = new InventoryManagementSystem();
                 break;
             }
+            case 3: {
+                aocDay = new HowYouSliceIt();
+                break;
+            }
         }
         aocDay.solve();
     }
