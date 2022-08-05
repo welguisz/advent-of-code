@@ -7,21 +7,8 @@ public class TemporalAnomalies extends AoCYear {
     public TemporalAnomalies(int year) { super(year); }
     @Override
     public void runOneDay(int day) {
-        AoCDay aocDay = new AoCDay();
-        switch (day) {
-            case 1: {
-                aocDay = new ChronalCalibration();
-                break;
-            }
-            case 2: {
-                aocDay = new InventoryManagementSystem();
-                break;
-            }
-            case 3: {
-                aocDay = new HowYouSliceIt();
-                break;
-            }
-        }
+        AoCDay days[] = {new ChronalCalibration(), new InventoryManagementSystem(), new HowYouSliceIt(), new ReposeRecord()};
+        AoCDay aocDay = days[day];
         aocDay.solve();
     }
 }
