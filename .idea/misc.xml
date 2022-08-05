@@ -14,32 +14,20 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="849" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/SolarSystem.java" />
+          <option name="caretOffset" value="532" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/TemporalAnomalies.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="3290" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/CrossedWires.java" />
+          <option name="caretOffset" value="6749" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2018/day02/input.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1104" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/ChanceOfAsteriods.java" />
+          <option name="caretOffset" value="32" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2018/day02/testcase.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1425" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/ProgramAlarm.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="2548" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2019/day05/input.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="152" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2019/day05/testcase.txt" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="2309" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2019/IntCodeComputer/IntCodeComputer.java" />
+          <option name="caretOffset" value="1038" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/InventoryManagementSystem.java" />
         </OpenedFileInfo>
       </list>
     </option>
