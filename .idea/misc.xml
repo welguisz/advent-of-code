@@ -50,7 +50,11 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day05/testcase.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="473" />
+          <option name="caretOffset" value="1110" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/TwistyTrampolines.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="459" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/NaughtyOrNiceList.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -58,8 +62,8 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/CorruptionChecksum.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="167" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/TwistyTrampolines.java" />
+          <option name="caretOffset" value="921" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/MemoryReallocation.java" />
         </OpenedFileInfo>
       </list>
     </option>

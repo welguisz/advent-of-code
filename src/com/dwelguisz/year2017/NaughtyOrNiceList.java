@@ -11,7 +11,7 @@ public class NaughtyOrNiceList extends AoCYear {
     @Override
     public void runOneDay(int day) {
         AoCDay aocDays[] = {new InverseCaptcha(), new CorruptionChecksum(), new SpiralMemory(),
-            new HighEntropyPassphrases(), new TwistyTrampolines()};
+            new HighEntropyPassphrases(), new TwistyTrampolines(), new MemoryReallocation()};
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
     }
