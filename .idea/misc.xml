@@ -14,8 +14,8 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1066" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/InventoryManagementSystem.java" />
+          <option name="caretOffset" value="1567" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/RecursiveCircus.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
           <option name="caretOffset" value="947" />
@@ -54,7 +54,7 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/TwistyTrampolines.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="473" />
+          <option name="caretOffset" value="523" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/NaughtyOrNiceList.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -78,8 +78,16 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/helper/CircusNode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1678" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/RecursiveCircus.java" />
+          <option name="caretOffset" value="25209" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day08/input.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="74" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day08/testcase.txt" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="345" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/HeardYouLikeRegisters.java" />
         </OpenedFileInfo>
       </list>
     </option>

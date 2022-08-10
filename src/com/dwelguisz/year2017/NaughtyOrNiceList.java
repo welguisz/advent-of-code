@@ -12,7 +12,7 @@ public class NaughtyOrNiceList extends AoCYear {
     public void runOneDay(int day) {
         AoCDay aocDays[] = {new InverseCaptcha(), new CorruptionChecksum(), new SpiralMemory(),
             new HighEntropyPassphrases(), new TwistyTrampolines(), new MemoryReallocation(),
-            new RecursiveCircus()};
+            new RecursiveCircus(), new HeardYouLikeRegisters()};
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
     }
