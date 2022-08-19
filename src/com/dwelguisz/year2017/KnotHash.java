@@ -1,2 +1,114 @@
-package com.dwelguisz.year2017;public class KnotHash {
+package com.dwelguisz.year2017;
+
+import com.dwelguisz.base.AoCDay;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class KnotHash extends AoCDay {
+    public static String input = "106,118,236,1,130,0,235,254,59,205,2,87,129,25,255,118";
+    public static String testcase = "3,4,1,5";
+    public static String testcase2 = "1,2,4";
+    public static Integer HASH_LENGTH = 256;
+
+    public void solve() {
+        Map<Integer, Integer> maps = new HashMap<>();
+        for (int i = 0; i < HASH_LENGTH; i++) {
+            maps.put(i,i);
+        }
+        List<Integer> commands = Arrays.stream(input.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        Integer part1 = solutionPart1(maps, commands);
+        for (int i = 0; i < HASH_LENGTH; i++) {
+            maps.put(i,i);
+        }
+        String part2 = solutionPart2(input, maps);
+        System.out.println(String.format("Part 1 Answer: %d",part1));
+        System.out.println(String.format("Part 2 Answer: %s",part2.toLowerCase()));
+    }
+
+    public Integer solutionPart1(Map<Integer, Integer> map, List<Integer> commands) {
+        int currentPosition = 0;
+        int skipSize = 0;
+        Map<Integer, Integer> tempMap = map;
+        for (Integer command : commands) {
+            List<Integer> values = getValues(tempMap, currentPosition, command);
+            tempMap = updateMap(tempMap, currentPosition, command, values);
+            currentPosition += command + skipSize;
+            while (currentPosition >= map.size()) {
+                currentPosition -= map.size();
+            }
+            skipSize++;
+        }
+        return tempMap.get(0) * tempMap.get(1);
+    }
+
+    public String solutionPart2(String inputStr, Map<Integer, Integer> map) {
+        StringBuffer sb = new StringBuffer();
+        char[] values = inputStr.toCharArray();
+        List<Integer> inputList = new ArrayList<>();
+        for (int i = 0; i < values.length; i++) {
+            inputList.add((int)values[i]);
+        }
+        inputList.addAll(List.of(17,31,73,47,23));
+
+        int currentPosition = 0;
+        int skipSize = 0;
+        Map<Integer, Integer> tempMap = map;
+        for (int i = 0; i < 64; i++) {
+            for (Integer command : inputList) {
+                List<Integer> valuesList = getValues(tempMap, currentPosition, command);
+                tempMap = updateMap(tempMap, currentPosition, command, valuesList);
+                currentPosition += command + skipSize;
+                while (currentPosition >= map.size()) {
+                    currentPosition -= map.size();
+                }
+                skipSize++;
+            }
+        }
+        for(int i = 0; i < 16; i++) {
+            List<Integer> sixteenDigits = new ArrayList<>();
+            for (int j = 0; j < 16; j++) {
+                sixteenDigits.add(tempMap.get(i*16+j));
+            }
+            sb.append(convertSparseToDense(sixteenDigits));
+        }
+
+        return sb.toString();
+    }
+
+    public String convertSparseToDense(List<Integer> sixteenDigits) {
+        Integer value = 0;
+        for (Integer val : sixteenDigits) {
+            value ^= val;
+        }
+        return String.format("%02X",value);
+    }
+
+    private List<Integer> getValues(Map<Integer, Integer> map, Integer start, Integer length) {
+        List<Integer> values = new ArrayList<>();
+        Integer pos = start;
+        for (int i = 0; i < length; i++) {
+            values.add(map.get(pos));
+            pos++;
+            if (pos == map.size()) {
+                pos -= map.size();
+            }
+        }
+        Collections.reverse(values);
+        return values;
+    }
+
+    private Map<Integer, Integer> updateMap(Map<Integer, Integer> map, Integer start, Integer length, List<Integer> values) {
+        Map<Integer, Integer> newMap = map;
+        Integer pos = start;
+        for (int i = 0; i < length; i++) {
+            map.put(pos,values.get(i));
+            pos++;
+            if (pos == map.size()) {
+                pos -= map.size();
+            }
+        }
+        return map;
+    }
+
 }
