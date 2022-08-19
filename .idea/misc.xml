@@ -10,36 +10,32 @@
     <option name="openedFilesInfos">
       <list>
         <OpenedFileInfo>
-          <option name="caretOffset" value="713" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
           <option name="caretOffset" value="443" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/TemporalAnomalies.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
-          <option name="caretOffset" value="605" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/CorruptionChecksum.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
           <option name="caretOffset" value="2156" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/KnotHash.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="588" />
+          <option name="caretOffset" value="610" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/NaughtyOrNiceList.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="0" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day11/input.txt" />
+          <option name="caretOffset" value="35453" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day12/input.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="14" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day11/testcase.txt" />
+          <option name="caretOffset" value="73" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/resources/year2017/day12/testcase.txt" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="1486" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/HexEd.java" />
+          <option name="caretOffset" value="535" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/CorruptionChecksum.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="786" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/DigitalPlumber.java" />
         </OpenedFileInfo>
       </list>
     </option>
