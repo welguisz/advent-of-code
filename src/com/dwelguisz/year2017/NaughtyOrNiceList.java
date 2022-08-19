@@ -13,7 +13,7 @@ public class NaughtyOrNiceList extends AoCYear {
         AoCDay aocDays[] = {new InverseCaptcha(), new CorruptionChecksum(), new SpiralMemory(),
             new HighEntropyPassphrases(), new TwistyTrampolines(), new MemoryReallocation(),
             new RecursiveCircus(), new HeardYouLikeRegisters(), new StreamProcessing(),
-            new KnotHash()};
+            new KnotHash(), new HexEd()};
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
     }
