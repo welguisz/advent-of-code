@@ -18,10 +18,7 @@ public class KnotHash extends AoCDay {
         }
         List<Integer> commands = Arrays.stream(input.split(",")).map(Integer::parseInt).collect(Collectors.toList());
         Integer part1 = solutionPart1(maps, commands);
-        for (int i = 0; i < HASH_LENGTH; i++) {
-            maps.put(i,i);
-        }
-        String part2 = solutionPart2(input, maps);
+        String part2 = solutionPart2(input);
         System.out.println(String.format("Part 1 Answer: %d",part1));
         System.out.println(String.format("Part 2 Answer: %s",part2.toLowerCase()));
     }
@@ -42,7 +39,11 @@ public class KnotHash extends AoCDay {
         return tempMap.get(0) * tempMap.get(1);
     }
 
-    public String solutionPart2(String inputStr, Map<Integer, Integer> map) {
+    public String solutionPart2(String inputStr) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < HASH_LENGTH; i++) {
+            map.put(i,i);
+        }
         StringBuffer sb = new StringBuffer();
         char[] values = inputStr.toCharArray();
         List<Integer> inputList = new ArrayList<>();
