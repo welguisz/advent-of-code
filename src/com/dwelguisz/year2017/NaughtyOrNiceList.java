@@ -14,7 +14,8 @@ public class NaughtyOrNiceList extends AoCYear {
                 new HighEntropyPassphrases(), new TwistyTrampolines(), new MemoryReallocation(),
                 new RecursiveCircus(), new HeardYouLikeRegisters(), new StreamProcessing(),
                 new KnotHash(), new HexEd(), new DigitalPlumber(), new PacketScanners(),
-                new DiskDefragmentation(), new DuelingGenerators(), new PermutationPromenade()
+                new DiskDefragmentation(), new DuelingGenerators(), new PermutationPromenade(),
+                new SpinLock()
         };
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();

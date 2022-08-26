@@ -18,8 +18,12 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="740" />
+          <option name="caretOffset" value="772" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/NaughtyOrNiceList.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="3975" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/PermutationPromenade.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
           <option name="caretOffset" value="2" />
@@ -38,8 +42,8 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/HighEntropyPassphrases.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="2748" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/PermutationPromenade.java" />
+          <option name="caretOffset" value="653" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/SpinLock.java" />
         </OpenedFileInfo>
       </list>
     </option>
