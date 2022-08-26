@@ -14,15 +14,11 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2018/TemporalAnomalies.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="573" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/NaughtyOrNiceList.java" />
-        </OpenedFileInfo>
-        <OpenedFileInfo>
           <option name="caretOffset" value="1452" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/DigitalPlumber.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="535" />
+          <option name="caretOffset" value="605" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/CorruptionChecksum.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
@@ -42,12 +38,20 @@
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/AdventOfCode.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
+          <option name="caretOffset" value="719" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/DiskDefragmentation.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
           <option name="caretOffset" value="1769" />
           <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/KnotHash.java" />
         </OpenedFileInfo>
         <OpenedFileInfo>
-          <option name="caretOffset" value="556" />
-          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/DiskDefragmentation.java" />
+          <option name="caretOffset" value="573" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/NaughtyOrNiceList.java" />
+        </OpenedFileInfo>
+        <OpenedFileInfo>
+          <option name="caretOffset" value="228" />
+          <option name="fileUrl" value="file://$PROJECT_DIR$/src/com/dwelguisz/year2017/DuelingGenerators.java" />
         </OpenedFileInfo>
       </list>
     </option>
