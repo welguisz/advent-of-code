@@ -1,5 +1,6 @@
 package com.dwelguisz.year2015;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2015.helper.day09.City;
 import com.dwelguisz.year2015.helper.day09.MapPath;
 
@@ -8,17 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay09 {
+public class AllInASingleNight extends AoCDay {
 
     static Map<String, City> santaMap;
     static List<String> cityToArrayMap;
     static Integer numberOfCities;
     static Integer[][] distances;
 
-    public static void main(String[] args) {
+    public void solve() {
         List<String> lines = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day09/input.txt");
         createMap(lines);
         Integer part1 = solutionPart1();

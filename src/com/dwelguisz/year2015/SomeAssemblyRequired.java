@@ -1,15 +1,16 @@
 package com.dwelguisz.year2015;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay07 {
+public class SomeAssemblyRequired extends AoCDay {
 
     static Integer NOT_SET_INPUT = 10000000;
     static List<String> allowedInstructions;
@@ -23,7 +24,7 @@ public class AdventDay07 {
         allowedInstructions.add("NOT");
     }
 
-    public static void main(String[] args) {
+    public void solve() {
         List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day07/input.txt");
         Map<String, Integer> values = new HashMap<>();
         values = part1(instructions, values);

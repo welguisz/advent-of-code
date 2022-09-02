@@ -1,13 +1,14 @@
 package com.dwelguisz.year2015;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.security.*;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 
-public class AdventDay04 {
-    public static void main(String[] args) {
+public class TheIdealStockingStuffer extends AoCDay {
+    public void solve() {
         List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day03/input.txt");
         Integer part1 = solutionPart1("iwrupvqb");
         Integer part2 = solutionPart2("iwrupvqb");

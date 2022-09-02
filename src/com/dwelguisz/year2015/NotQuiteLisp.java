@@ -1,12 +1,12 @@
 package com.dwelguisz.year2015;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.Arrays;
 import java.util.List;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
-
-public class AdventDay01 {
-    public static void main(String[] args) {
+public class NotQuiteLisp extends AoCDay {
+    public void solve() {
         List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day01/input.txt");
         List<String> row0 = Arrays.asList(instructions.get(0).split(""));
         Long part1 = solutionPart1(row0);

@@ -8,9 +8,9 @@ import java.util.*;
 public class Duet extends AoCDay {
     public void solve() {
         List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2017/day18/input.txt");
-        //Long part1 = solutionPart1(lines);
+        Long part1 = solutionPart1(lines);
         Long part2 = solutionPart2(lines);
-        //System.out.println(String.format("Part 1 Answer: %d", part1));
+        System.out.println(String.format("Part 1 Answer: %d", part1));
         System.out.println(String.format("Part 2 Answer: %d", part2));
 
     }

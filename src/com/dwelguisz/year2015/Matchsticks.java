@@ -1,16 +1,18 @@
 package com.dwelguisz.year2015;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 
-public class AdventDay08 {
+public class Matchsticks extends AoCDay {
 
     static Pattern pattern = Pattern.compile("\\\\(\\\\|\\\"|x[0123456789abcdef]{2})");
 
-    public static void main(String[] args) {
+    public void solve() {
         List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day08/input.txt");
         Long part1 = solutionPart1(instructions);
         Long part2 = solutionPart2(instructions);

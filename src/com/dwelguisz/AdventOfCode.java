@@ -1,6 +1,7 @@
 package com.dwelguisz;
 
 import com.dwelguisz.base.AoCYear;
+import com.dwelguisz.year2015.AoCYear2015;
 import com.dwelguisz.year2016.EasterBunny;
 import com.dwelguisz.year2017.NaughtyOrNiceList;
 import com.dwelguisz.year2018.TemporalAnomalies;
@@ -20,6 +21,10 @@ public class AdventOfCode {
         Integer year = parseInt(args[0]);
         Integer day = parseInt(args[1]);
         switch(year) {
+            case 2015 : {
+                aoCYear = new AoCYear2015(2015);
+                break;
+            }
             case 2016 : {
                 aoCYear = new EasterBunny(2016);
                 break;

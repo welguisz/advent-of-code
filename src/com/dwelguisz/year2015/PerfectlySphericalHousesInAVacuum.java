@@ -1,11 +1,11 @@
 package com.dwelguisz.year2015;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.Arrays;
 import java.util.List;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
-
-public class AdventDay03 {
+public class PerfectlySphericalHousesInAVacuum extends AoCDay {
     static Integer MAX_ROW = 400;
     static Boolean[][] visited = new Boolean[MAX_ROW][MAX_ROW];
     static Boolean[][] visitedPart2 = new Boolean[MAX_ROW][MAX_ROW];
@@ -18,7 +18,7 @@ public class AdventDay03 {
         }
     }
 
-    public static void main(String[] args) {
+    public void solve() {
         List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day03/input.txt");
         Long part1 = solutionPart1(Arrays.asList(instructions.get(0).split("")));
         Long part2 = solutionPart2(Arrays.asList(instructions.get(0).split("")));

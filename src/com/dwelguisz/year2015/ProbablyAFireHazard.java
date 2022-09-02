@@ -1,13 +1,14 @@
 package com.dwelguisz.year2015;
 
+import com.dwelguisz.base.AoCDay;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay06 {
+public class ProbablyAFireHazard extends AoCDay {
     static int MAX_ROW = 1000;
     static Boolean[][] grid = new Boolean[MAX_ROW][MAX_ROW];
     static Integer[][] betterGrid = new Integer[MAX_ROW][MAX_ROW];
@@ -20,7 +21,7 @@ public class AdventDay06 {
         }
     }
 
-    public static void main(String[] args) {
+    public void solve() {
         List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day06/input.txt");
         Long part1 = solutionPart1(instructions);
         Long part2 = solutionPart2(instructions);

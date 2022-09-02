@@ -1,8 +1,10 @@
 package com.dwelguisz.year2015;
 
 
-public class AdventDay10 {
-    public static void main(String[] args) {
+import com.dwelguisz.base.AoCDay;
+
+public class ElvesLookElvesSay extends AoCDay {
+    public void solve() {
         Integer part1 = part1("1113222113", 40);
         Integer part2 = part1("1113222113", 50);
         System.out.println(String.format("Part 1 Answer: %d", part1));
