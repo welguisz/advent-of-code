@@ -10,29 +10,9 @@ public class EasterBunny extends AoCYear {
 
     @Override
     public void runOneDay(int day) {
-        AoCDay aocDay = new AoCDay();
-        switch (day) {
-            case 1: {
-                aocDay = new NoTimeForATaxicab();
-                break;
-            }
-            case 2: {
-                aocDay = new BathroomSecurity();
-                break;
-            }
-            case 3: {
-                aocDay = new SquareWithThreeSides();
-                break;
-            }
-            case 4: {
-                aocDay = new SecurityThroughObscurity();
-                break;
-            }
-            case 5: {
-                aocDay = new NiceGameOfChess();
-                break;
-            }
-        }
+        AoCDay aocDays[] = {new NoTimeForATaxicab(), new BathroomSecurity(), new SquareWithThreeSides(),
+                new SecurityThroughObscurity(), new NiceGameOfChess(), new SignalsAndNoise()};
+        AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
     }
 }

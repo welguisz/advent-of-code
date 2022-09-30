@@ -11,6 +11,6 @@
     <orderEntry type="library" name="json" level="project" />
     <orderEntry type="library" name="apache.commons.lang31" level="project" />
     <orderEntry type="library" name="apache.commons.lang3" level="application" />
-    <orderEntry type="library" name="google.guava" level="application" />
+    <orderEntry type="library" name="google.guava" level="project" />
   </component>
 </module>
