@@ -11,7 +11,8 @@ public class AoCYear2015 extends AoCYear {
         AoCDay aocDays[] = {new NotQuiteLisp(), new IWasToldThereWouldBeNoMath(),
                 new PerfectlySphericalHousesInAVacuum(), new TheIdealStockingStuffer(),
                 new DoesntHeHaveInternElvesForThis(), new ProbablyAFireHazard(), new SomeAssemblyRequired(),
-                new Matchsticks(), new AllInASingleNight(), new ElvesLookElvesSay(), new CorporatePolicy()};
+                new Matchsticks(), new AllInASingleNight(), new ElvesLookElvesSay(), new CorporatePolicy(),
+                new JSAbacusFramework()};
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
 
