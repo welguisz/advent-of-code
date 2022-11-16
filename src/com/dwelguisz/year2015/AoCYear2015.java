@@ -12,7 +12,8 @@ public class AoCYear2015 extends AoCYear {
                 new PerfectlySphericalHousesInAVacuum(), new TheIdealStockingStuffer(),
                 new DoesntHeHaveInternElvesForThis(), new ProbablyAFireHazard(), new SomeAssemblyRequired(),
                 new Matchsticks(), new AllInASingleNight(), new ElvesLookElvesSay(), new CorporatePolicy(),
-                new JSAbacusFramework(), new KnightsOfTheDinnerTable(), new ReindeerOlympics()};
+                new JSAbacusFramework(), new KnightsOfTheDinnerTable(), new ReindeerOlympics(),
+                new ScienceForHungryPeople()};
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
 
