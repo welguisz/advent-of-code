@@ -14,7 +14,7 @@ public class WeatherMachine extends AoCYear {
                 new Matchsticks(), new AllInASingleNight(), new ElvesLookElvesSay(), new CorporatePolicy(),
                 new JSAbacusFramework(), new KnightsOfTheDinnerTable(), new ReindeerOlympics(),
                 new ScienceForHungryPeople(), new AuntSue(), new NoSuchThingasTooMuch(), new LikeAGIFForYourYard(),
-                new MedicineForRudolph(), new InfiniteElvesAndInfiniteHouses()};
+                new MedicineForRudolph(), new InfiniteElvesAndInfiniteHouses(), new RPGSimulator20XX()};
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
 
