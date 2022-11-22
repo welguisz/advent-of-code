@@ -13,14 +13,14 @@ public class WizardSimulator20XX extends AoCDay {
     public static Integer MAX_MANA = 1500;
     public static class Spell {
         String name;
-        Integer cost;
-        Integer damage;
-        Integer healing;
-        Integer armor;
-        Integer recharge;
-        Integer activeTurns;
+        int cost;
+        int damage;
+        int healing;
+        int armor;
+        int recharge;
+        int activeTurns;
 
-        public Spell(String name, Integer cost, Integer damage, Integer healing, Integer armor, Integer recharge, Integer activeTurns) {
+        public Spell(String name, int cost, int damage, int healing, int armor, int recharge, int activeTurns) {
             this.name = name;
             this.cost = cost;
             this.damage = damage;
@@ -38,15 +38,15 @@ public class WizardSimulator20XX extends AoCDay {
 
     public static class Player {
         public String name;
-        public Integer hitPoints;
-        public Integer baseDamage;
-        public Integer baseArmor;
-        public Integer mana;
+        public int hitPoints;
+        public int baseDamage;
+        public int baseArmor;
+        public int mana;
         public Map<Spell, Integer> spellsInEffect;
-        public Integer spent;
+        public int spent;
         public List<Spell> spellsCast;
 
-        public Player(String name, Integer hitPoints, Integer baseDamage, Integer baseArmor, Integer mana, Integer spent) {
+        public Player(String name, int hitPoints, int baseDamage, int baseArmor, int mana, int spent) {
             this.name = name;
             this.hitPoints = hitPoints;
             this.baseDamage = baseDamage;
@@ -69,7 +69,7 @@ public class WizardSimulator20XX extends AoCDay {
         }
         public boolean spellInEffect(Spell spell) {
             Integer count = spellsInEffect.getOrDefault(spell,0);
-            if (count <= 0) {
+            if (count.equals(0)) {
                 return false;
             }
             return true;
@@ -92,7 +92,7 @@ public class WizardSimulator20XX extends AoCDay {
                 healing += 2;
             }
             for (Map.Entry<Spell, Integer> currentSpell : spellsInEffect.entrySet()) {
-                if (currentSpell.getValue() == 0) {
+                if (currentSpell.getValue().equals(0)) {
                     continue;
                 }
                 attack += currentSpell.getKey().damage;
@@ -133,9 +133,12 @@ public class WizardSimulator20XX extends AoCDay {
 
     public List<Integer> doesPlayer1Win(Player player, Player boss1, Boolean hardMode) {
         List<Spell> goodSpells = availableSpells(player);
-        if ((goodSpells.size() == 0) || (player.spent > MAX_MANA)) { //Unable to cast any spell since the cost is too high
+        //If unable to cast spells on Player's turn, die.
+        //MAX_MANA is to prevent the simulator getting in an infinite loop
+        if ((goodSpells.size() == 0) || (player.spent > MAX_MANA)) {
             return new ArrayList<>();
         }
+        //If hard mode, decrement player's hitPoints. If it goes to 0, player is dead.
         if (hardMode) {
             player.hitPoints--;
             if (player.hitPoints <= 0) {
@@ -144,6 +147,7 @@ public class WizardSimulator20XX extends AoCDay {
         }
         List<Integer> results = new ArrayList<>();
         for (Spell spellCast : goodSpells) {
+            //Copy information for all possible scenarios.
             Player player1 = Player.copyOf(player);
             Player boss = Player.copyOf(boss1);
             player1.spellsCast.add(spellCast);
@@ -188,7 +192,7 @@ public class WizardSimulator20XX extends AoCDay {
         spells.add(new Spell("Nothing",0,0,0,0,0,0));
         spells.add(new Spell("Magic Missile",53,4,0,0,0,0));
         spells.add(new Spell("Drain",73,2,2,0,0,0));
-        spells.add(new Spell("Shield",113,0,0,7,0,7));
+        spells.add(new Spell("Shield",113,0,0,7,0,6));
         spells.add(new Spell("Poison",173,3,0,0,0,6));
         spells.add(new Spell("Recharge",229,0,0,0,101,5));
     }
