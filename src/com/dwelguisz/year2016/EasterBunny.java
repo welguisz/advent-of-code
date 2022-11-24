@@ -13,7 +13,7 @@ public class EasterBunny extends AoCYear {
         AoCDay aocDays[] = {new NoTimeForATaxicab(), new BathroomSecurity(), new SquareWithThreeSides(),
                 new SecurityThroughObscurity(), new NiceGameOfChess(), new SignalsAndNoise(),
                 new InternetProtocolVersion7(), new TwoFactorAuthentication(), new ExplosiveInCyberspace(),
-                new BalanceBots(), new RadioisotepeThermoelectricGenerators()};
+                new BalanceBots(), new RadioisotepeThermoelectricGenerators(), new LeonardoMonorail()};
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
     }
