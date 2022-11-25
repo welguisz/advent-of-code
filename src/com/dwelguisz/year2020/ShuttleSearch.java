@@ -37,29 +37,6 @@ public class ShuttleSearch extends AoCDay {
         return minBusId * minTime;
     }
 
-    private Pair<Long, Long> extGCD(Long a, Long b) {
-        Long x = 1L;
-        Long y = 0L;
-        Long x1 = 0L;
-        Long y1 = 1L;
-        Long a1 = a;
-        Long b1 = b;
-
-        while (b1 > 0) {
-            Long q = Math.floorDiv(a1, b1);
-            Long tmp = x;
-            x = x1;
-            x1 = tmp - q*x1;
-            tmp = y;
-            y = y1;
-            y1 = tmp - q*y1;
-            tmp = a1;
-            a1 = b1;
-            b1 = tmp - q*b1;
-        }
-        return Pair.of(x,y);
-    }
-
     private Long solutionPart2(List<String> busIds) {
         Long lcv = 0L;
         List<Pair<Long, Long>> pairs = new ArrayList<>();
