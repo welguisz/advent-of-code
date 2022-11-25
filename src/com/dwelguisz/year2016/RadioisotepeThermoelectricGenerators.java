@@ -163,11 +163,32 @@ public class RadioisotepeThermoelectricGenerators extends AoCDay {
             return results;
         }
 
+        public boolean canBeOnElevator(List<String> values) {
+            if (values.size() == 0) {
+                return false;
+            }
+            if (values.size() == 1) {
+                return true;
+            }
+            if (values.size() > 2) {
+                return false;
+            }
+            List<String> generators = values.stream().filter(s -> s.substring(1).equals("G")).map(s -> s.substring(0,1)).collect(Collectors.toList());
+            List<String> microchips = values.stream().filter(s -> s.substring(1).equals("M")).map(s -> s.substring(0,1)).collect(Collectors.toList());
+            if (generators.isEmpty() || microchips.isEmpty()) {
+                return true;
+            }
+            List<String> tmp = microchips.stream().filter(m -> !generators.contains(m)).collect(Collectors.toList());
+            return tmp.isEmpty();
+        }
+
         public void combinationsInternal(List<String> inputSet, int k, List<List<String>> results, ArrayList<String> accumulator, int index) {
             int needToAccumulate = k - accumulator.size();
             int canAccumulate = inputSet.size() - index;
             if (accumulator.size() == k) {
-                results.add(new ArrayList<>(accumulator));
+                if (canBeOnElevator(accumulator)) {
+                    results.add(new ArrayList<>(accumulator));
+                }
             } else if (needToAccumulate <= canAccumulate) {
                 combinationsInternal(inputSet, k, results, accumulator, index + 1);
                 accumulator.add(inputSet.get(index));
@@ -184,7 +205,7 @@ public class RadioisotepeThermoelectricGenerators extends AoCDay {
                 Pair<Integer, Integer> values = numberOfPairsAndNonPairs(floor);
                 Map<String, Integer> diffMap = findDistanceToPair(index);
                 Integer v = diffMap.entrySet().stream().map(e -> e.getValue()).reduce(0, (a,b)->a+b);
-                distance += (3 - index) * ((values.getLeft() * 4) + (values.getRight() * 6));
+                distance += (3 - index) * ((values.getLeft() * 2) + (values.getRight() * 3));
                 index++;
             }
         }
@@ -221,7 +242,7 @@ public class RadioisotepeThermoelectricGenerators extends AoCDay {
             }
             //Since generators and microchips have at least 1 and we know that this is a valid state, we can
             //assume that microchips.size() <= generators.size()
-            return Pair.of(microchips.size(), generators.size() - microchips.size());
+            return Pair.of(microchips.size(), Math.abs(generators.size() - microchips.size()));
 
 
         }
@@ -230,7 +251,26 @@ public class RadioisotepeThermoelectricGenerators extends AoCDay {
 
     public void solve() {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day11/input.txt");
-        Integer part1 = solutionPart1(lines, new ArrayList<>());
+        List<List<String>> testfloors = new ArrayList<>();
+        List<String> floor1 = new ArrayList<>();
+        List<String> floor2 = new ArrayList<>();
+        List<String> floor3 = new ArrayList<>();
+        List<String> floor4 = new ArrayList<>();
+        floor1.add("SM");
+        floor1.add("SG");
+        floor1.add("PM");
+        floor1.add("PG");
+        floor2.add("TG");
+        floor2.add("RG");
+        floor2.add("RM");
+        floor2.add("CG");
+        floor2.add("CM");
+        floor3.add("TM");
+        testfloors.add(floor1);
+        testfloors.add(floor2);
+        testfloors.add(floor3);
+        testfloors.add(floor4);
+        Integer part1 = solutionPart1(lines, new ArrayList<>(), true, testfloors);
         System.out.println(String.format("Part 1 Answer: %d",part1));
         List <String> extraItems = new ArrayList<>();
         extraItems.add("EG");
@@ -241,8 +281,8 @@ public class RadioisotepeThermoelectricGenerators extends AoCDay {
         //System.out.println(String.format("Part 2 Answer: %d",part2));
     }
 
-    public Integer solutionPart1(List<String> lines, List<String> extraItems) {
-        List<List<String>> initialFloors = setupInitialState(lines);
+    public Integer solutionPart1(List<String> lines, List<String> extraItems, boolean test, List<List<String>> floors) {
+        List<List<String>> initialFloors = test ? floors : setupInitialState(lines);
 
         List<State> previousStates = new ArrayList<>();
         State initialState = new State();
