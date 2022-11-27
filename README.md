@@ -7,4 +7,3 @@
 
 ### Year 2016
 * RadioisotepeThermoelectricGenerators, Day 11
-* MazeOfTwistyLittleCubicles, Day 13
