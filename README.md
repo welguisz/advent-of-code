@@ -7,3 +7,4 @@
 
 ### Year 2016
 * RadioisotepeThermoelectricGenerators, Day 11
+* Safe Cracking, Day 23

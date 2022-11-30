@@ -8,6 +8,7 @@ import com.dwelguisz.year2018.TemporalAnomalies;
 import com.dwelguisz.year2019.SolarSystem;
 import com.dwelguisz.year2020.Vacation;
 import com.dwelguisz.year2021.RetrieveTheKeys;
+import com.dwelguisz.year2022.AoCYear2022;
 
 import static java.lang.Integer.parseInt;
 
@@ -47,6 +48,10 @@ public class AdventOfCode {
             }
             case 2021 : {
                 aoCYear = new RetrieveTheKeys(2021);
+                break;
+            }
+            case 2022 : {
+                aoCYear = new AoCYear2022(2022);
                 break;
             }
         }
