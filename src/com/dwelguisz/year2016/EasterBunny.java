@@ -17,7 +17,7 @@ public class EasterBunny extends AoCYear {
                 new MazeOfTwistyLittleCubicles(), new OneTimePad(), new TimingIsEverything(),
                 new DragonChecksum(), new TwoStepsForward(), new LikeARogue(), new AnElephantNamedJoseph(),
                 new FirewallRules(), new ScrambledLettersAndHash(), new GridComputing(),
-                new SafeCracking(), new AirDuctSpleunking()};
+                new SafeCracking(), new AirDuctSpleunking(), new ClockSignal()};
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
     }

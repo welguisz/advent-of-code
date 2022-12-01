@@ -10,6 +10,8 @@ public class AoCYear2022 extends AoCYear {
 
     @Override
     public void runOneDay(int day) {
-        AoCDay aocDays[] = {};
+        AoCDay aocDays[] = {new CalorieCounting()};
+        AoCDay aocDay = aocDays[day-1];
+        aocDay.solve();
     }
 }
