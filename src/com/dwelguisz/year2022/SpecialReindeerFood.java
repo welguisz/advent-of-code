@@ -3,8 +3,8 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.base.AoCYear;
 
-public class AoCYear2022 extends AoCYear {
-    public AoCYear2022(int year) {
+public class SpecialReindeerFood extends AoCYear {
+    public SpecialReindeerFood(int year) {
         super(year);
     }
 

@@ -5,49 +5,30 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 public class CalorieCounting extends AoCDay {
     public void solve() {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day01/input.txt");
-        Integer part1 = solutionPart1(lines);
+        PriorityQueue<Integer> queue = createQueue(lines);
+        Integer part1 = queue.peek();
         System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = solutionPart2(lines);
-        System.out.println(String.format("Part 1 Answer: %d",part2));
+        Integer part2 = queue.poll() + queue.poll() + queue.poll();
+        System.out.println(String.format("Part 2 Answer: %d",part2));
     }
 
-    public Integer solutionPart1(List<String> lines) {
-        Integer elfMaxCalories = 0;
-        Integer currentCalories = 0;
-        for (String line : lines) {
-            if (line.length() == 0) {
-                if (elfMaxCalories < currentCalories) {
-                    elfMaxCalories = currentCalories;
-                }
-                currentCalories = 0;
-            } else {
-                currentCalories += Integer.parseInt(line);
+    public PriorityQueue<Integer> createQueue(List<String> lines) {
+        PriorityQueue<Integer> queue = new PriorityQueue<>(200, (a,b) -> b- a);
+        String oneString = lines.stream().collect(Collectors.joining(","));
+        String elves[] = oneString.split(",,");
+        for (String elf : elves) {
+            String calories[] = elf.split(",");
+            Integer sum = 0;
+            for (String calorie : calories) {
+                sum += Integer.parseInt(calorie);
             }
+            queue.add(sum);
         }
-        return elfMaxCalories;
-    }
-
-    public Integer solutionPart2(List<String> lines) {
-        Integer currentCalories = 0;
-        Integer currentElf = 1;
-        PriorityQueue<Pair<Integer, Integer>> queue = new PriorityQueue<>(200, (a,b) -> b.getRight() - a.getRight());
-
-        for (String line : lines) {
-            if (line.length() == 0) {
-                queue.add(Pair.of(currentElf, currentCalories));
-                currentElf++;
-                currentCalories = 0;
-            } else {
-                currentCalories += Integer.parseInt(line);
-            }
-        }
-        Integer sum = queue.poll().getRight();
-        sum+= queue.poll().getRight();
-        sum+= queue.poll().getRight();
-        return sum;
+        return queue;
     }
 }
