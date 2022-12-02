@@ -1,9 +1,7 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
-import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
