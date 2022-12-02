@@ -1,8 +1,11 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AoC2022Day2 extends AoCDay {
     public void solve() {
@@ -15,66 +18,40 @@ public class AoC2022Day2 extends AoCDay {
 
     public Integer solutionPart1(List<String> lines) {
         Integer score = 0;
+        Map<Pair<Character,Character>, Integer> part1ScoreMap = new HashMap<>();
+        part1ScoreMap.put(Pair.of('A','X'),4);
+        part1ScoreMap.put(Pair.of('A','Y'),8);
+        part1ScoreMap.put(Pair.of('A','Z'),3);
+        part1ScoreMap.put(Pair.of('B','X'),1);
+        part1ScoreMap.put(Pair.of('B','Y'),5);
+        part1ScoreMap.put(Pair.of('B','Z'),9);
+        part1ScoreMap.put(Pair.of('C','X'),7);
+        part1ScoreMap.put(Pair.of('C','Y'),2);
+        part1ScoreMap.put(Pair.of('C','Z'),6);
         for (String line:lines) {
-            String c[] = line.split(" ");
-            if (c[1].equals("X")) {
-                score += 1;
-                if (c[0].equals("A")) {
-                    score += 3;
-                } else if (c[0].equals("C")) {
-                    score += 6;
-                }
-            } else if (c[1].equals("Y")) {
-                score += 2;
-                if (c[0].equals("B")) {
-                    score += 3;
-                } else if (c[0].equals("A")) {
-                    score += 6;
-                }
-            } else if (c[1].equals("Z")) {
-                score += 3;
-                if (c[0].equals("C")) {
-                    score += 3;
-                } else if (c[0].equals("B")) {
-                    score += 6;
-                }
-            }
-
+            Character p1 = line.charAt(0);
+            Character p2 = line.charAt(2);
+            score += part1ScoreMap.get(Pair.of(p1,p2));
         }
         return score;
     }
 
     public Integer solutionPart2(List<String> lines) {
         Integer score = 0;
+        Map<Pair<Character,Character>, Integer> part2ScoreMap = new HashMap<>();
+        part2ScoreMap.put(Pair.of('A','X'),3);
+        part2ScoreMap.put(Pair.of('A','Y'),4);
+        part2ScoreMap.put(Pair.of('A','Z'),8);
+        part2ScoreMap.put(Pair.of('B','X'),1);
+        part2ScoreMap.put(Pair.of('B','Y'),5);
+        part2ScoreMap.put(Pair.of('B','Z'),9);
+        part2ScoreMap.put(Pair.of('C','X'),2);
+        part2ScoreMap.put(Pair.of('C','Y'),6);
+        part2ScoreMap.put(Pair.of('C','Z'),7);
         for (String line:lines) {
-            String c[] = line.split(" ");
-            if (c[0].equals("A")) {
-                if (c[1].equals("X")) {
-                    score += 3;
-                } else if (c[1].equals("Y")) {
-                    score += 4;
-                } else {
-                    score += 8;
-                }
-            } else if (c[0].equals("B")) {
-                if (c[1].equals("X")) {
-                    score += 1;
-                } else if (c[1].equals("Y")) {
-                    score += 5;
-                } else {
-                    score += 9;
-                }
-            } else {
-                if (c[1].equals("X")) {
-                    score += 2;
-                } else if (c[1].equals("Y")) {
-                    score += 6;
-                } else {
-                    score += 7;
-                }
-
-            }
-
+            Character p1 = line.charAt(0);
+            Character p2 = line.charAt(2);
+            score += part2ScoreMap.get(Pair.of(p1,p2));
         }
         return score;
     }
