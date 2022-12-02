@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AoC2022Day2 extends AoCDay {
+public class RockPaperScissors extends AoCDay {
     public void solve() {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day02/input.txt");
         Integer part1 = solutionPart1(lines);

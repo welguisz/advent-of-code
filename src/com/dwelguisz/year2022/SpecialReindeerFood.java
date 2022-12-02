@@ -10,7 +10,7 @@ public class SpecialReindeerFood extends AoCYear {
 
     @Override
     public void runOneDay(int day) {
-        AoCDay aocDays[] = {new CalorieCounting(), new AoC2022Day2()};
+        AoCDay aocDays[] = {new CalorieCounting(), new RockPaperScissors()};
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
     }
