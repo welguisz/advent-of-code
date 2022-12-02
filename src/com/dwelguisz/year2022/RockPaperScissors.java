@@ -25,6 +25,6 @@ public class RockPaperScissors extends AoCDay {
                 "C X", part2? 2 : 7,
                 "C Y", part2? 6 : 2 ,
                 "C Z", part2? 7 : 6);
-        return lines.stream().map(s -> scoreMap.get(s)).reduce(0,(a,b)->a+b);
+        return lines.stream().mapToInt(s -> scoreMap.get(s)).sum();
     }
 }
