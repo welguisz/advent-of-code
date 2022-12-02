@@ -3,6 +3,7 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
@@ -19,16 +20,12 @@ public class CalorieCounting extends AoCDay {
 
     public PriorityQueue<Integer> createQueue(List<String> lines) {
         PriorityQueue<Integer> queue = new PriorityQueue<>(200, (a,b) -> b- a);
-        String oneString = lines.stream().collect(Collectors.joining(","));
-        String elves[] = oneString.split(",,");
-        for (String elf : elves) {
-            String calories[] = elf.split(",");
-            Integer sum = 0;
-            for (String calorie : calories) {
-                sum += Integer.parseInt(calorie);
-            }
-            queue.add(sum);
-        }
+        Arrays.stream(
+                lines.stream()
+                        .collect(Collectors.joining(","))
+                        .split(",,"))
+                .forEach(elf -> queue.add(Arrays.stream(elf.split(","))
+                        .mapToInt(s -> Integer.parseInt(s)).sum()));
         return queue;
     }
 }
