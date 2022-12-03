@@ -66,4 +66,8 @@ public class AoCDay {
         System.out.println(sb);
     }
 
+    public List<String> convertStringToList(String input) {
+        return Arrays.stream(input.split("")).collect(Collectors.toList());
+    }
+
 }

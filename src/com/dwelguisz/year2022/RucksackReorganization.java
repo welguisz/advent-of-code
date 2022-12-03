@@ -19,34 +19,27 @@ public class RucksackReorganization extends AoCDay {
         Integer sum = 0;
         for (String line : lines) {
             Integer length = line.length()/2;
-            List<String> firstHalf = Arrays.stream(line.substring(0, length).split("")).collect(Collectors.toList());
-            List<String> secondHalf = Arrays.stream(line.substring(length).split("")).collect(Collectors.toList());
+            List<String> firstHalf = convertStringToList(line.substring(0,length));
+            List<String> secondHalf = convertStringToList(line.substring(length));
             String appearsInBoth = firstHalf.stream().filter(l -> secondHalf.contains(l)).collect(Collectors.toList()).get(0);
-            Integer val = Integer.valueOf(appearsInBoth.toCharArray()[0]);
-            if (val < 96) {
-                val -= 38;
-            } else {
-                val -= 96;
-            }
-            sum += val;
+            sum += priorityScore(appearsInBoth);
         }
         return sum;
+    }
+
+    public Integer priorityScore(String str) {
+        Integer val = Integer.valueOf(str.toCharArray()[0]);
+        return (val < 96) ? val - 38 : val - 96;
     }
 
     public Integer solutionPart2(List<String> lines) {
         Integer sum = 0;
         for (int i = 0; i < lines.size(); i+=3) {
-            List<String> line0 = Arrays.stream(lines.get(i).split("")).collect(Collectors.toList());
-            List<String> line1 = Arrays.stream(lines.get(i + 1).split("")).collect(Collectors.toList());
-            List<String> line2 = Arrays.stream(lines.get(i + 2).split("")).collect(Collectors.toList());
+            List<String> line0 = convertStringToList(lines.get(i));
+            List<String> line1 = convertStringToList(lines.get(i+1));
+            List<String> line2 = convertStringToList(lines.get(i+2));
             String inAllThree = line0.stream().filter(l -> line1.contains(l)).filter(l -> line2.contains(l)).collect(Collectors.toList()).get(0);
-            Integer val = Integer.valueOf(inAllThree.toCharArray()[0]);
-            if (val < 96) {
-                val -= 38;
-            } else {
-                val -= 96;
-            }
-            sum += val;
+            sum += priorityScore(inAllThree);
         }
         return sum;
     }
