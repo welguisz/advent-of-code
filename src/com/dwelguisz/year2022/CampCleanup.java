@@ -35,9 +35,9 @@ public class CampCleanup extends AoCDay {
         for (Pair<List<Integer>,List<Integer>> pair : pairs) {
             List<Integer> first = pair.getLeft();
             List<Integer> second = pair.getRight();
-            boolean firstContained = first.containsAll(second);
-            boolean secondContained = second.containsAll(first);
-            count += (firstContained || secondContained) ? 1 : 0;
+            boolean contained = first.containsAll(second);
+            contained = contained || second.containsAll(first);
+            count += contained ? 1 : 0;
         }
         return count;
     }
