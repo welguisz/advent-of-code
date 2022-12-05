@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class SupplyStacks extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day05/input.txt");
+        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day05/reddit.txt");
         String part1 = solutionPart1(lines);
         System.out.println(String.format("Part 1 Answer: %s",part1));
         String part2 = solutionPart2(lines);
