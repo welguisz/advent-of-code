@@ -17,16 +17,19 @@ public class FractalArt extends AoCDay {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2017/day21/input.txt");
         createTransformer(lines);
         String initialGrid = ".#./..#/###";
-        Integer part1 = solutionPart1(initialGrid, 5); // 200 - too high
+        Integer part1 = solutionPart1(initialGrid, 5); // 188 - just right
         System.out.println(String.format("Part 1 Answer: %d",part1));
+        Integer part2 = solutionPart1(initialGrid, 18); // 2758764 - just right
+        System.out.println(String.format("Part 2 Answer: %d",part2));
     }
 
     public Integer solutionPart1(String grid, Integer turns) {
         Map<String, Integer> value = Map.of(".",0,"#",1);
         String currentGrid = grid;
+        System.out.println("Turn 0 size:" + currentGrid.length());
         for (int i = 0; i < turns; i++) {
             currentGrid = transformOneTime(currentGrid);
-            System.out.println(currentGrid);
+            System.out.println("Turn " + i + " size: " + currentGrid.length());
         }
         List<String> output = convertStringToList(currentGrid);
         return output.stream().mapToInt(s -> value.getOrDefault(s,0)).sum();
@@ -51,7 +54,7 @@ public class FractalArt extends AoCDay {
                 gridItems.add(newGrid);
             }
         }
-        return combineGrid(gridItems, inputSize+1);
+        return combineGrid(gridItems, inputSize + 1);
     }
 
     public String combineGrid(List<String> grids, Integer outputSize) {
@@ -62,7 +65,7 @@ public class FractalArt extends AoCDay {
         Integer totalSize = outerSize * innerSize;
         for (int i = 0; i < totalSize; i++) {
             for(int j = 0; j < totalSize; j++) {
-                Integer matrixNum = (i / outputSize) + (j / outputSize);
+                Integer matrixNum = ((i / outputSize) * outerSize) + (j / outputSize);
                 Integer rowNumber = i % outputSize;
                 Integer colNumber = j % outputSize;
                 String grid = grids.get(matrixNum);
@@ -74,28 +77,16 @@ public class FractalArt extends AoCDay {
     }
     public String findTransformAndRun(String input, Integer size) {
         String matrix = input;
-        List<String> possibleOutputs = new ArrayList<>();
-        Set<String> inputs = new HashSet<>();
-        Map<String, String> conversions = new HashMap<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 2; j++) {
                 if (transformer.containsKey(matrix)) {
-                    inputs.add(matrix);
-                    possibleOutputs.add(transformer.get(matrix));
-                    conversions.put(matrix, transformer.get(matrix));
+                    return transformer.get(matrix);
                 }
                 matrix = (size == 2) ? flipMatrixSize2(matrix) : flipMatrixSize3(matrix);
             }
             matrix = (size == 2) ? rotateMatrixSize2(matrix) : rotateMatrixSize3(matrix);
         }
-        if (inputs.size() > 1) {
-            System.out.println("Transform returned more than 1 possible output:---");
-            System.out.println("Input matrix: " + input);
-            for (Map.Entry<String, String> v : conversions.entrySet()) {
-                System.out.println(v.getKey() + " ==> " + v.getValue());
-            }
-         }
-        return possibleOutputs.get(0);
+        return "--/--";
     }
 
     public String flipMatrixSize2(String input) {
