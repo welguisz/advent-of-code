@@ -7,8 +7,11 @@ public class TemporalAnomalies extends AoCYear {
     public TemporalAnomalies(int year) { super(year); }
     @Override
     public void runOneDay(int day) {
-        AoCDay days[] = {new ChronalCalibration(), new InventoryManagementSystem(), new HowYouSliceIt(), new ReposeRecord()};
-        AoCDay aocDay = days[day];
+        AoCDay days[] = {
+                new ChronalCalibration(), new InventoryManagementSystem(), new HowYouSliceIt(), new ReposeRecord(),
+                new AlchemicalReduction()
+        };
+        AoCDay aocDay = days[day-1];
         aocDay.solve();
     }
 }
