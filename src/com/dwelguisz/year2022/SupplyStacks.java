@@ -42,12 +42,15 @@ public class SupplyStacks extends AoCDay {
         }
         while (!rows.isEmpty()) {
             String current = rows.pop();
-            for (int i = 0; i < current.length(); i++) {
-                if (map.containsKey(i)) {
-                    String tmp = current.substring(i,i+1);
-                    if (!tmp.equals(" ")) {
-                        finalStack.get(map.get(i)-1).push(tmp);
-                    }
+            for (Map.Entry<Integer, Integer> loc : map.entrySet()) {
+                Integer stackNumber = loc.getValue();
+                Integer charPosition = loc.getKey();
+                if (charPosition > current.length()) {
+                    continue;
+                }
+                String tmp = current.substring(charPosition,charPosition+1);
+                if (!tmp.equals(" ")) {
+                    finalStack.get(stackNumber-1).push(tmp);
                 }
             }
         }
