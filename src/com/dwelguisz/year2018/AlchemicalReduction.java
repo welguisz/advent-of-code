@@ -2,11 +2,8 @@ package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 public class AlchemicalReduction extends AoCDay {
     public void solve() {
