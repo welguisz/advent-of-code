@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AoC2022Day7 extends AoCDay {
+public class NoSpaceLeftOnDevice extends AoCDay {
 
     public static class Directory {
         Map<String, Directory> directoryMap;
