@@ -9,7 +9,8 @@ public class TemporalAnomalies extends AoCYear {
     public void runOneDay(int day) {
         AoCDay days[] = {
                 new ChronalCalibration(), new InventoryManagementSystem(), new HowYouSliceIt(), new ReposeRecord(),
-                new AlchemicalReduction(), new ChronalCoordinates(), new TheSumOfItsParts(), new MemoryManeuver()
+                new AlchemicalReduction(), new ChronalCoordinates(), new TheSumOfItsParts(), new MemoryManeuver(),
+                new MarbleMania()
         };
         AoCDay aocDay = days[day-1];
         aocDay.solve();
