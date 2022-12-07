@@ -61,14 +61,14 @@ public class AoC2022Day7 extends AoCDay {
 
     public Directory createDirectory(List<String> lines) {
         Directory headDirectory = new Directory("/");
-        Pair<Directory, Integer> res = subNode(lines, 1, headDirectory);
+        Pair<Directory, Integer> res = subDirectory(lines, 1, headDirectory);
         return res.getLeft();
     }
 
-    public Pair<Directory, Integer> subNode(List<String> screen, Integer pointer, Directory currentDirectory) {
+    public Pair<Directory, Integer> subDirectory(List<String> lines, Integer pointer, Directory currentDirectory) {
         boolean stayHere = true;
         while (stayHere) {
-            String line = screen.get(pointer);
+            String line = lines.get(pointer);
             String cmd[] = line.split(" ");
             if (cmd[0].equals("$")) {
                 if (cmd[1].equals("ls")) {
@@ -81,7 +81,7 @@ public class AoC2022Day7 extends AoCDay {
                         String dirName = cmd[2];
                         Directory subDir = currentDirectory.directoryMap.get(dirName);
                         pointer++;
-                        Pair<Directory, Integer> res = subNode(screen, pointer, subDir);
+                        Pair<Directory, Integer> res = subDirectory(lines, pointer, subDir);
                         pointer = res.getRight();
                         currentDirectory.directoryMap.put(dirName, res.getLeft());
                     }
@@ -95,7 +95,7 @@ public class AoC2022Day7 extends AoCDay {
                     pointer++;
                 }
             }
-            if (pointer == screen.size()) {
+            if (pointer == lines.size()) {
                 stayHere = false;
             }
         }
