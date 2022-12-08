@@ -1,11 +1,14 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class TreetopTreeHouse extends AoCDay {
+    List<Pair<Integer, Integer>> visibleTrees;
     public void solve() {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day08/input.txt");
         Integer[][] grid = createGrid(lines);
@@ -28,10 +31,14 @@ public class TreetopTreeHouse extends AoCDay {
     }
 
     Long solutionPart1(Integer[][] grid) {
+        visibleTrees = new ArrayList<>();
         Long sum = 0L;
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length;j++) {
-                sum += checkVisibility(grid,i,j) ? 1 : 0;
+                if (checkVisibility(grid,i,j)) {
+                    sum++;
+                    visibleTrees.add(Pair.of(i,j));
+                }
             }
         }
         return sum;
@@ -39,36 +46,18 @@ public class TreetopTreeHouse extends AoCDay {
 
     public boolean checkVisibility(Integer grid[][], Integer i, Integer j) {
         Integer height = grid[i][j];
-        List<Integer> heights = new ArrayList<>();
         List<Boolean> visible = new ArrayList<>();
-        for (int x = 0; x < i; x++) {
-            heights.add(grid[x][j]);
-        }
-        visible.add(heights.stream().anyMatch(h -> h >= height));
-        heights = new ArrayList<>();
-        for (int x = i + 1; x < grid.length; x++) {
-            heights.add(grid[x][j]);
-        }
-        visible.add(heights.stream().anyMatch(h -> h >= height));
-        heights = new ArrayList<>();
-        for (int x = 0; x < j; x++) {
-            heights.add(grid[i][x]);
-        }
-        visible.add(heights.stream().anyMatch(h -> h >= height));
-        heights = new ArrayList<>();
-        for (int x = j + 1; x < grid[i].length; x++) {
-            heights.add(grid[i][x]);
-        }
-        visible.add(heights.stream().anyMatch(h -> h >= height));
+        visible.add(IntStream.range(0,i).map(x -> grid[x][j]).anyMatch(h -> h >= height));
+        visible.add(IntStream.range(i+1,grid.length).map(x -> grid[x][j]).anyMatch(h -> h >= height));
+        visible.add(IntStream.range(0,j).map(x -> grid[i][x]).anyMatch(h -> h >= height));
+        visible.add(IntStream.range(j+1,grid[i].length).map(x -> grid[i][x]).anyMatch(h -> h >= height));
         return visible.stream().anyMatch(v -> !v);
     }
 
     Long solutionPart2(Integer[][] grid) {
         Integer maxScore = Integer.MIN_VALUE;
-        for (int i = 0; i < grid.length;i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                maxScore = Integer.max(maxScore, getScenicScore(grid, i, j));
-            }
+        for (Pair<Integer, Integer> tree : visibleTrees) {
+            maxScore = Integer.max(maxScore, getScenicScore(grid, tree.getLeft(), tree.getRight()));
         }
         return maxScore.longValue();
     }
