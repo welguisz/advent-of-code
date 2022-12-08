@@ -12,7 +12,7 @@ public class TreetopTreeHouse extends AoCDay {
     public void solve() {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day08/input.txt");
         Integer[][] grid = createGrid(lines);
-        Long part1 = solutionPart1(grid);
+        Integer part1 = solutionPart1(grid);
         System.out.println(String.format("Part 1 Answer: %d",part1));
         Long part2 = solutionPart2(grid);
         System.out.println(String.format("Part 2 Answer: %d",part2));
@@ -30,18 +30,16 @@ public class TreetopTreeHouse extends AoCDay {
         return grid;
     }
 
-    Long solutionPart1(Integer[][] grid) {
+    Integer solutionPart1(Integer[][] grid) {
         visibleTrees = new ArrayList<>();
-        Long sum = 0L;
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length;j++) {
                 if (checkVisibility(grid,i,j)) {
-                    sum++;
                     visibleTrees.add(Pair.of(i,j));
                 }
             }
         }
-        return sum;
+        return visibleTrees.size();
     }
 
     public boolean checkVisibility(Integer grid[][], Integer i, Integer j) {
