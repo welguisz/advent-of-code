@@ -54,9 +54,15 @@ public class TreetopTreeHouse extends AoCDay {
 
     Long solutionPart2(Integer[][] grid) {
         Integer maxScore = Integer.MIN_VALUE;
+        Pair<Integer, Integer> treeLocation = Pair.of(0,0);
         for (Pair<Integer, Integer> tree : visibleTrees) {
-            maxScore = Integer.max(maxScore, getScenicScore(grid, tree.getLeft(), tree.getRight()));
+            Integer scenicScore = getScenicScore(grid, tree.getLeft(), tree.getRight());
+            if (maxScore < scenicScore) {
+                maxScore = scenicScore;
+                treeLocation = Pair.of(tree.getLeft(), tree.getRight());
+            }
         }
+        System.out.println("Best viewing tree is at: (" + treeLocation.getLeft() + ", " + treeLocation.getRight() + ")");
         return maxScore.longValue();
     }
 
