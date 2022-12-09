@@ -12,7 +12,7 @@ public class SpecialReindeerFood extends AoCYear {
     public void runOneDay(int day) {
         AoCDay aocDays[] = {new CalorieCounting(), new RockPaperScissors(), new RucksackReorganization(),
                 new CampCleanup(), new SupplyStacks(), new TuningTrouble(), new NoSpaceLeftOnDevice(),
-                new TreetopTreeHouse()
+                new TreetopTreeHouse(), new AoC2022Day9()
         };
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
