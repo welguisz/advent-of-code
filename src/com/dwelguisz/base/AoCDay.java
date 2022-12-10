@@ -66,6 +66,19 @@ public class AoCDay {
         System.out.println(sb);
     }
 
+    protected void printGrid(Character[][] grid) {
+        StringBuffer sb = new StringBuffer("\n");
+        for (int i = 0; i < grid.length; i++) {
+            for(int j = 0; j < grid[0].length;j++) {
+                sb.append(grid[i][j]);
+            }
+            sb.append("\n");
+        }
+        sb.append("\n");
+        System.out.println(sb);
+    }
+
+
     public List<String> convertStringToList(String input) {
         return Arrays.stream(input.split("")).collect(Collectors.toList());
     }

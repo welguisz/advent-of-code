@@ -10,7 +10,8 @@ public class TemporalAnomalies extends AoCYear {
         AoCDay days[] = {
                 new ChronalCalibration(), new InventoryManagementSystem(), new HowYouSliceIt(), new ReposeRecord(),
                 new AlchemicalReduction(), new ChronalCoordinates(), new TheSumOfItsParts(), new MemoryManeuver(),
-                new MarbleMania(), new TheStarsAlign(), new ChronalCharge(), new SubterraneanSustainability()
+                new MarbleMania(), new TheStarsAlign(), new ChronalCharge(), new SubterraneanSustainability(),
+                new MineCartMadness()
         };
         AoCDay aocDay = days[day-1];
         aocDay.solve();

@@ -8,3 +8,6 @@
 ### Year 2016
 * RadioisotepeThermoelectricGenerators, Day 11
 * Safe Cracking, Day 23
+
+### Year 2018
+* Mine Cart Madness, Day 13
