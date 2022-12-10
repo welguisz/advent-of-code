@@ -19,18 +19,15 @@ public class CathodeRayTube extends AoCDay {
     Pair<Integer,String> solutionPart1(List<String> lines) {
         Integer cycleCount = 0;
         Integer registerA = 1;
-        List<Integer> cycleCountL = List.of(20,60,100,140,180,220);
         List<Integer> values = new ArrayList<>();
         String screen = "";
-        Integer pointer = 0;
-        while(cycleCount < 240) {
-            String l = lines.get(pointer);
+        for (String l : lines) {
             String split[] = l.split(" ");
             String cmd = split[0];
             if (cmd.equals("noop")) {
                 screen += printPixel(registerA, cycleCount);
                 cycleCount++;
-                if (cycleCountL.contains(cycleCount)) {
+                if (cycleCount % 40 == 20) {
                     values.add(registerA * cycleCount);
                 }
             }
@@ -39,14 +36,12 @@ public class CathodeRayTube extends AoCDay {
                 for (int i = 0; i < 2; i++) {
                     screen += printPixel(registerA, cycleCount);
                     cycleCount++;
-                    if (cycleCountL.contains(cycleCount)) {
+                    if (cycleCount % 40 == 20) {
                         values.add(registerA * cycleCount);
                     }
                 }
                 registerA += val;
             }
-            pointer++;
-            pointer %= lines.size();
         }
         return Pair.of(values.stream().mapToInt(i -> i).sum(), screen);
     }
