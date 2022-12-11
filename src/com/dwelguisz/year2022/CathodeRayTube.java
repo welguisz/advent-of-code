@@ -8,7 +8,6 @@ import java.util.List;
 
 public class CathodeRayTube extends AoCDay {
     public void solve() {
-        System.out.println("Day 10 ready to go");
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day10/input.txt");
         Pair<Integer, String> part1 = solutionPart1(lines);
         System.out.println(String.format("Part 1 Answer: %d",part1.getLeft()));
