@@ -10,53 +10,39 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
-public class AoC2022Day11 extends AoCDay {
+public class MonkeyInTheMiddle extends AoCDay {
 
     public static class Monkey {
         Integer id;
         List<Long> items;
         Map<Boolean, Integer> nextMonkey;
-        String operation;
         Integer divisbleBy;
         Integer inspections;
+
+        Boolean operation; //false -> addition; true -> multiply
+        String operand;
 
         public Monkey(Integer id, List<Long> items, Map<Boolean, Integer> nextMonkey, Integer divisbleBy, String operation) {
             this.id = id;
             this.items = items;
             this.nextMonkey = nextMonkey;
             this.divisbleBy = divisbleBy;
-            this.operation = operation;
+            this.operation = operation.contains("*");
+            this.operand = operation.substring(operation.indexOf(this.operation ? "*" : "+")+2);
             inspections = 0;
         }
 
         public void oneRound(List<Monkey> monkeys, Boolean part2, Integer totalModulus) {
             for (Long item : items) {
                 inspections++;
-                Long newValue = 0L;
-                if (operation.contains("*")) {
-                    String operand1 = operation.substring(operation.indexOf("*")+2);
-                    if (operand1.equals("old")) {
-                        newValue = item * item;
-                    } else {
-                        newValue = item * Long.parseLong(operand1);
-                    }
+                Long newValue;
+                if (operation) {
+                    newValue = operand.equals("old") ? item * item : item * Long.parseLong(operand);
                 } else {
-                    String operand1 = operation.substring(operation.indexOf("+")+2);
-                    if (operand1.equals("old")) {
-                        newValue = item + item;
-                    } else {
-                        newValue = item + Long.parseLong(operand1);
-                    }
+                    newValue = operand.equals("old") ? item + item : item + Long.parseLong(operand);
                 }
-                newValue %= totalModulus;
-                if (!part2) {
-                    newValue /= 3;
-                }
-                if (newValue % divisbleBy == 0) {
-                    monkeys.get(nextMonkey.get(true)).items.add(newValue);
-                } else {
-                    monkeys.get(nextMonkey.get(false)).items.add(newValue);
-                }
+                newValue   = part2 ? newValue % totalModulus : newValue / 3;
+                monkeys.get(nextMonkey.get(newValue % divisbleBy == 0)).items.add(newValue);
             }
             items = new ArrayList<>();
         }
