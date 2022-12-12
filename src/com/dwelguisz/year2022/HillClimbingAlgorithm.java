@@ -4,8 +4,10 @@ import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 public class HillClimbingAlgorithm extends AoCDay {
 
@@ -25,7 +27,11 @@ public class HillClimbingAlgorithm extends AoCDay {
             this.visitedNodes = visitedNodes;
             distanceToTarget = (targetX-x)*(targetX-x) + (targetY-y)*(targetY-y);
         }
-    
+
+        public Pair<Integer, Integer> getLoc() {
+            return Pair.of(x,y);
+        }
+
         public Integer getSteps() {
             return visitedNodes.size();
         }
@@ -135,17 +141,11 @@ public class HillClimbingAlgorithm extends AoCDay {
             }
         }
         Integer minValue = maxSteps+10;
-        System.out.println("Number of starting Points: " + startingPoints.size());
-        Integer count = 0;
         for (Pair<Integer, Integer> s : startingPoints) {
-            if (count %100 == 0) {
-                System.out.println("Trying point #" + count);
-            }
             Integer cur = findShortestDistance(s, goalPoint, grid, minValue);
             minValue = Integer.min(minValue, cur);
-            count++;
         }
-        return minValue;
+        return minValue
     }
 
     public Integer findShortestDistance(Pair<Integer, Integer> startingPoint, Pair<Integer, Integer> endPoint, String map[][], Integer maxSteps) {
@@ -157,9 +157,9 @@ public class HillClimbingAlgorithm extends AoCDay {
         );
         Node initialLoc = new Node(startingPoint.getLeft(), startingPoint.getRight(), endPoint.getLeft(),endPoint.getRight(),new ArrayList<>());
         List<Node> visitedNodes = new ArrayList<>();
-        List<Node> currentlyInTheQueue = new ArrayList<>();
+        Set<Pair<Integer,Integer>> currentlyInTheQueue = new HashSet<>();
         queue.add(initialLoc);
-        currentlyInTheQueue.add(initialLoc);
+        currentlyInTheQueue.add(startingPoint);
         while (!queue.isEmpty()) {
             Node currentNode = queue.poll();
             currentlyInTheQueue.remove(currentNode);
@@ -172,18 +172,12 @@ public class HillClimbingAlgorithm extends AoCDay {
             }
             List<Node> nextNodes = currentNode.getNextNodes(map);
             for (Node nextNode : nextNodes) {
-                if (!alreadyInNode(currentlyInTheQueue, nextNode)) {
+
+                if (currentlyInTheQueue.add(nextNode.getLoc())) {
                     queue.add(nextNode);
-                    currentlyInTheQueue.add(nextNode);
                 }
             }
         }
         return Integer.MAX_VALUE;
     }
-
-    public Boolean alreadyInNode(List<Node> nodes, Node targetNode) {
-        return nodes.stream().anyMatch(n -> n.x.equals(targetNode.x) && n.y.equals(targetNode.y));
-    }
-
-
 }
