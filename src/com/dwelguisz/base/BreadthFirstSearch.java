@@ -18,7 +18,6 @@ public abstract class BreadthFirstSearch<T> extends AoCDay{
 
     public Integer findShortestPath(
             Pair<Integer, Integer> startingPoint,
-            Pair<Integer, Integer> targetPoint,
             Integer maxSteps,
             SearchNode initialNode) {
         PriorityQueue<SearchNode> queue = new PriorityQueue<>(2000,
