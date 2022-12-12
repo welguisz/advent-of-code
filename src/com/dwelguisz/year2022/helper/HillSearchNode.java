@@ -1,7 +1,6 @@
 package com.dwelguisz.year2022.helper;
 
 import com.dwelguisz.base.SearchNode;
-import com.dwelguisz.year2022.HillClimbingAlgorithm;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
