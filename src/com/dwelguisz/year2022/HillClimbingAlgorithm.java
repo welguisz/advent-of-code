@@ -1,14 +1,13 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
-import com.dwelguisz.year2016.AirDuctSpleunking;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class AoC2022Day12 extends AoCDay {
+public class HillClimbingAlgorithm extends AoCDay {
 
     public static class Node {
         Integer x;
@@ -34,10 +33,10 @@ public class AoC2022Day12 extends AoCDay {
         public Boolean[] allowedMovement(String[][] map) {
             Integer currentLoc = getHeight(map,x,y);
 
-            Integer up = x == 0 ? 37 : getHeight(map,x-1,y);
-            Integer down = x == map.length ? 37 : getHeight(map,x+1,y);
-            Integer left = y == 0 ? 37 : getHeight(map,x,y-1);
-            Integer right = y == map[0].length ? 37 : getHeight(map,x,y+1);
+            Integer up = getHeight(map,x-1,y);
+            Integer down = getHeight(map,x+1,y);
+            Integer left = getHeight(map,x,y-1);
+            Integer right = getHeight(map,x,y+1);
             return new Boolean[]{currentLoc +2 > up, currentLoc + 2 > down, currentLoc + 2 > left, currentLoc + 2 > right};
         }
         
@@ -56,7 +55,7 @@ public class AoC2022Day12 extends AoCDay {
         }
         
         public List<Node> getNextNodes(String[][] map) {
-            Boolean[] validNextSteps = whichDoorsAreOpen(map);
+            Boolean[] validNextSteps = validMoves(map);
             List<Node> newNodes = new ArrayList<>();
             List<Node> newVisited = new ArrayList<>(visitedNodes);
             newVisited.add(this);
@@ -74,28 +73,14 @@ public class AoC2022Day12 extends AoCDay {
             }
             return newNodes;
         }
-        public Boolean[] seesWhichDoorsOpen(String[][] map) {
-            return new Boolean[]{
-                    isDoorOpen(x-1,y, map),
-                    isDoorOpen(x+1,y, map),
-                    isDoorOpen(x,y-1, map),
-                    isDoorOpen(x,y+1, map)
-            };
-        }
-        public static List<String> OPEN_SPACE = List.of("0","1","2","3","4","5","6","7","8","9",".");
-        public Boolean isDoorOpen(Integer x, Integer y, String[][] map) {
-            return true;
-        }
-    
-        public Boolean[] whichDoorsAreOpen(String[][] map) {
+        public Boolean[] validMoves(String[][] map) {
             Boolean[] stepResult = allowedMovement(map);
-            Boolean doorsOpen[] = new Boolean[]{
+            return new Boolean[]{
                     stepResult[0] && haveWeVisitedThisNode(x-1,y),
                     stepResult[1] && haveWeVisitedThisNode(x+1,y),
                     stepResult[2] && haveWeVisitedThisNode(x,y-1),
                     stepResult[3] && haveWeVisitedThisNode(x,y+1)
             };
-            return doorsOpen;
         }
     
         public Boolean onTarget() {
@@ -103,25 +88,17 @@ public class AoC2022Day12 extends AoCDay {
         }
     
         public Boolean haveWeVisitedThisNode(Integer x, Integer y) {
-            for(Node visitedNode : visitedNodes) {
-                if (visitedNode.x.equals(x) && visitedNode.y.equals(y)) {
-                    return false;
-                }
-            }
-            return true;
+            return !visitedNodes.stream().anyMatch(v -> v.x.equals(x) && v.y.equals(y));
         }
     }
 
 
     public void solve() {
-        System.out.println("Day 12 ready to go");
-        boolean test = false;
-        String filename = test ? "testcase.txt" : "input.txt";
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day12/" + filename);
+        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day12/input.txt");
         String[][] grid = convertToGrid(lines);
         Integer part1 = solutionPart1(grid);
         System.out.println(String.format("Part 1 Answer: %s",part1));
-        Integer part2 = solutionPart2(grid);
+        Integer part2 = solutionPart2(grid, part1);
         System.out.println(String.format("Part 2 Answer: %s",part2));
     }
 
@@ -138,10 +115,10 @@ public class AoC2022Day12 extends AoCDay {
                 }
             }
         }
-        return findShortestDistance(startingPoint, goalPoint, grid);
+        return findShortestDistance(startingPoint, goalPoint, grid, Integer.MAX_VALUE);
     }
 
-    Integer solutionPart2(String[][] grid) {
+    Integer solutionPart2(String[][] grid, Integer maxSteps) {
         List<Pair<Integer,Integer>> startingPoints = new ArrayList<>();
         Pair<Integer, Integer> goalPoint = Pair.of(0,0);
         for (int i = 0; i < grid.length; i++) {
@@ -157,22 +134,27 @@ public class AoC2022Day12 extends AoCDay {
                 }
             }
         }
-        Integer minValue = Integer.MAX_VALUE;
+        Integer minValue = maxSteps+10;
+        System.out.println("Number of starting Points: " + startingPoints.size());
+        Integer count = 0;
         for (Pair<Integer, Integer> s : startingPoints) {
-            Integer cur = findShortestDistance(s, goalPoint, grid);
+            if (count %100 == 0) {
+                System.out.println("Trying point #" + count);
+            }
+            Integer cur = findShortestDistance(s, goalPoint, grid, minValue);
             minValue = Integer.min(minValue, cur);
+            count++;
         }
         return minValue;
     }
 
-    public Integer findShortestDistance(Pair<Integer, Integer> startingPoint, Pair<Integer, Integer> endPoint, String map[][]) {
+    public Integer findShortestDistance(Pair<Integer, Integer> startingPoint, Pair<Integer, Integer> endPoint, String map[][], Integer maxSteps) {
         PriorityQueue<Node> queue = new PriorityQueue<>(2000,
                 (a,b) -> {
                     Integer diffLength = a.getSteps() - b.getSteps();
                     return diffLength;
                 }
         );
-        Integer queueSize = 0;
         Node initialLoc = new Node(startingPoint.getLeft(), startingPoint.getRight(), endPoint.getLeft(),endPoint.getRight(),new ArrayList<>());
         List<Node> visitedNodes = new ArrayList<>();
         List<Node> currentlyInTheQueue = new ArrayList<>();
@@ -182,6 +164,9 @@ public class AoC2022Day12 extends AoCDay {
             Node currentNode = queue.poll();
             currentlyInTheQueue.remove(currentNode);
             visitedNodes.add(currentNode);
+            if (currentNode.getSteps() > maxSteps) {
+                continue;
+            }
             if (currentNode.onTarget()) {
                 return currentNode.getSteps();
             }
@@ -193,16 +178,11 @@ public class AoC2022Day12 extends AoCDay {
                 }
             }
         }
-        return -1;
+        return Integer.MAX_VALUE;
     }
 
     public Boolean alreadyInNode(List<Node> nodes, Node targetNode) {
-        for (Node node : nodes) {
-            if (node.x.equals(targetNode.x) && node.y.equals(targetNode.y)) {
-                return true;
-            }
-        }
-        return false;
+        return nodes.stream().anyMatch(n -> n.x.equals(targetNode.x) && n.y.equals(targetNode.y));
     }
 
 
