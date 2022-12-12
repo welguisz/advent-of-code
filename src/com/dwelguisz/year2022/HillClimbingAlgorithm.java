@@ -4,6 +4,7 @@ import com.dwelguisz.base.BreadthFirstSearch;
 import com.dwelguisz.year2022.helper.HillSearchNode;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,13 +12,18 @@ import java.util.List;
 public class HillClimbingAlgorithm extends BreadthFirstSearch<String> {
 
     public void solve() {
+        Long startTime = Instant.now().toEpochMilli();
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day12/input.txt");
         String grid[][] = convertToGrid(lines);
         setMap(grid);
         Integer part1 = solutionPart1(grid);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
+        Long part1Time = Instant.now().toEpochMilli();
         Integer part2 = solutionPart2(grid);
-        System.out.println(String.format("Part 2 Answer: %s",part2));
+        Long part2Time = Instant.now().toEpochMilli();
+        System.out.println(String.format("Part 1 Answer: %d",part1));
+        System.out.println(String.format("Part 2 Answer: %d",part2));
+        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
+        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
     }
 
     Integer solutionPart1(String[][] grid) {
@@ -34,7 +40,7 @@ public class HillClimbingAlgorithm extends BreadthFirstSearch<String> {
             }
         }
         HillSearchNode node = new HillSearchNode(startingPoint, goalPoint, new ArrayList<>(), new HashSet<>());
-        return findShortestPath(startingPoint, goalPoint, Integer.MAX_VALUE, node);
+        return findShortestPath(startingPoint, Integer.MAX_VALUE, node);
     }
 
     Integer solutionPart2(String[][] grid) {
@@ -56,7 +62,7 @@ public class HillClimbingAlgorithm extends BreadthFirstSearch<String> {
         Integer minValue = Integer.MAX_VALUE;
         for (Pair<Integer, Integer> s : startingPoints) {
             HillSearchNode node = new HillSearchNode(s, goalPoint, new ArrayList<>(), new HashSet<>());
-            Integer cur = findShortestPath(s, goalPoint, minValue, node);
+            Integer cur = findShortestPath(s, minValue, node);
             minValue = Integer.min(minValue, cur);
         }
         return minValue;
