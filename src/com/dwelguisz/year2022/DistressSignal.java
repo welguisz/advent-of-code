@@ -1,19 +1,16 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
-import org.apache.commons.lang3.tuple.Pair;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
-public class AoC2022Day13 extends AoCDay {
+public class DistressSignal extends AoCDay {
     public void solve() {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day13/input.txt");
         Long startTime = Instant.now().toEpochMilli();
