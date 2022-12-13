@@ -90,18 +90,14 @@ public class DistressSignal extends AoCDay {
     }
     public Integer solutionPart2(List<String> lines) {
         List<String> pairs = Arrays.stream(lines.stream().collect(Collectors.joining("t")).split("tt")).collect(Collectors.toList());
-        List<String> values = new ArrayList<>();
+        PriorityQueue<String> results = new PriorityQueue<>(200, (a,b) -> compareStr(a,b));
         for (String p : pairs) {
             String parts[] = p.split("t");
-            values.add(parts[0]);
-            values.add(parts[1]);
+            results.add(parts[0]);
+            results.add(parts[1]);
         }
-        values.add("[[2]]");
-        values.add("[[6]]");
-        PriorityQueue<String> results = new PriorityQueue<>(200, (a,b) -> compareStr(a,b));
-        for (String v : values) {
-            results.add(v);
-        }
+        results.add("[[2]]");
+        results.add("[[6]]");
         List<Integer> indices = new ArrayList<>();
         Integer index = 1;
         ArrayList<String> needThese = new ArrayList<>();
