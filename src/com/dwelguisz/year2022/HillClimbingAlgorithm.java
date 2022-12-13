@@ -1,6 +1,7 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.BreadthFirstSearch;
+import com.dwelguisz.base.SearchNode;
 import com.dwelguisz.year2022.helper.HillSearchNode;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -60,12 +61,11 @@ public class HillClimbingAlgorithm extends BreadthFirstSearch<String> {
             }
         }
         Integer minValue = Integer.MAX_VALUE;
+        List<SearchNode> nodes = new ArrayList<>();
         for (Pair<Integer, Integer> s : startingPoints) {
-            HillSearchNode node = new HillSearchNode(s, goalPoint, new ArrayList<>(), new HashSet<>());
-            Integer cur = findShortestPath(s, minValue, node);
-            minValue = Integer.min(minValue, cur);
+            nodes.add(new HillSearchNode(s, goalPoint, new ArrayList<>(), new HashSet<>()));
         }
-        return minValue;
+        return findShortestPath(startingPoints, minValue, nodes);
     }
 
 }

@@ -20,17 +20,28 @@ public abstract class BreadthFirstSearch<T> extends AoCDay{
             Pair<Integer, Integer> startingPoint,
             Integer maxSteps,
             SearchNode initialNode) {
+        return findShortestPath(List.of(startingPoint), maxSteps, List.of(initialNode));
+    }
+
+    public Integer findShortestPath(
+        List<Pair<Integer, Integer>> startingPoints,
+        Integer maxSteps,
+        List<SearchNode> initialNodes
+    ) {
         PriorityQueue<SearchNode> queue = new PriorityQueue<>(2000,
                 (a,b) -> {
                     Integer diffLength = a.getSteps() - b.getSteps();
                     return diffLength;
                 }
         );
-        SearchNode initialLoc = initialNode;
+        for (SearchNode node : initialNodes) {
+            queue.add(node);
+        }
         List<SearchNode> visitedNodes = new ArrayList<>();
         Set<Pair<Integer,Integer>> currentlyInTheQueue = new HashSet<>();
-        queue.add(initialLoc);
-        currentlyInTheQueue.add(startingPoint);
+        for(Pair<Integer, Integer> points : startingPoints) {
+            currentlyInTheQueue.add(points);
+        }
         while (!queue.isEmpty()) {
             SearchNode currentNode = queue.poll();
             currentlyInTheQueue.remove(currentNode);
@@ -49,6 +60,6 @@ public abstract class BreadthFirstSearch<T> extends AoCDay{
                 }
             }
         }
-        return Integer.MAX_VALUE;
+    return Integer.MAX_VALUE;
     }
 }
