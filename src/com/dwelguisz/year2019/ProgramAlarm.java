@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ProgramAlarm extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2019/day02/input.txt");
+        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2019/day02/input.txt");
         Integer part1 = solutionPart1(lines, 12, 2);
         Integer part2 = solutionPart2(lines);
         System.out.println(String.format("Part 1 Answer: %d",part1));

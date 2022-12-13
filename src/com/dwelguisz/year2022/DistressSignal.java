@@ -13,10 +13,11 @@ import java.util.stream.Collectors;
 public class DistressSignal extends AoCDay {
     public void solve() {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day13/input.txt");
+        List<String> pairs = Arrays.stream(lines.stream().collect(Collectors.joining("t")).split("tt")).collect(Collectors.toList());
         Long startTime = Instant.now().toEpochMilli();
-        Integer part1 = solutionPart1(lines);
+        Integer part1 = solutionPart1(pairs);
         Long part1Time = Instant.now().toEpochMilli();
-        Integer part2 = solutionPart2(lines);
+        Integer part2 = solutionPart2(pairs);
         Long part2Time = Instant.now().toEpochMilli();
         System.out.println(String.format("Part 1 Answer: %d",part1));
         System.out.println(String.format("Part 2 Answer: %d",part2));
@@ -24,11 +25,10 @@ public class DistressSignal extends AoCDay {
         System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
     }
 
-    public Integer solutionPart1(List<String> lines) {
-        List<String> values = Arrays.stream(lines.stream().collect(Collectors.joining("t")).split("tt")).collect(Collectors.toList());
+    public Integer solutionPart1(List<String> pairs) {
         Integer sum = 0;
         Integer index = 1;
-        for (String pair : values) {
+        for (String pair : pairs) {
             String pairValues[] = pair.split("t");
             if (compareStr(pairValues[0], pairValues[1]) == -1) {
                 sum += index;
@@ -88,23 +88,20 @@ public class DistressSignal extends AoCDay {
     Integer compareStr(String a, String b) {
         return compare(new JSONArray(a), new JSONArray(b));
     }
-    public Integer solutionPart2(List<String> lines) {
-        List<String> pairs = Arrays.stream(lines.stream().collect(Collectors.joining("t")).split("tt")).collect(Collectors.toList());
+    public Integer solutionPart2(List<String> pairs) {
         PriorityQueue<String> results = new PriorityQueue<>(200, (a,b) -> compareStr(a,b));
         for (String p : pairs) {
             String parts[] = p.split("t");
             results.add(parts[0]);
             results.add(parts[1]);
         }
-        results.add("[[2]]");
-        results.add("[[6]]");
+        List<String> newValues = List.of("[[2]]","[[6]]");
+        results.addAll(newValues);
         List<Integer> indices = new ArrayList<>();
         Integer index = 1;
-        ArrayList<String> needThese = new ArrayList<>();
-        needThese.addAll(List.of("[[2]]","[[6]]"));
         while (!results.isEmpty()) {
             String v = results.poll();
-            if (needThese.contains(v)) {
+            if (newValues.contains(v)) {
                 indices.add(index);
             }
             index++;

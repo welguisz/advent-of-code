@@ -3,13 +3,11 @@ package com.dwelguisz.year2019;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2019.IntCodeComputer.IntCodeComputer;
 import com.google.common.collect.Collections2;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.LinkedTransferQueue;
 
 public class AmplicationCircuit extends AoCDay {
     public void solve() {
@@ -18,7 +16,6 @@ public class AmplicationCircuit extends AoCDay {
         Integer part2 = solutionPart2(lines);
         System.out.println(String.format("Part 1 Answer: %d", part1));
         System.out.println(String.format("Part 2 Answer: %d", part2));
-
     }
 
     public Integer solutionPart1(List<String> lines) {
@@ -31,7 +28,8 @@ public class AmplicationCircuit extends AoCDay {
                 computer.setInputValue(inputValue);
                 computer.setInputValue(previousValue);
                 computer.run();
-                previousValue = computer.getOutputValue();
+                Pair<Boolean, Integer> result = computer.getOutputValue();
+                previousValue = result.getRight();
             }
             maxValue = Integer.max(previousValue, maxValue);
         }
@@ -39,43 +37,32 @@ public class AmplicationCircuit extends AoCDay {
     }
 
     public Integer solutionPart2(List<String> lines) {
-        Integer maxValue = Integer.MIN_VALUE;
-        BlockingQueue<Integer> queues[] = new BlockingQueue[5];
-        for (int i = 0; i < 5; i++) {
-            queues[i] = new LinkedBlockingQueue<>();
-        }
+        List<Integer> thrustOutput = new ArrayList<>();
         for (List<Integer> perm : Collections2.permutations(List.of(5, 6, 7, 8, 9))) {
-            IntCodeComputer computers[] = new IntCodeComputer[5];
+            List<IntCodeComputer> computers = new ArrayList<>();
+            List<ArrayDeque<Integer>> deques = new ArrayList<>();
             for (int i = 0; i < 5; i++) {
-                computers[i] = new IntCodeComputer();
-                computers[i].setId(i);
-                computers[i].initializeIntCode(lines);
-                computers[i].setInputValue(perm.get(i));
+                deques.add(new ArrayDeque<>());
             }
-            computers[0].setInputValue(0);
             for (int i = 0; i < 5; i++) {
-                new Thread(computers[i]).start();
+                Integer inputQueueNo = (i == 0) ? 4 : i - 1;
+                IntCodeComputer computer = new IntCodeComputer();
+                computer.setId(i);
+                computer.setInputQueue(deques.get(inputQueueNo));
+                computer.setOutputQueue(deques.get(i));
+                computer.initializeIntCode(lines);
+                computer.setInputValue(perm.get(i));
+                computers.add(computer);
             }
-            Boolean done = false;
-            Integer fromAmplifierE = 0;
-            while (!done) {
-                List<Boolean> computerDone = new ArrayList<>();
-                for (int i = 0; i < 5; i++) {
-                    Integer prevComputer = i == 0 ? 4 : i - 1;
-                    Optional<Integer> outputValue = computers[prevComputer].getOutputValuePolling();
-                    if (outputValue.isPresent()) {
-                        if (i == 0) {
-                            fromAmplifierE = outputValue.get();
-                        }
-                        computers[i].setInputValue(outputValue.get());
-                    }
-                    computerDone.add(computers[i].isDone());
-                    done = computerDone.stream().allMatch(d -> d);
-                }
+            computers.get(0).setInputValue(0);
+            for (int i = 0; i < 5; i++) {
+                new Thread(computers.get(i)).start();
             }
-            maxValue = Integer.max(fromAmplifierE, maxValue);
+            while (!computers.stream().allMatch(c -> c.isDone()));
+
+            thrustOutput.add(computers.get(4).getDebugValue());
         }
-        return maxValue;
+        return thrustOutput.stream().mapToInt(i -> i).max().getAsInt();
     }
 
 
