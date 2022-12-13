@@ -3,10 +3,7 @@ package com.dwelguisz.year2019;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2019.IntCodeComputer.IntCodeComputer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ProgramAlarm extends AoCDay {
     public void solve() {

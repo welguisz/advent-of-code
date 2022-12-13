@@ -1,24 +1,30 @@
 package com.dwelguisz.year2019.IntCodeComputer;
 
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
 
-public class IntCodeComputer {
+public class IntCodeComputer implements Runnable{
     Integer programCounter;
     Map<Integer, Integer> intCode;
     //Stores the opcodes and the jump for position
     Map<Integer, Integer> opCodes;
-    Integer inputValue;
-    Integer outputValue;
+    ArrayDeque<Integer> inputValues;
+    ArrayDeque<Integer> outputValues;
+    Integer id;
+    Boolean done;
+
     enum ParameterModes {
         positionMode,
         immediateMode
     };
     public IntCodeComputer() {
         programCounter = 0;
+        id = 0;
+        done = false;
         opCodes = new HashMap<>();
-        inputValue = 0;
-        outputValue = 0;
+        inputValues = new ArrayDeque<>();
+        outputValues = new ArrayDeque<>();
         opCodes.put(1,4);
         opCodes.put(2,4);
         opCodes.put(3,2);
@@ -27,6 +33,14 @@ public class IntCodeComputer {
         opCodes.put(6,3);
         opCodes.put(7,4);
         opCodes.put(8,4);
+    }
+
+    public Boolean isDone() {
+        return this.done;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setIntCode(Map<Integer, Integer> intCode) {
@@ -47,11 +61,22 @@ public class IntCodeComputer {
     }
 
     public void setInputValue(Integer inputValue) {
-        this.inputValue = inputValue;
+        this.inputValues.add(inputValue);
     }
 
     public Integer getOutputValue() {
-        return this.outputValue;
+        return outputValues.poll();
+    }
+
+    public Optional<Integer> getOutputValuePolling() {
+        if (!outputValues.isEmpty()) {
+            return Optional.of(outputValues.poll());
+        }
+        return Optional.empty();
+    }
+
+    public Boolean outputAvailable() {
+        return !outputValues.isEmpty();
     }
 
     public Integer getMemoryLocation(Integer location) {
@@ -65,10 +90,13 @@ public class IntCodeComputer {
         return ParameterModes.immediateMode;
     }
 
+    public static Integer SLEEP_TIME = 10;
+
     public void run() {
         Integer currentInstructionWithMode = intCode.getOrDefault(programCounter,-1);
         Integer currentInstruction = currentInstructionWithMode % 100;
         boolean incProgramCounter = true;
+        done = false;
         while ((currentInstruction != 99) && (opCodes.containsKey(currentInstruction))) {
             incProgramCounter = true;
             int aMode = (currentInstructionWithMode / 100) % 10;
@@ -90,12 +118,18 @@ public class IntCodeComputer {
                     break;
                 }
                 case 3: {
-                    intCode.put(opPointer1, inputValue);
+                    while (inputValues.isEmpty()) {
+                        try {
+                            Thread.sleep(SLEEP_TIME);
+                        } catch (InterruptedException e) {
+
+                        }
+                    }
+                    intCode.put(opPointer1, inputValues.poll());
                     break;
                 }
                 case 4: {
-                    outputValue = (mode0 == ParameterModes.positionMode) ? intCode.getOrDefault(opPointer1, Integer.MIN_VALUE) : opPointer1;
-                    System.out.println("Output value: " + outputValue);
+                    outputValues.add((mode0 == ParameterModes.positionMode) ? intCode.getOrDefault(opPointer1, Integer.MIN_VALUE) : opPointer1);
                     break;
                 }
                 case 5: {
@@ -133,6 +167,7 @@ public class IntCodeComputer {
             currentInstructionWithMode = intCode.getOrDefault(programCounter, -1);
             currentInstruction = currentInstructionWithMode % 100;
         }
+        done = true;
 
     }
 }
