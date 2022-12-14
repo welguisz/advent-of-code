@@ -5,23 +5,25 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RegolithReservoir extends AoCDay {
     public void solve() {
-        System.out.println("Day 14 ready to go");
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day14/input.txt");
+        Long parseTime = Instant.now().toEpochMilli();
         Set<Pair<Integer,Integer>> cave = createCave(lines);
         Long startTime = Instant.now().toEpochMilli();
-        Integer part1 = solutionPart1(cave, false);
+        Integer part1 = simulateSand(new HashSet<>(cave), false);
         Long part1Time = Instant.now().toEpochMilli();
-        cave = createCave(lines);
-        Integer part2 = solutionPart1(cave, true);
+        Integer part2 = simulateSand(cave, true);
         Long part2Time = Instant.now().toEpochMilli();
         System.out.println(String.format("Part 1 Answer: %d",part1));
         System.out.println(String.format("Part 2 Answer: %d",part2));
+        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
         System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
         System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
     }
@@ -29,29 +31,27 @@ public class RegolithReservoir extends AoCDay {
     public Set<Pair<Integer,Integer>> createCave(List<String> lines) {
         Set<Pair<Integer,Integer>> cave = new HashSet<>();
         for (String line : lines) {
-            List<Pair<Integer, Integer>> pairLine = new ArrayList<>();
+            List<Pair<Integer, Integer>> pl = new ArrayList<>();
             String pairs[] = line.split(" -> ");
             for (int i = 0; i < pairs.length; i++) {
-                String parts[] = pairs[i].split(",");
-                Integer x = Integer.parseInt(parts[0]);
-                Integer y = Integer.parseInt(parts[1]);
-                pairLine.add(Pair.of(x,y));
+                List<Integer> vals = Arrays.stream(pairs[i].split(",")).map(Integer::parseInt).collect(Collectors.toList());
+                pl.add(Pair.of(vals.get(0),vals.get(1)));
                 if (i == 0) {
                     continue;
                 }
-                Pair<Integer, Integer> prevPair = pairLine.get(i-1);
-                Pair<Integer, Integer> curPair = pairLine.get(i);
-                drawLine(cave, prevPair, curPair);
+                Pair<Integer, Integer> pp = pl.get(i-1);
+                Pair<Integer, Integer> cp = pl.get(i);
+                drawLine(cave, pp.getLeft(), pp.getRight(), cp.getLeft(), cp.getRight());
             }
         }
         return cave;
     }
 
-    public void drawLine(Set<Pair<Integer, Integer>> cave, Pair<Integer, Integer> startingPoint, Pair<Integer, Integer> endingPoint) {
-        Integer minY = Integer.min(startingPoint.getLeft(), endingPoint.getLeft());
-        Integer minX = Integer.min(startingPoint.getRight(), endingPoint.getRight());
-        Integer maxY = Integer.max(startingPoint.getLeft(), endingPoint.getLeft());
-        Integer maxX = Integer.max(startingPoint.getRight(), endingPoint.getRight());
+    public void drawLine(Set<Pair<Integer, Integer>> cave, Integer py, Integer px, Integer cy, Integer cx) {
+        Integer minY = Integer.min(py,cy);
+        Integer minX = Integer.min(px,cx);
+        Integer maxY = Integer.max(py,cy);
+        Integer maxX = Integer.max(px,cx);
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
                 cave.add(Pair.of(x,y));
@@ -59,10 +59,10 @@ public class RegolithReservoir extends AoCDay {
         }
     }
 
-    public Integer solutionPart1(Set<Pair<Integer,Integer>> cave, Boolean part2) {
+    public Integer simulateSand(Set<Pair<Integer,Integer>> cave, Boolean part2) {
         Integer maxY = cave.stream().mapToInt(e -> e.getLeft()).max().getAsInt();
         if (part2) {
-            drawLine(cave, Pair.of(0, maxY+2), Pair.of(999, maxY+2));
+            drawLine(cave, 0, maxY+2, 999, maxY+2);
         }
         Integer sandCount=0;
         while(addSand(cave, maxY)) {
@@ -78,18 +78,13 @@ public class RegolithReservoir extends AoCDay {
         int x = 500;
         int y = 0;
         while (y <= maxY + 3) {
-            if (!cave.contains(Pair.of(y+1,x))) {
+            Boolean spaceFree[] = new Boolean[] {
+                    !cave.contains(Pair.of(y+1,x)),
+                    !cave.contains(Pair.of(y+1,x-1)),
+                    !cave.contains(Pair.of(y+1,x+1))};
+            if (Arrays.stream(spaceFree).anyMatch(b -> b)) {
+                x = spaceFree[0] ? x : spaceFree[1] ? x-1 : x+1;
                 y++;
-                continue;
-            }
-            if (!cave.contains(Pair.of(y+1,x-1))) {
-                y++;
-                x--;
-                continue;
-            }
-            if (!cave.contains(Pair.of(y+1,x+1))) {
-                y++;
-                x++;
                 continue;
             }
             cave.add(Pair.of(y,x));
