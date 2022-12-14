@@ -12,49 +12,49 @@ import java.util.List;
 public class AmplicationCircuit extends AoCDay {
     public void solve() {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2019/day07/input.txt");
-        Integer part1 = solutionPart1(lines);
-        Integer part2 = solutionPart2(lines);
+        Long part1 = solutionPart1(lines);
+        Long part2 = solutionPart2(lines);
         System.out.println(String.format("Part 1 Answer: %d", part1));
         System.out.println(String.format("Part 2 Answer: %d", part2));
     }
 
-    public Integer solutionPart1(List<String> lines) {
-        Integer maxValue = Integer.MIN_VALUE;
+    public Long solutionPart1(List<String> lines) {
+        Long maxValue = Long.MIN_VALUE;
         for (List<Integer> perm : Collections2.permutations(List.of(0, 1, 2, 3, 4))) {
-            Integer previousValue = 0;
+            Long previousValue = 0L;
             for (Integer inputValue : perm) {
                 IntCodeComputer computer = new IntCodeComputer();
                 computer.initializeIntCode(lines);
-                computer.setInputValue(inputValue);
+                computer.setInputValue(inputValue.longValue());
                 computer.setInputValue(previousValue);
                 computer.run();
-                Pair<Boolean, Integer> result = computer.getOutputValue();
+                Pair<Boolean, Long> result = computer.getOutputValue();
                 previousValue = result.getRight();
             }
-            maxValue = Integer.max(previousValue, maxValue);
+            maxValue = Long.max(previousValue, maxValue);
         }
         return maxValue;
     }
 
-    public Integer solutionPart2(List<String> lines) {
-        List<Integer> thrustOutput = new ArrayList<>();
+    public Long solutionPart2(List<String> lines) {
+        List<Long> thrustOutput = new ArrayList<>();
         for (List<Integer> perm : Collections2.permutations(List.of(5, 6, 7, 8, 9))) {
             List<IntCodeComputer> computers = new ArrayList<>();
-            List<ArrayDeque<Integer>> deques = new ArrayList<>();
+            List<ArrayDeque<Long>> deques = new ArrayList<>();
             for (int i = 0; i < 5; i++) {
                 deques.add(new ArrayDeque<>());
             }
-            for (int i = 0; i < 5; i++) {
-                Integer inputQueueNo = (i == 0) ? 4 : i - 1;
+            for (Long i = 0L; i < 5; i++) {
+                Long inputQueueNo = (i == 0L) ? 4L : i - 1;
                 IntCodeComputer computer = new IntCodeComputer();
                 computer.setId(i);
-                computer.setInputQueue(deques.get(inputQueueNo));
-                computer.setOutputQueue(deques.get(i));
+                computer.setInputQueue(deques.get(inputQueueNo.intValue()));
+                computer.setOutputQueue(deques.get(i.intValue()));
                 computer.initializeIntCode(lines);
-                computer.setInputValue(perm.get(i));
+                computer.setInputValue(perm.get(i.intValue()).longValue());
                 computers.add(computer);
             }
-            computers.get(0).setInputValue(0);
+            computers.get(0).setInputValue(0L);
             for (int i = 0; i < 5; i++) {
                 new Thread(computers.get(i)).start();
             }
@@ -62,7 +62,7 @@ public class AmplicationCircuit extends AoCDay {
 
             thrustOutput.add(computers.get(4).getDebugValue());
         }
-        return thrustOutput.stream().mapToInt(i -> i).max().getAsInt();
+        return thrustOutput.stream().mapToLong(i -> i).max().getAsLong();
     }
 
 
