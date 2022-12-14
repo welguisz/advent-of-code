@@ -9,7 +9,8 @@ public class SolarSystem extends AoCYear {
     @Override
     public void runOneDay(int day) {
         AoCDay aocDays[] = {new RocketEquation(), new ProgramAlarm(), new CrossedWires(), new SecureContainer(),
-                new ChanceOfAsteriods(), new UniversalOrbitMap(), new AmplicationCircuit(), new SpaceImageFormat()
+                new ChanceOfAsteriods(), new UniversalOrbitMap(), new AmplicationCircuit(), new SpaceImageFormat(),
+                new SensorBoost()
         };
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();

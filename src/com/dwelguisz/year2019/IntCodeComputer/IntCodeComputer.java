@@ -20,9 +20,12 @@ public class IntCodeComputer implements Runnable {
     Boolean done;
     Long debugValue;
 
+    Long relativeBaseAddress;
+
     enum ParameterModes {
         positionMode,
-        immediateMode
+        immediateMode,
+        relativeMode
     };
 
     Boolean stopOnFirstTime;
@@ -30,6 +33,7 @@ public class IntCodeComputer implements Runnable {
     public IntCodeComputer()  {
         programCounter = 0L;
         id = 0L;
+        relativeBaseAddress = 0L;
         done = false;
         opCodes = new HashMap<>();
         inputValues = new ArrayDeque<>();
@@ -44,6 +48,7 @@ public class IntCodeComputer implements Runnable {
         opCodes.put(6L,3L);
         opCodes.put(7L,4L);
         opCodes.put(8L,4L);
+        opCodes.put(9L,2L);
     }
 
     public void setInputQueue(ArrayDeque<Long> iqueue) {
@@ -111,15 +116,30 @@ public class IntCodeComputer implements Runnable {
     }
 
     private ParameterModes updateMode(Long value) {
-        if (value == 0) {
+        if (value.equals(0L)) {
             return ParameterModes.positionMode;
+        } else if (value.equals(1L)) {
+            return ParameterModes.immediateMode;
+        } else {
+            return ParameterModes.relativeMode;
         }
-        return ParameterModes.immediateMode;
     }
 
+    public Long getMemoryAddress(Long offset, ParameterModes mode) {
+        if (mode == ParameterModes.immediateMode) {
+            return offset;
+        }
+        return (mode == ParameterModes.relativeMode) ? relativeBaseAddress + offset : offset;
+    }
+    public Long getMemoryValue(Long address, ParameterModes mode) {
+        if (mode == ParameterModes.immediateMode) {
+            return address;
+        }
+        return intCode.getOrDefault(address, 0L);
+    }
     public static Integer SLEEP_TIME = 10;
     public void run() {
-        Long currentInstructionWithMode = intCode.getOrDefault(programCounter,-1L);
+        Long currentInstructionWithMode = intCode.getOrDefault(programCounter,0L);
         Long currentInstruction = currentInstructionWithMode % 100;
         boolean incProgramCounter = true;
         done = false;
@@ -127,13 +147,18 @@ public class IntCodeComputer implements Runnable {
             incProgramCounter = true;
             Long aMode = (currentInstructionWithMode / 100L) % 10L;
             Long bMode = (currentInstructionWithMode / 1000L) % 10L;
+            Long cMode = (currentInstructionWithMode / 10000L) % 10L;
             ParameterModes mode0 = updateMode(aMode);
             ParameterModes mode1 = updateMode(bMode);
-            Long opPointer1 = intCode.getOrDefault(programCounter + 1, -1L);
-            Long opPointer2 = intCode.getOrDefault(programCounter + 2, -1L);
-            Long storePointer = intCode.getOrDefault(programCounter + 3, -1L);
-            Long value1 = (mode0 == ParameterModes.positionMode) ? intCode.getOrDefault(opPointer1, -1L) : opPointer1;
-            Long value2 = (mode1 == ParameterModes.positionMode) ? intCode.getOrDefault(opPointer2, -1L) : opPointer2;
+            ParameterModes mode2 = updateMode(cMode);
+            Long opPointer1 = intCode.getOrDefault(programCounter + 1, 0L);
+            Long opPointer2 = intCode.getOrDefault(programCounter + 2, 0L);
+            Long storePointer = intCode.getOrDefault(programCounter + 3, 0L);
+            opPointer1 = getMemoryAddress(opPointer1, mode0);
+            opPointer2 = getMemoryAddress(opPointer2, mode1);
+            storePointer = getMemoryAddress(storePointer, mode2);
+            Long value1 = getMemoryValue(opPointer1, mode0);
+            Long value2 = getMemoryValue(opPointer2, mode1);
             if (currentInstruction.equals(1L)) {
                 intCode.put(storePointer, value1 + value2);
             } else if (currentInstruction.equals(2L)) {
@@ -141,9 +166,10 @@ public class IntCodeComputer implements Runnable {
             } else if (currentInstruction.equals(3L)) {
                 Pair<Boolean, Long> value = getInputValue();
                 if (value.getLeft()) {
-                    intCode.put(opPointer1, value.getRight());
+                    Long address = getMemoryAddress(opPointer1, mode0);
+                    intCode.put(address, value.getRight());
                 } else {
-                    programCounter -= 2;
+                    programCounter -= opCodes.get(3L);
                     try {
                         Thread.sleep(SLEEP_TIME);
                     } catch (InterruptedException e) {
@@ -151,7 +177,7 @@ public class IntCodeComputer implements Runnable {
                     }
                 }
             } else if (currentInstruction.equals(4L)) {
-                Long outputValue = (mode0 == ParameterModes.positionMode) ? intCode.getOrDefault(opPointer1, Long.MIN_VALUE) : opPointer1;
+                Long outputValue = getMemoryValue(opPointer1, mode0);
                 addOutputValue(outputValue);
                 debugValue = outputValue;
             } else if (currentInstruction.equals(5L)) {
@@ -165,7 +191,6 @@ public class IntCodeComputer implements Runnable {
                     incProgramCounter = false;
                 }
             } else if (currentInstruction.equals(7L)) {
-
                 Long value = 0L;
                 if (value1 < value2) {
                     value = 1L;
@@ -177,9 +202,11 @@ public class IntCodeComputer implements Runnable {
                     value = 1L;
                 }
                 intCode.put(storePointer, value);
+            } else if (currentInstruction.equals(9L)) {
+                relativeBaseAddress += opPointer1;
             }
             programCounter += incProgramCounter? opCodes.get(currentInstruction) : 0;
-            currentInstructionWithMode = intCode.getOrDefault(programCounter, -1L);
+            currentInstructionWithMode = intCode.getOrDefault(programCounter, 0L);
             currentInstruction = currentInstructionWithMode % 100;
         }
         done = true;
