@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AoC2022Day14 extends AoCDay {
+public class RegolithReservoir extends AoCDay {
     public void solve() {
         System.out.println("Day 14 ready to go");
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day14/input.txt");
