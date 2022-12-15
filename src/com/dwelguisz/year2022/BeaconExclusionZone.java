@@ -4,8 +4,11 @@ import com.dwelguisz.base.AoCDay;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class BeaconExclusionZone extends AoCDay {
 
@@ -33,6 +36,7 @@ public class BeaconExclusionZone extends AoCDay {
             }
             return null;
         }
+
         public Integer manhattanDistance(Integer cx, Integer cy, Integer ax, Integer ay) {
             return Math.abs(cx-ax) + Math.abs(cy-ay);
         }
@@ -73,8 +77,14 @@ public class BeaconExclusionZone extends AoCDay {
 
     public Integer solutionPart1(List<Sensor> sensors, Integer line) {
         List<List<Integer>> sensorRanges = sensors.stream().map(s -> s.getKnownRange(line)).filter(s -> s != null).collect(Collectors.toList());
+        //The naive approach takes this one function from 2 ms to 740 ms.
+        //Set<Integer> naive = new HashSet<>();
+        //for (List<Integer> s : sensorRanges) {
+        //    naive.addAll(IntStream.range(s.get(0),s.get(1)).boxed().collect(Collectors.toSet()));
+        //}
+        //return naive.size();
         sensorRanges = mergeIntervals(sensorRanges);
-        return sensorRanges.get(0).get(1)-sensorRanges.get(0).get(0);
+        #return sensorRanges.get(0).get(1)-sensorRanges.get(0).get(0);
     }
 
     public Integer comparePairs(List<Integer> a, List<Integer> b) {
