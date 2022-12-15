@@ -130,14 +130,23 @@ public class IntCodeComputer implements Runnable {
     }
 
     Long getNewAddress(ParameterModes mode, Long value) {
+        return getNewAddress(mode, value, false);
+    }
+
+    Long getNewAddress(ParameterModes mode, Long value, Boolean write) {
         if (mode == ParameterModes.positionMode) {
-            return value;
+            if (write) {
+                return value;
+            } else {
+                return intCode.getOrDefault(value, 0L);
+            }
         } else if (mode == ParameterModes.relativeMode) {
             return relativeBaseAddress + value;
         } else {
             throw new RuntimeException("Unexpected Address mode: " + mode);
         }
     }
+
 
     Long getOperand(ParameterModes mode, Long value) {
         if (mode == ParameterModes.immediateMode) {
@@ -154,18 +163,18 @@ public class IntCodeComputer implements Runnable {
     void doCalculation(Long instr, List<ParameterModes> modes) {
         if (instr.equals(1L)) {
             Long value = TwoInputOperand(modes,(a,b) -> a+b);
-            Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L));
+            Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L), true);
             intCode.put(address, value);
             instructionPointer += opCodes.get(instr);
         } else if (instr.equals(2L)) {
             Long value = TwoInputOperand(modes,(a,b) -> a*b);
-            Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L));
+            Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L), true);
             intCode.put(address, value);
             instructionPointer += opCodes.get(instr);
         } else if (instr.equals(3L)) {
             Pair<Boolean, Long> res = getInputValue();
             if (res.getLeft()) {
-                Long address = getNewAddress(modes.get(0), intCode.getOrDefault(instructionPointer+1,0L));
+                Long address = getNewAddress(modes.get(0), intCode.getOrDefault(instructionPointer+1,0L), true);
                 intCode.put(address, res.getRight());
                 instructionPointer += opCodes.get(instr);
             } else {
@@ -186,11 +195,11 @@ public class IntCodeComputer implements Runnable {
             instructionPointer = TwoInputOperand(modes, (a,b) -> a.equals(0L) ? b : instructionPointer + opCodes.get(instr));
         } else if (instr.equals(7L)) {
             Long result = TwoInputOperand(modes, (a,b) -> a < b ? 1L : 0L);
-            Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L));
+            Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L), true);
             intCode.put(address, result);
         } else if (instr.equals(8L)) {
             Long result = TwoInputOperand(modes, (a,b) -> a.equals(b) ? 1L : 0L);
-            Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L));
+            Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L), true);
             intCode.put(address, result);
         } else if (instr.equals(9L)) {
             relativeBaseAddress += getOperand(modes.get(0),instructionPointer+1);
