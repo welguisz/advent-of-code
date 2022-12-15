@@ -150,7 +150,7 @@ public class IntCodeComputer implements Runnable {
 
     Long getOperand(ParameterModes mode, Long value) {
         if (mode == ParameterModes.immediateMode) {
-            return value;
+            return intCode.getOrDefault(value, 0L);
         } else {
             Long newAddress = getNewAddress(mode, value);
             if (newAddress < 0) {
@@ -196,13 +196,16 @@ public class IntCodeComputer implements Runnable {
         } else if (instr.equals(7L)) {
             Long result = TwoInputOperand(modes, (a,b) -> a < b ? 1L : 0L);
             Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L), true);
+            instructionPointer += opCodes.get(instr);
             intCode.put(address, result);
         } else if (instr.equals(8L)) {
             Long result = TwoInputOperand(modes, (a,b) -> a.equals(b) ? 1L : 0L);
             Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L), true);
+            instructionPointer += opCodes.get(instr);
             intCode.put(address, result);
         } else if (instr.equals(9L)) {
             relativeBaseAddress += getOperand(modes.get(0),instructionPointer+1);
+            instructionPointer += opCodes.get(instr);
         }
     }
 
