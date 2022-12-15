@@ -111,10 +111,40 @@ public class BeaconExclusionZone extends AoCDay {
         return intervals;
     }
 
+    public Long runningSum(Integer n) {
+        Integer nA = Math.abs(n);
+        Long sum = nA.longValue()*(nA+1)/2;
+        return sum;
+    }
+
     public Long solutionPart2(List<Sensor> sensors) {
+        Long time0 = Instant.now().toEpochMilli();
         for(Integer i = 0; i < 4000000; i++) {
             final Integer line = i;
             List<List<Integer>> ranges = sensors.stream().map(s -> s.getKnownRange(line)).filter(s -> s != null).collect(Collectors.toList());
+            // Naive approach for Part 2.  For the first 16 lines, this took the following times:
+            // 645 ms, 614 ms, 550 ms, 644 ms, 492 ms, 472 ms, 603 ms, 659 ms, 632 ms, 594 ms, 446 ms, 721 ms
+            // 539 ms, 441 ms, 576 ms, 402 ms
+            //Long time1 = Instant.now().toEpochMilli();
+            //System.out.println("At line: " + i + ", took " + (time1 - time0) + " ms");
+            //time0 = time1;
+            //Set<Integer> naive = new HashSet<>();
+            //for (List<Integer> s : ranges) {
+            //    naive.addAll(IntStream.range(s.get(0),s.get(1)).boxed().collect(Collectors.toSet()));
+            //}
+            //Integer minV = naive.stream().mapToInt(in -> in).min().getAsInt();
+            //Integer maxV = naive.stream().mapToInt(in -> in).max().getAsInt();
+            //Long sumV = naive.stream().mapToLong(in -> in).sum();
+            //Long minSum = runningSum(minV);
+            //Long maxSum = runningSum(maxV);
+            //Long diff = (maxSum - minSum) - sumV;
+            //if (diff > 0) {
+            //    diff /= 2;
+            //    diff +=1;
+            //    System.out.println("Beacon is at (" + diff + ","+i+")");
+            //    Long val = 4000000L * diff;
+            //    return val + i;
+            //}
             ranges = mergeIntervals(ranges);
             if (ranges.size() > 1) {
                 Integer hole = ranges.get(0).get(1) + 1;
