@@ -84,7 +84,7 @@ public class BeaconExclusionZone extends AoCDay {
         //}
         //return naive.size();
         sensorRanges = mergeIntervals(sensorRanges);
-        #return sensorRanges.get(0).get(1)-sensorRanges.get(0).get(0);
+        return sensorRanges.get(0).get(1)-sensorRanges.get(0).get(0);
     }
 
     public Integer comparePairs(List<Integer> a, List<Integer> b) {
