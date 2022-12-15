@@ -137,11 +137,13 @@ public class IntCodeComputer implements Runnable {
         if (mode == ParameterModes.positionMode) {
             if (write) {
                 return value;
-            } else {
-                return intCode.getOrDefault(value, 0L);
             }
+            return intCode.getOrDefault(value, 0L);
         } else if (mode == ParameterModes.relativeMode) {
-            return relativeBaseAddress + value;
+            if (write) {
+                return relativeBaseAddress + value;
+            }
+            return relativeBaseAddress + intCode.getOrDefault(value, 0L);
         } else {
             throw new RuntimeException("Unexpected Address mode: " + mode);
         }
