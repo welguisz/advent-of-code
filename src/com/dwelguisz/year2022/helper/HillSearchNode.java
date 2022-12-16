@@ -20,6 +20,10 @@ public class HillSearchNode extends SearchNode<String> {
         setVisitedNodes(visited);
         setVisitedLocations(visitedLocations);
     }
+
+    public String getName() {
+        return location.toString();
+    }
     public List<SearchNode> getNextNodes(String[][] map) {
         Boolean[] validNextSteps = validMoves(map);
         List<SearchNode> newNodes = new ArrayList<>();

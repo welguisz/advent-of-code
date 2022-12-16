@@ -1,5 +1,6 @@
 package com.dwelguisz.base;
 
+import com.dwelguisz.year2022.AoC2022Day16;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -62,4 +63,81 @@ public abstract class BreadthFirstSearch<T> extends AoCDay{
         }
     return Integer.MAX_VALUE;
     }
+
+
+    public Integer findShortestPathAllEqual(
+            List<AoC2022Day16.Valve> startingPoints,
+            List<SearchNode> initialNodes
+    ) {
+        Integer minSteps = Integer.MAX_VALUE;
+        PriorityQueue<SearchNode> queue = new PriorityQueue<>(2000,
+                (a,b) -> {
+                    Integer diffLength = a.getSteps() - b.getSteps();
+                    return diffLength;
+                }
+        );
+        for (SearchNode node : initialNodes) {
+            queue.add(node);
+        }
+        List<SearchNode> visitedNodes = new ArrayList<>();
+        Set<String> currentlyInTheQueue = new HashSet<>();
+        for(AoC2022Day16.Valve points : startingPoints) {
+            currentlyInTheQueue.add(points.name);
+        }
+        while (!queue.isEmpty()) {
+            SearchNode currentNode = queue.poll();
+            currentlyInTheQueue.remove(currentNode.getName());
+            visitedNodes.add(currentNode);
+            if (currentNode.onTarget()) {
+                minSteps = Integer.min(minSteps, currentNode.visitedNodes.size());
+            }
+            List<SearchNode> nextNodes = currentNode.getNextNodes(map);
+            for (SearchNode nextNode : nextNodes) {
+
+                if (currentlyInTheQueue.add(nextNode.getName())) {
+                    queue.add(nextNode);
+                }
+            }
+        }
+        return minSteps-1;
+    }
+
+    public Integer findBestPathInTimeLimit(
+            List<AoC2022Day16.Valve> startingPoints,
+            List<SearchNode> initialNodes
+    ) {
+        Integer minSteps = Integer.MIN_VALUE;
+        PriorityQueue<SearchNode> queue = new PriorityQueue<>(2000,
+                (a,b) -> {
+                    Integer diffLength = a.getSteps() - b.getSteps();
+                    return diffLength;
+                }
+        );
+        for (SearchNode node : initialNodes) {
+            queue.add(node);
+        }
+        List<SearchNode> visitedNodes = new ArrayList<>();
+        Set<String> currentlyInTheQueue = new HashSet<>();
+        for(AoC2022Day16.Valve points : startingPoints) {
+            currentlyInTheQueue.add(points.name);
+        }
+        while (!queue.isEmpty()) {
+            SearchNode currentNode = queue.poll();
+            currentlyInTheQueue.remove(currentNode.getName());
+            visitedNodes.add(currentNode);
+            if (currentNode.onTarget()) {
+                minSteps = Integer.max(currentNode.getSteps(), minSteps);
+            }
+            List<SearchNode> nextNodes = currentNode.getNextNodes(map);
+            for (SearchNode nextNode : nextNodes) {
+
+                if (currentlyInTheQueue.add(nextNode.getName())) {
+                    queue.add(nextNode);
+                }
+            }
+        }
+        return minSteps-1;
+    }
+
+
 }

@@ -7,10 +7,13 @@ import java.util.Set;
 
 
 public abstract class SearchNode<T> {
-    Pair<Integer, Integer> location;
-    Pair<Integer, Integer> targetLocation;
-    List<SearchNode> visitedNodes;
-    Set<Pair<Integer,Integer>> visitedLocations;
+    public Pair<Integer, Integer> location;
+    public Pair<Integer, Integer> targetLocation;
+    public List<SearchNode> visitedNodes;
+    public Set<Pair<Integer,Integer>> visitedLocations;
+
+    public String name;
+
 
     public void setLocation(Pair<Integer, Integer> loc) {
         this.location = loc;
@@ -64,6 +67,12 @@ public abstract class SearchNode<T> {
 
     public Boolean onTarget() {
         return distanceToTarget() == 0;
+    }
+
+    public abstract String getName();
+
+    public Object getObj() {
+        return "To do here";
     }
 
     public abstract List<SearchNode> getNextNodes(T map[][]);
