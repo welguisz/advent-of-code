@@ -1,48 +1,27 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.utilities.Coord3D;
 
 import java.time.Instant;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class BoilingBoulders extends AoCDay {
 
-    public static class Boulder {
-        final int x;
-        final int y;
-        final int z;
-        private int hashCode;
+    public static class Boulder extends Coord3D {
         public Integer sidesExposed;
 
         public Boulder(int x, int y, int z) {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.hashCode = Objects.hash(x, y, z);
+            super(x,y,z);
             this.sidesExposed = 6;
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null | getClass() != o.getClass());
-            Boulder other = (Boulder) o;
-            return (this.x == other.x) && (this.y == other.y) && (this.z == other.z);
-        }
-
-        @Override
-        public int hashCode() {
-            return this.hashCode;
-        }
         public void touchingOtherBoulder(Boulder other) {
             Integer totalDiff = Math.abs(other.x - this.x) + Math.abs(other.y - this.y) + Math.abs(other.z - this.z);
             sidesExposed -= (totalDiff == 1) ? 1 : 0;
