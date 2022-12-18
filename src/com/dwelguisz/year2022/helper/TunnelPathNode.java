@@ -5,16 +5,18 @@ import com.dwelguisz.year2022.AoC2022Day16;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TunnelPathNode extends SearchNode<String> {
+public class TunnelPathNode extends SearchNode<String>  {
     public AoC2022Day16.Valve currentValve;
     Map<Pair<String,String>,Integer> pathCosts;
     Map<String, AoC2022Day16.Valve> valveMap;
     public List<String> valvesWithFlows;
     Integer timeLeft;
+    Integer pressure;
 
     public TunnelPathNode (
             AoC2022Day16.Valve currentValve,
@@ -22,14 +24,26 @@ public class TunnelPathNode extends SearchNode<String> {
             List<SearchNode> visitedNodes,
             Map<String, AoC2022Day16.Valve> valveMap,
             Integer timeLeft,
+            Integer pressure,
             List<String> valvesWithFlows) {
         this.currentValve = currentValve;
         this.pathCosts = pathCosts;
         setVisitedNodes(visitedNodes);
         this.valveMap = valveMap;
         this.timeLeft = timeLeft;
+        this.pressure = pressure;
         this.valvesWithFlows = valvesWithFlows;
     }
+
+    @Override
+    public Object getCompareObject1() {
+        return timeLeft;
+    }
+
+    public Object getCompareObject2() {
+        return pressure;
+    }
+
 
     public Integer compareFlows(String a, String b) {
         return valveMap.get(b).flowRate - valveMap.get(a).flowRate;
@@ -41,11 +55,12 @@ public class TunnelPathNode extends SearchNode<String> {
         nextNodes.removeAll(alreadyVisited);
         nextNodes = nextNodes.stream().sorted((a,b) -> compareFlows(a,b)).collect(Collectors.toList());
         List<SearchNode> nodes = new ArrayList<>();
+        Integer newPressure = currentValve.flowRate + pressure;
         for (String node : nextNodes) {
             Integer newTimeLeft = timeLeft - (pathCosts.get(Pair.of(currentValve.name, node)) + 1);
             List<SearchNode> newSearchNodes = new ArrayList<>(visitedNodes);
             newSearchNodes.add(this);
-            nodes.add(new TunnelPathNode(valveMap.get(node), pathCosts, newSearchNodes, valveMap, newTimeLeft, valvesWithFlows));
+            nodes.add(new TunnelPathNode(valveMap.get(node), pathCosts, newSearchNodes, valveMap, newTimeLeft, newPressure, valvesWithFlows));
         }
         return nodes;
     }
@@ -83,5 +98,19 @@ public class TunnelPathNode extends SearchNode<String> {
         }
         return pressure;
 
+    }
+
+    public static int compare(Object o, Object o1) {
+        SearchNode a = (SearchNode) o;
+        SearchNode b = (SearchNode) o1;
+        Integer aObj1 = (Integer)a.getCompareObject1();
+        Integer bObj1 = (Integer)b.getCompareObject1();
+        Integer diff = aObj1 - bObj1;
+        if (diff == 0) {
+            Integer aObj2 = (Integer)a.getCompareObject2();
+            Integer bObj2 = (Integer)b.getCompareObject2();
+            return bObj2 - aObj2;
+        }
+        return diff;
     }
 }

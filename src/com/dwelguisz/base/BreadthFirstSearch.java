@@ -4,10 +4,12 @@ import com.dwelguisz.year2022.AoC2022Day16;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.function.BinaryOperator;
 
 public abstract class BreadthFirstSearch<T> extends AoCDay{
 
@@ -104,15 +106,11 @@ public abstract class BreadthFirstSearch<T> extends AoCDay{
 
     public Integer findBestPathInTimeLimit(
             List<AoC2022Day16.Valve> startingPoints,
-            List<SearchNode> initialNodes
+            List<SearchNode> initialNodes,
+            Comparator<SearchNode> comparisonFunction
     ) {
         Integer minSteps = Integer.MIN_VALUE;
-        PriorityQueue<SearchNode> queue = new PriorityQueue<>(2000,
-                (a,b) -> {
-                    Integer diffLength = a.getSteps() - b.getSteps();
-                    return diffLength;
-                }
-        );
+        PriorityQueue<SearchNode> queue = new PriorityQueue<>(2000, comparisonFunction);
         for (SearchNode node : initialNodes) {
             queue.add(node);
         }

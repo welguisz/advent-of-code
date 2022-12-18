@@ -11,6 +11,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -146,8 +147,8 @@ public class AoC2022Day16 extends BreadthFirstSearch {
         Integer k = 2;
         Integer maxPressure = Integer.MIN_VALUE;
         Integer totalTime = 30;
-        TunnelPathNode initialNode = new TunnelPathNode(valveMap.get("AA"),pathCosts, new ArrayList<>(),valveMap,30,valvesWithFlow);
-        Integer cost = findBestPathInTimeLimit(List.of(valveMap.get("AA")), List.of(initialNode));
+        TunnelPathNode initialNode = new TunnelPathNode(valveMap.get("AA"),pathCosts, new ArrayList<>(),valveMap,30,0,valvesWithFlow);
+        Integer cost = findBestPathInTimeLimit(List.of(valveMap.get("AA")), List.of(initialNode), TunnelPathNode::compare);
         return cost;
     }
 
@@ -157,50 +158,7 @@ public class AoC2022Day16 extends BreadthFirstSearch {
         Integer personOne = 2;
         Integer maxPressure = Integer.MIN_VALUE;
         Integer totalTime = 26;
-        while (addedToList) {
-            System.out.println("Trying with " + personOne + " valves for Perosn 1");
-            addedToList = false;
-            List<List<String>> combos = combinations(valvesWithFlow,personOne);
-            for (List<String> combo : combos) {
-                for(List<String> perm : Collections2.permutations(combo)) {
-
-                    List<String> newValvesToCheck = new ArrayList<>(valvesWithFlow);
-                    newValvesToCheck.removeAll(combo);
-
-                    Integer personTwo = 2;
-
-                    List<String> newPerm = new ArrayList<>(perm);
-                    newPerm.add(0, "AA");
-                    if (calculateTime(newPerm) < totalTime) {
-                        addedToList = true;
-                        Boolean personTwo2Work = true;
-                        Integer pressure1 = calculatePressure(newPerm, totalTime);
-                        while (personTwo2Work) {
-                            personTwo2Work = false;
-                            List<List<String>> combos2 = combinations(newValvesToCheck, personTwo);
-                            for (List<String> combo2 : combos2) {
-                                for (List<String> perm2 : Collections2.permutations(combo2)) {
-                                    List<String> newPerm2 = new ArrayList<>(perm2);
-                                    newPerm2.add(0, "AA");
-                                    if (calculateTime(newPerm2) < totalTime) {
-                                        personTwo2Work = true;
-                                        Integer pressure2 = calculatePressure(newPerm, totalTime);
-                                        Integer pressure = pressure1 + pressure2;
-                                        if (maxPressure < pressure) {
-                                            maxPressure = pressure;
-                                            System.out.println("Paths: [" + newPerm + " and " + newPerm2 + "]; Pressure is " + maxPressure);
-                                        }
-                                    }
-                                }
-                            }
-                            personTwo++;
-                        }
-                    }
-                }
-            }
-            personOne++;
-        }
-        return maxPressure;
+        return 0;
     }
 
 

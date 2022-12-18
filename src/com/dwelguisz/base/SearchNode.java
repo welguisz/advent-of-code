@@ -75,5 +75,13 @@ public abstract class SearchNode<T> {
         return "To do here";
     }
 
+    public Object getCompareObject1() {
+        return "To do here";
+    }
+
+    public Object getCompareObject2() {
+        return "To do here";
+    }
+
     public abstract List<SearchNode> getNextNodes(T map[][]);
 }
