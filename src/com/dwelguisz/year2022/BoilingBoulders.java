@@ -1,13 +1,10 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class AoC2022Day18 extends AoCDay {
+public class BoilingBoulders extends AoCDay {
 
     public static class Boulder {
         final int x;

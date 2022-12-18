@@ -14,7 +14,7 @@ public class SpecialReindeerFood extends AoCYear {
                 new CampCleanup(), new SupplyStacks(), new TuningTrouble(), new NoSpaceLeftOnDevice(),
                 new TreetopTreeHouse(), new RopeBridge(), new CathodeRayTube(), new MonkeyInTheMiddle(),
                 new HillClimbingAlgorithm(), new DistressSignal(), new RegolithReservoir(), new BeaconExclusionZone(),
-                new AoC2022Day16(), new PyroclasticFlow(), new AoC2022Day18()
+                new AoC2022Day16(), new PyroclasticFlow(), new BoilingBoulders()
         };
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
