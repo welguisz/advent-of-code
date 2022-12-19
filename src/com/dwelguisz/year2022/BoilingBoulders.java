@@ -6,6 +6,7 @@ import com.dwelguisz.utilities.Coord3D;
 import java.time.Instant;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,17 +24,14 @@ public class BoilingBoulders extends AoCDay {
         }
 
         public void touchingOtherBoulder(Boulder other) {
-            Integer totalDiff = Math.abs(other.x - this.x) + Math.abs(other.y - this.y) + Math.abs(other.z - this.z);
-            sidesExposed -= (totalDiff == 1) ? 1 : 0;
-            other.sidesExposed -= (totalDiff == 1) ? 1 : 0;
+            sidesExposed -= (manhattanDistance(other) == 1) ? 1 : 0;
+            other.sidesExposed -= (manhattanDistance(other) == 1) ? 1 : 0;
         }
 
         List<Boulder> getNeighbors() {
             List<Integer> deltas = List.of(-1,1);
             List<Boulder> neighbors = new ArrayList<>();
-            deltas.stream().forEach(d -> neighbors.add(new Boulder(x+d,y,z)));
-            deltas.stream().forEach(d -> neighbors.add(new Boulder(x,y+d,z)));
-            deltas.stream().forEach(d -> neighbors.add(new Boulder(x,y,z+d)));
+            deltas.stream().forEach(d -> neighbors.addAll(List.of(new Boulder(x+d,y,z), new Boulder(x,y+d,z), new Boulder(x,y,z+d))));
             return neighbors;
         }
     }
@@ -56,8 +54,8 @@ public class BoilingBoulders extends AoCDay {
     public List<Boulder> parseLines(List<String> lines) {
         List<Boulder> values = new ArrayList<>();
         for (String l : lines) {
-            String vals[] = l.split(",");
-            values.add(new Boulder(Integer.parseInt(vals[0]),Integer.parseInt(vals[1]),Integer.parseInt(vals[2])));
+            List<Integer> vals = Arrays.stream(l.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+            values.add(new Boulder(vals.get(0),vals.get(1),vals.get(2)));
         }
         return values;
     }
@@ -106,13 +104,7 @@ public class BoilingBoulders extends AoCDay {
         for (Boulder b : values) {
             List<Boulder> neighbors = b.getNeighbors();
             for (Boulder n : neighbors) {
-                if (!outsideAir.contains(n)) {
-                    continue;
-                }
-                if (values.contains(n)) {
-                    continue;
-                }
-                sum++;
+                sum+= (!outsideAir.contains(n) || values.contains(n)) ? 0 : 1;
             }
         }
         return sum;

@@ -30,5 +30,8 @@ public class Coord3D {
         return this.hashCode;
     }
 
+    public Integer manhattanDistance(Coord3D other) {
+        return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z);
+    }
 
 }
