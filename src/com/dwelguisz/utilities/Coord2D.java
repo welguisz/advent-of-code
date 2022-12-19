@@ -3,8 +3,8 @@ package com.dwelguisz.utilities;
 import java.util.Objects;
 
 public class Coord2D {
-    final int x;
-    final int y;
+    public final int x;
+    public final int y;
     private int hashCode;
 
     public Coord2D(int x, int y) {
