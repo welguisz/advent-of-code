@@ -3,7 +3,6 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 
 import java.time.Instant;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,7 +12,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class AoC2022Day19 extends AoCDay {
+public class NotEnoughMinerals extends AoCDay {
 
     private Integer maxGeodes;
     public static class Blueprint {
