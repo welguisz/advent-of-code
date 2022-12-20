@@ -16,6 +16,7 @@ public class IntCodeComputer implements Runnable {
     ArrayDeque<Long> outputValues;
     Long id;
     Boolean done;
+    private boolean exit;
     Long debugValue;
 
     Long relativeBaseAddress;
@@ -31,6 +32,7 @@ public class IntCodeComputer implements Runnable {
     public IntCodeComputer()  {
         instructionPointer = 0L;
         id = 0L;
+        exit = false;
         relativeBaseAddress = 0L;
         done = false;
         opCodes = new HashMap<>();
@@ -116,7 +118,7 @@ public class IntCodeComputer implements Runnable {
         }
     }
 
-    public static Integer SLEEP_TIME = 10;
+    public static Integer SLEEP_TIME = 1;
 
     List<ParameterModes> findModes(Long opCode) {
         List<ParameterModes> modes = new ArrayList<>();
@@ -228,5 +230,6 @@ public class IntCodeComputer implements Runnable {
             currentInstruction = currentInstructionWithMode % 100;
         }
         done = true;
+        exit = true;
     }
 }
