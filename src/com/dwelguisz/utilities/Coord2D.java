@@ -28,4 +28,42 @@ public class Coord2D {
         return this.hashCode;
     }
 
+    public Integer manhattanDistance(Coord2D other) {
+        return Math.abs(this.x - other.x) + Math.abs(this.y - other.y);
+    }
+
+    public Coord2D slope(Coord2D other) {
+        int run = other.x - this.x;
+        int rise = other.y - this.y;
+        int scaleRun = run < 0 ? -1 : 1;
+        int scaleRise = rise < 0 ? -1 : 1;
+        int gcd = gcd(scaleRun * run, scaleRise * rise);
+        return new Coord2D(run/gcd, rise/gcd);
+    }
+
+    public String toString() {
+        return "["+x+","+y+"]";
+    }
+
+    public static int gcd(Integer n1, Integer n2) {
+        if (n1 == 0) {
+            return n2;
+        } else if (n2 == 0) {
+            return n1;
+        }
+        int i1 = n1;
+        int i2 = n2;
+        while (i2 != 0) {
+            int tmp = i1;
+            i1 = i2;
+            i2 = tmp % i2;
+        }
+        return i1;
+    }
+
+    public Double getAngle(Coord2D other) {
+        double angle = 90-Math.toDegrees(Math.atan2(y-other.y,other.x-x));
+        return angle < 0 ? angle+360 : angle;
+    }
+
 }

@@ -10,7 +10,7 @@ public class SolarSystem extends AoCYear {
     public void runOneDay(int day) {
         AoCDay aocDays[] = {new RocketEquation(), new ProgramAlarm(), new CrossedWires(), new SecureContainer(),
                 new ChanceOfAsteriods(), new UniversalOrbitMap(), new AmplicationCircuit(), new SpaceImageFormat(),
-                new SensorBoost()
+                new SensorBoost(), new MonitoringStation()
         };
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
