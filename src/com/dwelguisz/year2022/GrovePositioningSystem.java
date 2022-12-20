@@ -1,60 +1,58 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AoC2022Day20 extends AoCDay {
+public class GrovePositioningSystem extends AoCDay {
 
-    public static class Node {
-        Long value;
-        Long moduloValue;
-        Node previous;
-        Node next;
-
-        public Node(Long value) {
-            this(value, 0L);
-        }
-
-        public Node(Long value, Long modulo) {
-            this.value = value;
-            if (modulo == 0L) {
-                this.moduloValue = value;
-            } else {
-                this.moduloValue = value % modulo;
-            }
-            this.next = this;
-            this.previous = this;
-        }
-
-        public String toString() {
-            return "Node("+value+")";
-        }
-
-        public void mix() {
-            Node next = this.next;
-            Node previous = this.previous;
-            next.previous = previous;
-            previous.next = next;
-            Node selection = previous;
-            if (moduloValue < 0) {
-                for (Long i = moduloValue; i < 0; i++) {
-                    selection = selection.previous;
+    class CircleDeque<T> extends ArrayDeque<T> {
+        void mix(int num) {
+            if (num == 0) return;
+            if (num > 0) {
+                T targetValue = this.remove();
+                for (int i = 0; i < num; i++) {
+                    T t = this.remove();
+                    this.addLast(t);
                 }
+                this.addLast(targetValue);
             } else {
-                for (Long i = 0L; i < moduloValue; i++) {
-                    selection = selection.next;
+                T targetValue = this.remove();
+                for (int i = 0; i < Math.abs(num);i++) {
+                    T t = this.removeLast();
+                    this.addFirst(t);
                 }
+                this.addFirst(targetValue);
             }
-            this.next = selection.next;
-            this.previous = selection;
-            selection.next = this;
-            this.next.previous = this;
+        }
+
+        T rotateTillValueAtZero(T target) {
+            T t = this.peekFirst();
+            boolean zeroAtPos0 = target.equals(t);
+            while (!zeroAtPos0) {
+                t = this.remove();
+                this.addLast(t);
+                t = this.peekFirst();
+                zeroAtPos0 = target.equals(t);
+            }
+            return t;
+        }
+
+        T rotateAndGetValue(Integer turns) {
+            for (int i = 0; i < turns; i++) {
+                T t = this.remove();
+                this.addLast(t);
+            }
+            return this.peekFirst();
         }
     }
+
+
     public void solve() {
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day20/input.txt");
         Long parseTime = Instant.now().toEpochMilli();
@@ -71,42 +69,40 @@ public class AoC2022Day20 extends AoCDay {
     }
 
     Long solutionPart1(List<String> lines) {
-        return decrypt(lines, 1L, 1, false);
+        return decrypt(lines, 1L, 1);
     }
 
     Long solutionPart2(List<String> lines) {
-        return decrypt(lines, 811589153L, 10, true);
+        return decrypt(lines, 811589153L, 10);
     }
 
-    public Long decrypt(List<String> lines, Long decryptKey, Integer mixingTime, Boolean part2) {
-        int index = 0;
-        Node zeroNode = null;
-        List<Node> values = lines.stream().map(Long::parseLong)
-                .map(v -> new Node(v * decryptKey, part2 ? lines.size()-1 : 0L))
+    public Long decrypt(List<String> lines, Long decryptKey, Integer mixingTime) {
+        List<Long> values = lines.stream().map(Long::parseLong)
                 .collect(Collectors.toList());
-        for (Node v : values) {
-            v.next = values.get((index+1) % values.size());
-            Integer prevIndex = index == 0 ? values.size() - 1 : index - 1;
-            v.previous = values.get(prevIndex);
-            if (v.value == 0L) {
-                zeroNode = v;
+        CircleDeque<Pair<Integer,Long>> numbers = new CircleDeque<>();
+        Integer idx = 0;
+        Pair<Integer, Long> zeroItem = null;
+        for (Long v : values) {
+            if (v == 0L) {
+                zeroItem = Pair.of(idx, v);
             }
-            index++;
+            numbers.add(Pair.of(idx, v* decryptKey));
+            idx++;
         }
         for (int i = 0; i < mixingTime; i++) {
-            for (Node v : values) {
-                v.mix();
+            idx = 0;
+            for (Long v : values) {
+                Pair<Integer,Long> removedValue = numbers.rotateTillValueAtZero(Pair.of(idx, v*decryptKey));
+                Long turns = removedValue.getRight() % (values.size() - 1);
+                numbers.mix(turns.intValue());
+                idx++;
             }
         }
-        Node pointer = zeroNode;
-        List<Node> selected = new ArrayList<>();
+        numbers.rotateTillValueAtZero(zeroItem);
+        List<Long> positions = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 1000; j++) {
-                pointer = pointer.next;
-            }
-            selected.add(pointer);
+            positions.add(numbers.rotateAndGetValue(1000).getRight());
         }
-        return selected.stream().mapToLong(n -> n.value).sum();
-
+        return positions.stream().mapToLong(l -> l).sum();
     }
 }
