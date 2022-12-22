@@ -11,3 +11,6 @@
 
 ### Year 2018
 * Mine Cart Madness, Day 13
+
+### Year 2022
+* Monkey Map, Day 22

@@ -15,11 +15,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class AoC2022Day22 extends AoCDay {
+
+    public static Coord2D RIGHT = new Coord2D(0,1);
+    public static Coord2D DOWN = new Coord2D(1,0);
+    public static Coord2D LEFT = new Coord2D(0,-1);
+    public static Coord2D UP = new Coord2D(-1,0);
+
     List<Pair<Integer,String>> steps;
+    List<Coord2D> path;
 
     public void solve() {
         System.out.println(String.format("%s ready to go", getClass().getName()));
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day22/input.txt");
+        List<String> pathStr = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day22/steps.txt");
+        path = parsePath(pathStr);
         Long parseTime = Instant.now().toEpochMilli();
         String[][] map = parsedLines(lines);
         Long startTime = Instant.now().toEpochMilli();
@@ -34,6 +43,16 @@ public class AoC2022Day22 extends AoCDay {
         System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
     }
 
+    public List<Coord2D> parsePath(List<String> strs) {
+        path = new ArrayList<>();
+        String coords[] = strs.get(0).split(":::");
+        for (String coord : coords) {
+            String t = coord.substring(1,coord.length()-1);
+            String len[] = t.split(", ");
+            path.add(new Coord2D(Integer.parseInt(len[0])-1,Integer.parseInt(len[1])-1));
+        }
+        return path;
+    }
     public String[][] parsedLines(List<String> lines) {
         List<String> values = new ArrayList<>();
         Integer index = 0;
@@ -199,7 +218,7 @@ public class AoC2022Day22 extends AoCDay {
     List<Integer> createList(Integer low, Integer high) {
         return IntStream.range(low,high).boxed().collect(Collectors.toList());
     }
-    Integer currentSide(Coord2D currentLocation) {
+    Integer currentSide(Coord2D currentLocation, Coord2D direction) {
         if (createList(0,50).contains(currentLocation.x)) {
             if (createList(50,100).contains(currentLocation.y)) {
                 return 1;
@@ -209,10 +228,16 @@ public class AoC2022Day22 extends AoCDay {
             else if (currentLocation.y == 150) {
                 return 5;
             } else if (currentLocation.y == 49) {
+                if (direction.equals(UP)) {
+                    return 3;
+                }
                 return 4;
             }
         } else if (createList(50,100).contains(currentLocation.x)) {
             if (currentLocation.y == 100) {
+                if (direction.equals(DOWN)) {
+                    return 3;
+                }
                 return 2;
             } else if (currentLocation.y == 49) {
                 return 4;
@@ -229,10 +254,12 @@ public class AoC2022Day22 extends AoCDay {
                 return 2;
             }
         } else if (createList(150,200).contains(currentLocation.x)) {
-            if (createList(0,100).contains(currentLocation.y)) {
+            if (createList(0,50).contains(currentLocation.y)) {
                 return 6;
             } else if (currentLocation.y == -1) {
                 return 1;
+            } else if (currentLocation.y == 50) {
+                return 5;
             }
         } else if (currentLocation.x == -1) {
             if (createList(50,150).contains(currentLocation.y)) {
@@ -247,9 +274,9 @@ public class AoC2022Day22 extends AoCDay {
     }
 
     Pair<Coord2D, Coord2D> moveCubeForward(Coord2D currentLocation, Coord2D currentDirection) {
-        Integer currentSide = currentSide(currentLocation);
+        Integer currentSide = currentSide(currentLocation, currentDirection);
         Coord2D nextLoc = new Coord2D(currentLocation.x + currentDirection.x, currentLocation.y + currentDirection.y);
-        Integer nextSide = currentSide(nextLoc);
+        Integer nextSide = currentSide(nextLoc, currentDirection);
         Coord2D nextDirection = currentDirection;
         if (nextSide != currentSide) {
             Pair<Integer, Coord2D> result = jumpSide(currentSide, currentDirection);
@@ -262,17 +289,17 @@ public class AoC2022Day22 extends AoCDay {
 
     Coord2D jumpCoords(Coord2D nextLoc, Integer currentSide, Integer nextSide) {
         if (currentSide == 1 && nextSide == 6) {
-            return new Coord2D(151+nextLoc.x,0);
+            return new Coord2D(100+nextLoc.y,0);
         } else if (currentSide == 1 && nextSide == 4) {
-            return new Coord2D(101+nextLoc.x,0);
+            return new Coord2D(Math.abs(nextLoc.x-49)+100,0);
         } else if (currentSide == 2 && nextSide == 6) {
             return new Coord2D(199,nextLoc.y-100);
         } else if (currentSide == 2 && nextSide == 3) {
-            return new Coord2D(49,nextLoc.x+50);
+            return new Coord2D(nextLoc.y-50,99);
         } else if (currentSide == 2 && nextSide == 5) {
             return new Coord2D(Math.abs(nextLoc.x-49)+100,99);
         } else if (currentSide == 3 && nextSide == 2) {
-            return new Coord2D(nextLoc.y-50,99);
+            return new Coord2D(49, nextLoc.x+50);
         } else if (currentSide == 3 && nextSide == 4) {
             return new Coord2D(100,nextLoc.x-50);
         } else if (currentSide == 4 && nextSide == 1) {
@@ -294,42 +321,38 @@ public class AoC2022Day22 extends AoCDay {
     }
 
     Pair<Integer,Coord2D> jumpSide(Integer currentSide, Coord2D direction) {
-        Coord2D right = new Coord2D(0,1);
-        Coord2D down = new Coord2D(1,0);
-        Coord2D left = new Coord2D(0,-1);
-        Coord2D up = new Coord2D(-1,0);
         Map<Pair<Integer, Coord2D>, Pair<Integer,Coord2D>> jumpCoords = new HashMap();
 
         //Done by hand
-        jumpCoords.put(Pair.of(1,up),Pair.of(6,right));
-        jumpCoords.put(Pair.of(1,right),Pair.of(2,right));
-        jumpCoords.put(Pair.of(1,down),Pair.of(3,down));
-        jumpCoords.put(Pair.of(1,left),Pair.of(4,right));
+        jumpCoords.put(Pair.of(1,UP),Pair.of(6,RIGHT));
+        jumpCoords.put(Pair.of(1,RIGHT),Pair.of(2,RIGHT));
+        jumpCoords.put(Pair.of(1,DOWN),Pair.of(3,DOWN));
+        jumpCoords.put(Pair.of(1,LEFT),Pair.of(4,RIGHT));
 
-        jumpCoords.put(Pair.of(2,up),Pair.of(6,up));
-        jumpCoords.put(Pair.of(2,right),Pair.of(5,left));
-        jumpCoords.put(Pair.of(2,down),Pair.of(3,left));
-        jumpCoords.put(Pair.of(2,left),Pair.of(1,left));
+        jumpCoords.put(Pair.of(2,UP),Pair.of(6,UP));
+        jumpCoords.put(Pair.of(2,RIGHT),Pair.of(5,LEFT));
+        jumpCoords.put(Pair.of(2,DOWN),Pair.of(3,LEFT));
+        jumpCoords.put(Pair.of(2,LEFT),Pair.of(1,LEFT));
 
-        jumpCoords.put(Pair.of(3,up),Pair.of(1,up));
-        jumpCoords.put(Pair.of(3,right),Pair.of(2,up));
-        jumpCoords.put(Pair.of(3,down),Pair.of(5,down));
-        jumpCoords.put(Pair.of(3,left),Pair.of(4,down));
+        jumpCoords.put(Pair.of(3,UP),Pair.of(1,UP));
+        jumpCoords.put(Pair.of(3,RIGHT),Pair.of(2,UP));
+        jumpCoords.put(Pair.of(3,DOWN),Pair.of(5,DOWN));
+        jumpCoords.put(Pair.of(3,LEFT),Pair.of(4,DOWN));
 
-        jumpCoords.put(Pair.of(4,up),Pair.of(3,right));
-        jumpCoords.put(Pair.of(4,right),Pair.of(5,right));
-        jumpCoords.put(Pair.of(4,down),Pair.of(6,down));
-        jumpCoords.put(Pair.of(4,left),Pair.of(1,right));
+        jumpCoords.put(Pair.of(4,UP),Pair.of(3,RIGHT));
+        jumpCoords.put(Pair.of(4,RIGHT),Pair.of(5,RIGHT));
+        jumpCoords.put(Pair.of(4,DOWN),Pair.of(6,DOWN));
+        jumpCoords.put(Pair.of(4,LEFT),Pair.of(1,RIGHT));
 
-        jumpCoords.put(Pair.of(5,up),Pair.of(3,up));
-        jumpCoords.put(Pair.of(5,right),Pair.of(2,left));
-        jumpCoords.put(Pair.of(5,down),Pair.of(6,left));
-        jumpCoords.put(Pair.of(5,left),Pair.of(4,left));
+        jumpCoords.put(Pair.of(5,UP),Pair.of(3,UP));
+        jumpCoords.put(Pair.of(5,RIGHT),Pair.of(2,LEFT));
+        jumpCoords.put(Pair.of(5,DOWN),Pair.of(6,LEFT));
+        jumpCoords.put(Pair.of(5,LEFT),Pair.of(4,LEFT));
 
-        jumpCoords.put(Pair.of(6,up),Pair.of(4,up));
-        jumpCoords.put(Pair.of(6,right),Pair.of(5,up));
-        jumpCoords.put(Pair.of(6,down),Pair.of(2,down));
-        jumpCoords.put(Pair.of(6,left),Pair.of(1,down));
+        jumpCoords.put(Pair.of(6,UP),Pair.of(4,UP));
+        jumpCoords.put(Pair.of(6,RIGHT),Pair.of(5,UP));
+        jumpCoords.put(Pair.of(6,DOWN),Pair.of(2,DOWN));
+        jumpCoords.put(Pair.of(6,LEFT),Pair.of(1,DOWN));
 
         return jumpCoords.get(Pair.of(currentSide, direction));
 
