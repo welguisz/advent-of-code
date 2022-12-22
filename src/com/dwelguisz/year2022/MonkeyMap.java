@@ -2,19 +2,17 @@ package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
-import com.dwelguisz.utilities.Coord3D;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class AoC2022Day22 extends AoCDay {
+public class MonkeyMap extends AoCDay {
 
     public static Coord2D RIGHT = new Coord2D(0,1);
     public static Coord2D DOWN = new Coord2D(1,0);
