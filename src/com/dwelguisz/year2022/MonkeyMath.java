@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 public class MonkeyMath extends AoCDay {
     public void solve() {
-        System.out.println("Day 21 ready to go");
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day21/input.txt");
         Long parseTime = Instant.now().toEpochMilli();
         Map<String, String> values = parsedLines(lines);
