@@ -95,7 +95,6 @@ public class AoC2022Day22 extends AoCDay {
     public Integer solutionPart1(String map[][]) {
         Coord2D currentLocation = new Coord2D(0,IntStream.range(0,map[0].length).filter(i -> map[0][i].equals(".")).min().getAsInt());
         Coord2D direction = new Coord2D(0,1);
-        Integer stepCount = 0;
         for (Pair<Integer, String> step : steps) {
             for (int i = 0; i < step.getLeft(); i++) {
                 Coord2D nextLoc = moveForward(map, currentLocation, direction);
@@ -120,9 +119,7 @@ public class AoC2022Day22 extends AoCDay {
                 }
             }
             direction = updateDir(direction, step.getRight());
-            stepCount++;
         }
-
         return (currentLocation.x+1) * 1000 + (currentLocation.y+1) * 4 + decodeDir(direction);
     }
 
@@ -196,7 +193,6 @@ public class AoC2022Day22 extends AoCDay {
             }
             direction = updateDir(direction, step.getRight());
         }
-
         return (currentLocation.x+1) * 1000 + (currentLocation.y+1) * 4 + decodeDir(direction);
     }
 
@@ -216,6 +212,11 @@ public class AoC2022Day22 extends AoCDay {
                 return 4;
             }
         } else if (createList(50,100).contains(currentLocation.x)) {
+            if (currentLocation.y == 100) {
+                return 2;
+            } else if (currentLocation.y == 49) {
+                return 4;
+            }
             return 3;
         } else if (createList(100,150).contains(currentLocation.x)) {
             if (createList(0,50).contains(currentLocation.y)) {
@@ -262,50 +263,30 @@ public class AoC2022Day22 extends AoCDay {
     Coord2D jumpCoords(Coord2D nextLoc, Integer currentSide, Integer nextSide) {
         if (currentSide == 1 && nextSide == 6) {
             return new Coord2D(151+nextLoc.x,0);
-        } else if (currentSide == 1 && nextSide == 2) {
-            return nextLoc;
-        } else if (currentSide == 1 && nextSide == 3) {
-            return nextLoc;
         } else if (currentSide == 1 && nextSide == 4) {
             return new Coord2D(101+nextLoc.x,0);
-        } else if (currentSide == 2 && nextSide == 1) {
-            return nextLoc;
         } else if (currentSide == 2 && nextSide == 6) {
             return new Coord2D(199,nextLoc.y-100);
         } else if (currentSide == 2 && nextSide == 3) {
             return new Coord2D(49,nextLoc.x+50);
         } else if (currentSide == 2 && nextSide == 5) {
             return new Coord2D(Math.abs(nextLoc.x-49)+100,99);
-        } else if (currentSide == 3 && nextSide == 1) {
-            return nextLoc;
         } else if (currentSide == 3 && nextSide == 2) {
             return new Coord2D(nextLoc.y-50,99);
-        } else if (currentSide == 3 && nextSide == 5) {
-            return nextLoc;
         } else if (currentSide == 3 && nextSide == 4) {
             return new Coord2D(100,nextLoc.x-50);
         } else if (currentSide == 4 && nextSide == 1) {
             return new Coord2D(Math.abs(nextLoc.x-149),50);
         } else if (currentSide == 4 && nextSide == 3) {
             return new Coord2D(nextLoc.y+50,50);
-        } else if (currentSide == 4 && nextSide == 5) {
-            return nextLoc;
-        } else if (currentSide == 4 && nextSide == 6) {
-            return nextLoc;
         } else if (currentSide == 5 && nextSide == 2) {
             return new Coord2D(Math.abs(nextLoc.x-149),149);
-        } else if (currentSide == 5 && nextSide == 3) {
-            return nextLoc;
-        } else if (currentSide == 5 && nextSide == 4) {
-            return nextLoc;
         } else if (currentSide == 5 && nextSide == 6) {
             return new Coord2D(nextLoc.y+100,49);
         } else if (currentSide == 6 && nextSide == 1) {
             return new Coord2D(0,nextLoc.x-100);
         } else if (currentSide == 6 && nextSide == 2) {
             return new Coord2D(0,nextLoc.y+100);
-        } else if (currentSide == 6 && nextSide == 4) {
-            return nextLoc;
         } else if (currentSide == 6 && nextSide == 5) {
             return new Coord2D(149,nextLoc.x-100);
         }
@@ -349,10 +330,6 @@ public class AoC2022Day22 extends AoCDay {
         jumpCoords.put(Pair.of(6,right),Pair.of(5,up));
         jumpCoords.put(Pair.of(6,down),Pair.of(2,down));
         jumpCoords.put(Pair.of(6,left),Pair.of(1,down));
-
-        if (currentSide == 3 && direction.equals(right)) {
-            System.out.println("Stop here");
-        }
 
         return jumpCoords.get(Pair.of(currentSide, direction));
 
