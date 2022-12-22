@@ -15,6 +15,12 @@ public class Coord3D {
         this.hashCode = Objects.hash(x, y, z);
     }
 
+    public Coord3D(Coord3D prev) {
+        this.x = prev.x;
+        this.y = prev.y;
+        this.z = prev.z;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
