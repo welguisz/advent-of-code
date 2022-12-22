@@ -181,12 +181,8 @@ public class AoC2022Day22 extends AoCDay {
     public Integer solutionPart2(String map[][]) {
         Coord2D currentLocation = new Coord2D(0,IntStream.range(0,map[0].length).filter(i -> map[0][i].equals(".")).min().getAsInt());
         Coord2D direction = new Coord2D(0,1);
-        Integer stepCount = 0;
         for (Pair<Integer, String> step : steps) {
             for (int i = 0; i < step.getLeft(); i++) {
-                if (stepCount == 118) {// && currentLocation.x==148 && currentLocation.y==0) {
-                    System.out.println("Stop here");
-                }
                 Pair<Coord2D, Coord2D> stepForward = moveCubeForward(currentLocation, direction);
                 Coord2D nextLoc = stepForward.getLeft();
                 Coord2D nextDirection = stepForward.getRight();
@@ -199,17 +195,19 @@ public class AoC2022Day22 extends AoCDay {
                 }
             }
             direction = updateDir(direction, step.getRight());
-            stepCount++;
         }
 
         return (currentLocation.x+1) * 1000 + (currentLocation.y+1) * 4 + decodeDir(direction);
     }
 
+    List<Integer> createList(Integer low, Integer high) {
+        return IntStream.range(low,high).boxed().collect(Collectors.toList());
+    }
     Integer currentSide(Coord2D currentLocation) {
-        if (IntStream.range(0,50).boxed().collect(Collectors.toList()).contains(currentLocation.x)) {
-            if (IntStream.range(50,100).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
+        if (createList(0,50).contains(currentLocation.x)) {
+            if (createList(50,100).contains(currentLocation.y)) {
                 return 1;
-            } else if (IntStream.range(100,150).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
+            } else if (createList(100,150).contains(currentLocation.y)) {
                 return 2;
             }
             else if (currentLocation.y == 150) {
@@ -217,48 +215,33 @@ public class AoC2022Day22 extends AoCDay {
             } else if (currentLocation.y == 49) {
                 return 4;
             }
-        } else if (IntStream.range(50,100).boxed().collect(Collectors.toList()).contains(currentLocation.x)) {
-            if (IntStream.range(0,150).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
-                return 3;
-            } else if (currentLocation.y == 49) {
+        } else if (createList(50,100).contains(currentLocation.x)) {
+            return 3;
+        } else if (createList(100,150).contains(currentLocation.x)) {
+            if (createList(0,50).contains(currentLocation.y)) {
                 return 4;
-            }
-        } else if (IntStream.range(100,150).boxed().collect(Collectors.toList()).contains(currentLocation.x)) {
-            if (IntStream.range(0,50).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
-                return 4;
-            } else if (IntStream.range(50,100).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
+            } else if (createList(50,100).contains(currentLocation.y)) {
                 return 5;
             } else if (currentLocation.y == -1) {
                 return 1;
             } else if (currentLocation.y == 100) {
                 return 2;
             }
-        } else if (IntStream.range(150,200).boxed().collect(Collectors.toList()).contains(currentLocation.x)) {
-            if (IntStream.range(0,100).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
+        } else if (createList(150,200).contains(currentLocation.x)) {
+            if (createList(0,100).contains(currentLocation.y)) {
                 return 6;
             } else if (currentLocation.y == -1) {
                 return 1;
-            } else if (currentLocation.y == 50) {
-                return 5;
             }
         } else if (currentLocation.x == -1) {
-            if (IntStream.range(50, 150).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
+            if (createList(50,150).contains(currentLocation.y)) {
                 return 6;
             }
-        } else if (currentLocation.x == 50) {
-            if (IntStream.range(100, 150).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
-                return 3;
-            }
         } else if (currentLocation.x == 200) {
-            if (IntStream.range(0, 50).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
+            if (createList(0,50).contains(currentLocation.y)) {
                 return 2;
             }
-        } else if (currentLocation.y == 150) {
-            if (IntStream.range(0,50).boxed().collect(Collectors.toList()).contains(currentLocation.y)) {
-                return 5;
-            }
         }
-
         return -1;
     }
 
@@ -366,6 +349,10 @@ public class AoC2022Day22 extends AoCDay {
         jumpCoords.put(Pair.of(6,right),Pair.of(5,up));
         jumpCoords.put(Pair.of(6,down),Pair.of(2,down));
         jumpCoords.put(Pair.of(6,left),Pair.of(1,down));
+
+        if (currentSide == 3 && direction.equals(right)) {
+            System.out.println("Stop here");
+        }
 
         return jumpCoords.get(Pair.of(currentSide, direction));
 
