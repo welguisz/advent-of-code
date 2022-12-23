@@ -61,6 +61,14 @@ public class Coord2D {
         return i1;
     }
 
+    public static Coord2D add(Coord2D a, Coord2D b) {
+        return new Coord2D(a.x + b.x, a.y+b.y);
+    }
+
+    public Coord2D add(Coord2D o) {
+        return add(this, o);
+    }
+
     public Double getAngle(Coord2D other) {
         double angle = 90-Math.toDegrees(Math.atan2(y-other.y,other.x-x));
         return angle < 0 ? angle+360 : angle;
