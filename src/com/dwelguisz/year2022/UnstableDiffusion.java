@@ -99,43 +99,17 @@ public class UnstableDiffusion extends AoCDay {
     }
 
     Integer solutionPart1(Map<Coord2D, Elf> elves) {
-        for (int i = 0; i < 10; i++) {
-            Map<Coord2D, List<Elf>> proposedMoves = new HashMap<>();
-            for(Map.Entry<Coord2D,Elf> elf : elves.entrySet()) {
-                Coord2D nextMove = elf.getValue().propose(elves);
-                if (nextMove == null) {
-                    continue;
-                }
-                List<Elf> elfProposing = proposedMoves.getOrDefault(nextMove, new ArrayList<>());
-                elfProposing.add(elf.getValue());
-                proposedMoves.put(nextMove, elfProposing);
-            }
-            for (Map.Entry<Coord2D, List<Elf>> elvesProposing : proposedMoves.entrySet()) {
-                if (elvesProposing.getValue().size() != 1) {
-                    continue;
-                }
-                Elf updateElf = elvesProposing.getValue().get(0);
-                Coord2D newLoc = elvesProposing.getKey();
-                elves.remove(updateElf.position);
-                updateElf.updateLocation(newLoc);
-                elves.put(newLoc, updateElf);
-            }
-            for (Map.Entry<Coord2D,Elf> elf : elves.entrySet()) {
-                elf.getValue().updateProposeCheck();
-            }
-        }
-        Integer minX = elves.entrySet().stream().mapToInt(e -> e.getKey().x).min().getAsInt();
-        Integer maxX = elves.entrySet().stream().mapToInt(e -> e.getKey().x).max().getAsInt() + 1;
-        Integer minY = elves.entrySet().stream().mapToInt(e -> e.getKey().y).min().getAsInt();
-        Integer maxY = elves.entrySet().stream().mapToInt(e -> e.getKey().y).max().getAsInt() + 1;
-        Integer answer = (maxX - minX) * (maxY - minY) - elves.size();
-        return answer;
+        return simulate(elves, 10, false);
     }
 
     Integer solutionPart2(Map<Coord2D, Elf> elves) {
+        return simulate(elves, Integer.MAX_VALUE, true);
+    }
+
+    public Integer simulate(Map<Coord2D, Elf> elves, Integer maxSteps, Boolean part2) {
         Boolean elfMoved = true;
         Integer steps = 0;
-        while(elfMoved) {
+        while(elfMoved && steps < maxSteps) {
             Map<Coord2D, List<Elf>> proposedMoves = new HashMap<>();
             for(Map.Entry<Coord2D,Elf> elf : elves.entrySet()) {
                 Coord2D nextMove = elf.getValue().propose(elves);
@@ -162,6 +136,13 @@ public class UnstableDiffusion extends AoCDay {
             }
             steps++;
         }
-        return steps;
+        if (part2) {
+            return steps;
+        }
+        Integer minX = elves.entrySet().stream().mapToInt(e -> e.getKey().x).min().getAsInt();
+        Integer maxX = elves.entrySet().stream().mapToInt(e -> e.getKey().x).max().getAsInt() + 1;
+        Integer minY = elves.entrySet().stream().mapToInt(e -> e.getKey().y).min().getAsInt();
+        Integer maxY = elves.entrySet().stream().mapToInt(e -> e.getKey().y).max().getAsInt() + 1;
+        return (maxX - minX) * (maxY - minY) - elves.size();
     }
 }
