@@ -25,8 +25,6 @@ public class MonkeyMap extends AoCDay {
     public void solve() {
         System.out.println(String.format("%s ready to go", getClass().getName()));
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day22/input.txt");
-        List<String> pathStr = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day22/steps.txt");
-        path = parsePath(pathStr);
         Long parseTime = Instant.now().toEpochMilli();
         String[][] map = parsedLines(lines);
         Long startTime = Instant.now().toEpochMilli();
