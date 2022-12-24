@@ -20,7 +20,7 @@ public class BlizzardBasin extends AoCDay {
 
     public void solve() {
         System.out.println("Day 24 ready to.");
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day24/testcase.txt");
+        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day24/input.txt");
         Long parseTime = Instant.now().toEpochMilli();
         parsedLines(lines);
         Long startTime = Instant.now().toEpochMilli();
@@ -92,32 +92,30 @@ public class BlizzardBasin extends AoCDay {
     Integer solutionPart1() {
         Coord2D startingPoint = new Coord2D(0,1);
         Coord2D endingPoint = new Coord2D(map.length-1,map[0].length-2);
-        BlizzardSearchNode node = new BlizzardSearchNode(startingPoint,endingPoint,0);
-        return findShortestPath(300, node);
+        BlizzardSearchNode node = new BlizzardSearchNode(startingPoint,0);
+        return findShortestPath(300, endingPoint, node);
     }
 
     Integer solutionPart2() {
         Coord2D startingPoint = new Coord2D(0,1);
         Coord2D endingPoint = new Coord2D(map.length-1,map[0].length-2);
-        BlizzardSearchNode node = new BlizzardSearchNode(startingPoint,endingPoint,0);
-        Integer time =  findShortestPath(300, node);
-        node = new BlizzardSearchNode(endingPoint,startingPoint,time);
-        time = findShortestPath(600,node);
-        node = new BlizzardSearchNode(startingPoint,endingPoint,time);
-        return findShortestPath(900,node);
+        BlizzardSearchNode node = new BlizzardSearchNode(startingPoint,0);
+        Integer time =  findShortestPath(300, endingPoint, node);
+        node = new BlizzardSearchNode(endingPoint,time);
+        time = findShortestPath(600,startingPoint, node);
+        node = new BlizzardSearchNode(startingPoint,time);
+        return findShortestPath(900,endingPoint, node);
     }
 
     public class BlizzardSearchNode extends SearchNode<String> {
         final Coord2D groupLocation;
-        final Coord2D targetLocation;
         final Integer time;
         private int hashCode;
 
-        public BlizzardSearchNode (Coord2D groupLocation, Coord2D targetLocation, Integer time) {
+        public BlizzardSearchNode (Coord2D groupLocation, Integer time) {
             this.groupLocation = groupLocation;
-            this.targetLocation = targetLocation;
             this.time = time;
-            this.hashCode = Objects.hash(groupLocation, targetLocation, time);
+            this.hashCode = Objects.hash(groupLocation, time);
         }
 
         @Override
@@ -127,7 +125,7 @@ public class BlizzardBasin extends AoCDay {
 
         @Override
         public String getName() {
-            return String.format("Group at %s at time %d", groupLocation.toString(), time);
+            return String.format("Loc: %s; Time: %d", groupLocation.toString(), time);
         }
 
         @Override
@@ -135,7 +133,7 @@ public class BlizzardBasin extends AoCDay {
             return null;
         }
 
-        public List<BlizzardSearchNode> getNextNodes(Set<Coord2D> freeSpace, Set<BlizzardSearchNode> inQueue) {
+        public List<BlizzardSearchNode> getNextNodes(Set<Coord2D> freeSpace, Set<BlizzardSearchNode> inQueue, Set<BlizzardSearchNode> seen) {
             List<Coord2D> possibleLocs = List.of(groupLocation,
                     groupLocation.add(new Coord2D(-1,0)),
                     groupLocation.add(new Coord2D(0,1)),
@@ -145,8 +143,9 @@ public class BlizzardBasin extends AoCDay {
                     .filter(n -> freeSpace.contains(n))
                     .collect(Collectors.toList());
             return possibleLocs.stream()
-                    .map(n -> new BlizzardSearchNode(n, targetLocation, time+1))
+                    .map(n -> new BlizzardSearchNode(n, time+1))
                     .filter(n -> !inQueue.contains(n))
+                    .filter(n -> !seen.contains(n))
                     .collect(Collectors.toList());
         }
 
@@ -163,6 +162,7 @@ public class BlizzardBasin extends AoCDay {
     }
     public Integer findShortestPath(
             Integer maxSteps,
+            Coord2D endingLocation,
             BlizzardSearchNode initialNode
     ) {
         Integer maxQueueSize = 0;
@@ -174,19 +174,28 @@ public class BlizzardBasin extends AoCDay {
         );
         queue.add(initialNode);
         Set<BlizzardSearchNode> currentlyInTheQueue = new HashSet<>();
+        Set<BlizzardSearchNode> seen = new HashSet<>();
         currentlyInTheQueue.add(initialNode);
         while (!queue.isEmpty()) {
             maxQueueSize = Integer.max(maxQueueSize, queue.size());
             BlizzardSearchNode currentNode = queue.poll();
             currentlyInTheQueue.remove(currentNode);
+            seen.add(currentNode);
+            if (queue.size() % 1000000 == 999999) {
+                System.out.println(String.format("Size: %d, Info: %s",queue.size(),currentNode.getName()));
+            }
             if (currentNode.getSteps() > maxSteps) {
                 continue;
             }
-            if (currentNode.onTarget()) {
+            if (currentNode.groupLocation.equals(endingLocation)) {
                 System.out.println("Max Queue Size: " + maxQueueSize);
                 return currentNode.getSteps() + 1;
             }
-            List<BlizzardSearchNode> nextNodes = currentNode.getNextNodes(freePath.get((currentNode.getSteps()+1)%freePath.size()),currentlyInTheQueue);
+            List<BlizzardSearchNode> nextNodes = currentNode.getNextNodes(
+                    freePath.get((currentNode.getSteps()+1)%freePath.size()),
+                    currentlyInTheQueue,
+                    seen
+            );
             for (BlizzardSearchNode nextNode : nextNodes) {
                     queue.add(nextNode);
             }
