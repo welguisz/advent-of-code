@@ -1,17 +1,15 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
-import com.dwelguisz.base.SearchNode;
 import com.dwelguisz.utilities.Coord2D;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BlizzardBasin extends AoCDay {
 
@@ -28,10 +26,10 @@ public class BlizzardBasin extends AoCDay {
         Long part1Time = Instant.now().toEpochMilli();
         Integer part2 = solutionPart2();
         Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
         System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
+        System.out.println(String.format("Part 1 Answer: %d",part1));
         System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
+        System.out.println(String.format("Part 2 Answer: %d",part2));
         System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
     }
 
@@ -92,112 +90,40 @@ public class BlizzardBasin extends AoCDay {
     Integer solutionPart1() {
         Coord2D startingPoint = new Coord2D(0,1);
         Coord2D endingPoint = new Coord2D(map.length-1,map[0].length-2);
-        BlizzardSearchNode node = new BlizzardSearchNode(startingPoint,0);
-        return findShortestPath(300, endingPoint, node);
+        return findShortestPath(300, 0,startingPoint, endingPoint);
     }
 
     Integer solutionPart2() {
         Coord2D startingPoint = new Coord2D(0,1);
         Coord2D endingPoint = new Coord2D(map.length-1,map[0].length-2);
-        BlizzardSearchNode node = new BlizzardSearchNode(startingPoint,0);
-        Integer time =  findShortestPath(300, endingPoint, node);
-        node = new BlizzardSearchNode(endingPoint,time);
-        time = findShortestPath(600,startingPoint, node);
-        node = new BlizzardSearchNode(startingPoint,time);
-        return findShortestPath(900,endingPoint, node);
+        Integer time =  findShortestPath(300, 0, startingPoint, endingPoint);
+        time = findShortestPath(600,time+1, endingPoint, startingPoint);
+        return findShortestPath(900,time+1,startingPoint, endingPoint);
     }
 
-    public class BlizzardSearchNode extends SearchNode<String> {
-        final Coord2D groupLocation;
-        final Integer time;
-        private int hashCode;
-
-        public BlizzardSearchNode (Coord2D groupLocation, Integer time) {
-            this.groupLocation = groupLocation;
-            this.time = time;
-            this.hashCode = Objects.hash(groupLocation, time);
-        }
-
-        @Override
-        public int hashCode() {
-            return this.hashCode;
-        }
-
-        @Override
-        public String getName() {
-            return String.format("Loc: %s; Time: %d", groupLocation.toString(), time);
-        }
-
-        @Override
-        public List<SearchNode> getNextNodes(String[][] map) {
-            return null;
-        }
-
-        public List<BlizzardSearchNode> getNextNodes(Set<Coord2D> freeSpace, Set<BlizzardSearchNode> inQueue, Set<BlizzardSearchNode> seen) {
-            List<Coord2D> possibleLocs = List.of(groupLocation,
-                    groupLocation.add(new Coord2D(-1,0)),
-                    groupLocation.add(new Coord2D(0,1)),
-                    groupLocation.add(new Coord2D(1,0)),
-                    groupLocation.add(new Coord2D(0,-1)));
-            possibleLocs = possibleLocs.stream()
-                    .filter(n -> freeSpace.contains(n))
-                    .collect(Collectors.toList());
-            return possibleLocs.stream()
-                    .map(n -> new BlizzardSearchNode(n, time+1))
-                    .filter(n -> !inQueue.contains(n))
-                    .filter(n -> !seen.contains(n))
-                    .collect(Collectors.toList());
-        }
-
-        @Override
-        public Integer getSteps() {
-            return time;
-        }
-
-        @Override
-        public Boolean onTarget() {
-            return groupLocation.equals(targetLocation);
-        }
+    Stream<Coord2D> nextSpots(Coord2D loc, Set<Coord2D> freeSpace) {
+        List<Coord2D> possibleLocs = List.of(loc,
+                loc.add(new Coord2D(-1,0)),
+                loc.add(new Coord2D(0,1)),
+                loc.add(new Coord2D(1,0)),
+                loc.add(new Coord2D(0,-1)));
+        return possibleLocs.stream()
+                .filter(n -> freeSpace.contains(n));
 
     }
     public Integer findShortestPath(
             Integer maxSteps,
-            Coord2D endingLocation,
-            BlizzardSearchNode initialNode
+            Integer initialTime,
+            Coord2D startingLocation,
+            Coord2D endingLocation
     ) {
-        Integer maxQueueSize = 0;
-        PriorityQueue<BlizzardSearchNode> queue = new PriorityQueue<>(2000,
-                (a,b) -> {
-                    Integer diffLength = a.getSteps() - b.getSteps();
-                    return diffLength;
-                }
-        );
-        queue.add(initialNode);
-        Set<BlizzardSearchNode> currentlyInTheQueue = new HashSet<>();
-        Set<BlizzardSearchNode> seen = new HashSet<>();
-        currentlyInTheQueue.add(initialNode);
-        while (!queue.isEmpty()) {
-            maxQueueSize = Integer.max(maxQueueSize, queue.size());
-            BlizzardSearchNode currentNode = queue.poll();
-            currentlyInTheQueue.remove(currentNode);
-            seen.add(currentNode);
-            if (queue.size() % 1000000 == 999999) {
-                System.out.println(String.format("Size: %d, Info: %s",queue.size(),currentNode.getName()));
-            }
-            if (currentNode.getSteps() > maxSteps) {
-                continue;
-            }
-            if (currentNode.groupLocation.equals(endingLocation)) {
-                System.out.println("Max Queue Size: " + maxQueueSize);
-                return currentNode.getSteps() + 1;
-            }
-            List<BlizzardSearchNode> nextNodes = currentNode.getNextNodes(
-                    freePath.get((currentNode.getSteps()+1)%freePath.size()),
-                    currentlyInTheQueue,
-                    seen
-            );
-            for (BlizzardSearchNode nextNode : nextNodes) {
-                    queue.add(nextNode);
+        Set<Coord2D> states = new HashSet<>();
+        states.add(startingLocation);
+        for (Integer i = initialTime; i < maxSteps; i++) {
+            Set<Coord2D> openSpaces = freePath.get((i +1 )% freePath.size());
+            states = states.stream().flatMap(s -> nextSpots(s,openSpaces)).collect(Collectors.toSet());
+            if (states.stream().anyMatch(s -> s.equals(endingLocation))) {
+                return i+1;
             }
         }
         return Integer.MAX_VALUE;
