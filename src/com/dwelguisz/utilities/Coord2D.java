@@ -65,6 +65,14 @@ public class Coord2D {
         return new Coord2D(a.x + b.x, a.y+b.y);
     }
 
+    public Coord2D multiply(Integer t) {
+        return new Coord2D(t*x, t*y);
+    }
+
+    public Coord2D modulus(Coord2D modulo) {
+        return new Coord2D(x % modulo.x, y % modulo.y);
+    }
+
     public Coord2D add(Coord2D o) {
         return add(this, o);
     }
