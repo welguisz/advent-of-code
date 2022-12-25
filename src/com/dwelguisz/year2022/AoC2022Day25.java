@@ -4,7 +4,6 @@ import com.dwelguisz.base.AoCDay;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AoC2022Day25 extends AoCDay {
@@ -34,24 +33,18 @@ public class AoC2022Day25 extends AoCDay {
     }
 
     String solutionPart1(List<String> values) {
-        char[] reversed = convertToSnafu(values.stream().mapToLong(v -> convertToLong(v)).sum()).toCharArray();
-        String finalVal = "";
-
-        for (int i = reversed.length-1;i>=0;i--) {
-            finalVal += reversed[i];
-        }
-        return finalVal;
+        return convertToSnafu(values.stream().mapToLong(v -> convertToLong(v)).sum());
     }
 
     String convertToSnafu(Long value) {
         while (value > 0) {
             Long remainder = value % 5;
             switch (remainder.intValue()) {
-                case 0 : return "0"+convertToSnafu(value / 5);
-                case 1 : return "1"+convertToSnafu(value / 5);
-                case 2 : return "2"+convertToSnafu(value / 5);
-                case 3 : return "="+convertToSnafu((value+2) / 5);
-                case 4 : return "-"+convertToSnafu((value+1) / 5);
+                case 0 : return convertToSnafu(value / 5) +"0";
+                case 1 : return convertToSnafu(value / 5) + "1";
+                case 2 : return convertToSnafu(value / 5) + "2";
+                case 3 : return convertToSnafu((value+2) / 5) + "=";
+                case 4 : return convertToSnafu((value+1) / 5) + "-";
             }
         }
         return "";
