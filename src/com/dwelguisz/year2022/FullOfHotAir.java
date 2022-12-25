@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AoC2022Day25 extends AoCDay {
+public class FullOfHotAir extends AoCDay {
     public void solve() {
         System.out.println("Day 25 ready to go.");
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day25/input.txt");
