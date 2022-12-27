@@ -61,6 +61,10 @@ public class Coord2D {
         return i1;
     }
 
+    public static int lcm(Integer n1, Integer n2) {
+        return n1*n2/(gcd(n1,n2));
+    }
+
     public static Coord2D add(Coord2D a, Coord2D b) {
         return new Coord2D(a.x + b.x, a.y+b.y);
     }

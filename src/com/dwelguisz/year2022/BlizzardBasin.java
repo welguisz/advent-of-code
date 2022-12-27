@@ -11,13 +11,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.dwelguisz.utilities.Coord2D.lcm;
+
 public class BlizzardBasin extends AoCDay {
 
     String[][] map;
     List<Set<Coord2D>> freePath;
 
     public void solve() {
-        System.out.println("Day 24 ready to.");
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day24/input.txt");
         Long parseTime = Instant.now().toEpochMilli();
         parsedLines(lines);
@@ -64,13 +65,11 @@ public class BlizzardBasin extends AoCDay {
     void parsedLines(List<String> lines) {
         map = convertToGrid(lines);
         freePath = new ArrayList<>();
-        Integer sx = lines.get(0).indexOf(".");
-        Integer ex = lines.get(lines.size()-1).indexOf(".");
         //Blizzards will repeat since they will go in the same direction. So Blizzards going in the vertical
         //positions will repeat after map.length -2 (walls).  Blizzards going in the horizontal direction will
         //repeat after map[0].length -2.  Will create blizzards. After creating the blizzards through time, create
         //a sequence of maps that are available during each time period.
-        int maxBlizzards = (lines.size()-2) * (lines.get(0).length()-2);
+        int maxBlizzards = lcm((lines.size()-2),(lines.get(0).length()-2));
         for (int i = 0; i < maxBlizzards; i++) {
             freePath.add(findFreeSpaces(i));
         }
