@@ -7,21 +7,21 @@ import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 
 public class IntCodeComputer implements Runnable {
-    Long instructionPointer;
-    Map<Long, Long> intCode;
+    public Long instructionPointer;
+    public Map<Long, Long> intCode;
     //Stores the opcodes and the jump for position
-    Map<Long, Long> opCodes;
+    public Map<Long, Long> opCodes;
     Map<Long, Integer> storeParamMap;
     ArrayDeque<Long> inputValues;
     ArrayDeque<Long> outputValues;
     Long id;
-    Boolean done;
+    public Boolean done;
     private boolean exit;
     Long debugValue;
 
     Long relativeBaseAddress;
 
-    enum ParameterModes {
+    public enum ParameterModes {
         positionMode,
         immediateMode,
         relativeMode
@@ -120,7 +120,7 @@ public class IntCodeComputer implements Runnable {
 
     public static Integer SLEEP_TIME = 1;
 
-    List<ParameterModes> findModes(Long opCode) {
+    public List<ParameterModes> findModes(Long opCode) {
         List<ParameterModes> modes = new ArrayList<>();
         Long divisor = 100L;
         for (int i = 0; i < 3; i++) {
@@ -164,7 +164,7 @@ public class IntCodeComputer implements Runnable {
         }
     }
 
-    void doCalculation(Long instr, List<ParameterModes> modes) {
+    public void doCalculation(Long instr, List<ParameterModes> modes) {
         if (instr.equals(1L)) {
             Long value = TwoInputOperand(modes,(a,b) -> a+b);
             Long address = getNewAddress(modes.get(2), intCode.getOrDefault(instructionPointer+3,0L), true);

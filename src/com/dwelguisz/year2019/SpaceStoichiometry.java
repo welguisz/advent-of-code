@@ -4,13 +4,11 @@ import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class SpaceStoichiometry extends AoCDay {
@@ -103,7 +101,7 @@ public class SpaceStoichiometry extends AoCDay {
         Long fuelCreated = 0L;
         Map<String,Long> leftOvers = new HashMap<>();
         while (oreAvailable >= oreNeededFor1) {
-            Long fuelCreatedThisRound = (oreAvailable / (oreNeededFor1 * 3)) + 1;
+            Long fuelCreatedThisRound = (oreAvailable / (oreNeededFor1 * 2)) + 1;
             Long oreNeededForBigBatch = getOreNeeded(reactions, leftOvers, fuelCreatedThisRound, "FUEL");
             oreAvailable -= oreNeededForBigBatch;
             fuelCreated += fuelCreatedThisRound;

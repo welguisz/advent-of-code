@@ -11,7 +11,7 @@ public class SolarSystem extends AoCYear {
         AoCDay aocDays[] = {new RocketEquation(), new ProgramAlarm(), new CrossedWires(), new SecureContainer(),
                 new ChanceOfAsteriods(), new UniversalOrbitMap(), new AmplicationCircuit(), new SpaceImageFormat(),
                 new SensorBoost(), new MonitoringStation(), new SpacePolice(), new TheNBodyProblem(),
-                new CarePackage(), new SpaceStoichiometry()
+                new CarePackage(), new SpaceStoichiometry(), new OxygenSystem()
         };
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
