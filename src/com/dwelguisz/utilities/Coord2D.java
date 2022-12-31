@@ -18,7 +18,7 @@ public class Coord2D {
         if (this == o) {
             return true;
         }
-        if (o == null | getClass() != o.getClass());
+        if (o == null | getClass() != o.getClass()) return false;
         Coord2D other = (Coord2D) o;
         return (this.x == other.x) && (this.y == other.y);
     }
