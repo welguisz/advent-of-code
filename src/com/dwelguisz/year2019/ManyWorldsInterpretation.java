@@ -129,17 +129,47 @@ public class ManyWorldsInterpretation extends AoCDay {
         Set<String> openSpaces2 = new HashSet<>();
         Set<String> openSpaces3 = new HashSet<>();
         for (Map.Entry<Coord2D,String> s : keys.entrySet()) {
+            Coord2D upLoc = s.getKey().add(new Coord2D(-1,0));
+            Coord2D downLoc = s.getKey().add(new Coord2D(1,0));
+            Coord2D leftLoc = s.getKey().add(new Coord2D(0,-1));
+            Coord2D rightLoc = s.getKey().add(new Coord2D(0,1));
             if (s.getKey().x < startingPoint.x) {
                 if (s.getKey().y < startingPoint.y) {
                     openSpaces0.add(s.getValue());
                 } else if (s.getKey().y > startingPoint.y) {
                     openSpaces1.add(s.getValue());
+                } else {
+                    if (openSpace.contains(leftLoc) || doors.containsKey(leftLoc) || keys.containsKey(leftLoc)) {
+                        openSpaces0.add(s.getValue());
+                    } else if (openSpace.contains(rightLoc) || doors.containsKey(rightLoc) || keys.containsKey(rightLoc)) {
+                        openSpaces2.add(s.getValue());
+                    }
                 }
             } else if (s.getKey().x > startingPoint.x){
                 if (s.getKey().y < startingPoint.y) {
                     openSpaces2.add(s.getValue());
                 } else if (s.getKey().y > startingPoint.y){
                     openSpaces3.add(s.getValue());
+                } else {
+                    if (openSpace.contains(leftLoc) || doors.containsKey(leftLoc) || keys.containsKey(leftLoc)) {
+                        openSpaces1.add(s.getValue());
+                    } else if (openSpace.contains(rightLoc) || doors.containsKey(rightLoc) || keys.containsKey(rightLoc)) {
+                        openSpaces3.add(s.getValue());
+                    }
+                }
+            } else {
+                if (s.getKey().y < startingPoint.y) {
+                    if (openSpace.contains(upLoc) || doors.containsKey(upLoc) || keys.containsKey(upLoc)) {
+                        openSpaces0.add(s.getValue());
+                    } else if (openSpace.contains(downLoc) || doors.containsKey(downLoc) || keys.containsKey(downLoc)) {
+                        openSpaces2.add(s.getValue());
+                    }
+                } else if (s.getKey().y > startingPoint.y) {
+                    if (openSpace.contains(upLoc) || doors.containsKey(upLoc) || keys.containsKey(upLoc)) {
+                        openSpaces1.add(s.getValue());
+                    } else if (openSpace.contains(downLoc) || doors.containsKey(downLoc) || keys.containsKey(downLoc)) {
+                        openSpaces3.add(s.getValue());
+                    }
                 }
             }
         }
