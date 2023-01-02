@@ -89,7 +89,7 @@ public class SetAndForget extends AoCDay {
             return Pair.of(false, 0L);
         }
 
-            @Override
+        @Override
         public void addOutputValue(Long outputValue) {
             if (outputValue > 255L) {
                 dustCleaned = outputValue;
