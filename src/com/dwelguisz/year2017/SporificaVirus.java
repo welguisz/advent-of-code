@@ -42,7 +42,6 @@ public class SporificaVirus extends AoCDay {
         System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
         System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
         System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
-
     }
 
     public Map<Coord2D, String> parseLines(List<String> lines) {
