@@ -26,7 +26,7 @@ public class Coord3D {
         if (this == o) {
             return true;
         }
-        if (o == null | getClass() != o.getClass());
+        if (o == null | getClass() != o.getClass()) return false;
         Coord3D other = (Coord3D) o;
         return (this.x == other.x) && (this.y == other.y) && (this.z == other.z);
     }
