@@ -6,14 +6,14 @@ import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
 
-public class IntCodeComputer implements Runnable {
+public class IntCodeComputer extends Thread implements Runnable {
     public Long instructionPointer;
     public Map<Long, Long> intCode;
     //Stores the opcodes and the jump for position
     public Map<Long, Long> opCodes;
     Map<Long, Integer> storeParamMap;
-    ArrayDeque<Long> inputValues;
-    ArrayDeque<Long> outputValues;
+    public ArrayDeque<Long> inputValues;
+    public ArrayDeque<Long> outputValues;
     Long id;
     public Boolean done;
     private boolean exit;
@@ -223,7 +223,7 @@ public class IntCodeComputer implements Runnable {
         Long currentInstructionWithMode = intCode.getOrDefault(instructionPointer,0L);
         Long currentInstruction = currentInstructionWithMode % 100;
         done = false;
-        while ((currentInstruction != 99) && (opCodes.containsKey(currentInstruction))) {
+        while ((currentInstruction != 99) && (opCodes.containsKey(currentInstruction)) && !Thread.interrupted()) {
             List<ParameterModes> modes = findModes(currentInstructionWithMode);
             doCalculation(currentInstruction, modes);
             currentInstructionWithMode = intCode.getOrDefault(instructionPointer, 0L);
