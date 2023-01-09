@@ -13,7 +13,8 @@ public class SolarSystem extends AoCYear {
                 new SensorBoost(), new MonitoringStation(), new SpacePolice(), new TheNBodyProblem(),
                 new CarePackage(), new SpaceStoichiometry(), new OxygenSystem(), new FlawedFrequencyTransmission(),
                 new SetAndForget(), new ManyWorldsInterpretation(), new TractorBeam(), new DonutMaze(),
-                new SpringdroidAdventure(), new SlamShuffle(), new CategorySix(), new PlanetOfDiscord()
+                new SpringdroidAdventure(), new SlamShuffle(), new CategorySix(), new PlanetOfDiscord(),
+                new Cryostatis()
         };
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
