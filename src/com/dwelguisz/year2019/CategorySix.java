@@ -47,9 +47,9 @@ public class CategorySix extends AoCDay {
                                 part2 = true;
                             }
                             if (allInputQueuesEmpty()) {
-                                System.out.println(String.format("Input Queues are empty. Sending: %d, %d", natX, natY));
                                 if (natY.equals(lastY)) {
                                     System.out.println(String.format("Part 2 answer: %d", natY));
+                                    System.out.println("End program by pressing Ctrl-C now");
                                     continueToRun = false;
                                 }
                                 inputQueues[0].add(natX);
