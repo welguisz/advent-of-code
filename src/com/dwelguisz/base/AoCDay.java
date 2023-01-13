@@ -54,7 +54,7 @@ public class AoCDay {
     }
 
 
-    protected void printGrid(String[][] grid) {
+    protected static void printGrid(String[][] grid) {
         StringBuffer sb = new StringBuffer("\n");
         for (int i = 0; i < grid.length; i++) {
             for(int j = 0; j < grid[0].length;j++) {

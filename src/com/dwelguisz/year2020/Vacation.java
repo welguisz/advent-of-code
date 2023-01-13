@@ -12,85 +12,14 @@ public class Vacation extends AoCYear {
 
     @Override
     public void runOneDay(int day) {
-        AoCDay aocDay = new AoCDay();
-        switch(day) {
-            case 1: {
-                aocDay = new ReportRepair();
-                break;
-            }
-            case 2: {
-                aocDay = new PasswordPhilosophy();
-                break;
-            }
-            case 3: {
-                aocDay = new TobogganTrajectory();
-                break;
-            }
-            case 4: {
-                aocDay = new PassportProcessing();
-                break;
-            }
-            case 5: {
-                aocDay = new BinaryBoarding();
-                break;
-            }
-            case 6: {
-                aocDay = new CustomCustoms();
-                break;
-            }
-            case 7: {
-                aocDay = new HandyHaversacks();
-                break;
-            }
-            case 8: {
-                aocDay = new HandheldHalting();
-                break;
-            }
-            case 9: {
-                aocDay = new EncodingError();
-                break;
-            }
-            case 10: {
-                aocDay = new AdapterArray();
-                break;
-            }
-            case 11: {
-                aocDay = new SeatingSystem();
-                break;
-            }
-            case 12: {
-                aocDay = new RainRisk();
-                break;
-            }
-            case 13: {
-                aocDay = new ShuttleSearch();
-                break;
-            }
-            case 14: {
-                aocDay = new DockingData();
-                break;
-            }
-            case 15: {
-                aocDay = new RambunctiousRecitation();
-                break;
-            }
-            case 16: {
-                aocDay = new TicketTranslation();
-                break;
-            }
-            case 17: {
-                aocDay = new ConwayCubes();
-                break;
-            }
-            case 18: {
-                aocDay = new OperationOrder();
-                break;
-            }
-            case 19: {
-                aocDay = new MonsterMessages();
-                break;
-            }
-        }
+        AoCDay aocDays[] = { new ReportRepair(), new PasswordPhilosophy(), new TobogganTrajectory(),
+                new PassportProcessing(), new BinaryBoarding(), new CustomCustoms(), new HandyHaversacks(),
+                new HandheldHalting(), new EncodingError(), new AdapterArray(), new SeatingSystem(),
+                new RainRisk(), new ShuttleSearch(), new DockingData(), new RambunctiousRecitation(),
+                new TicketTranslation(), new ConwayCubes(), new OperationOrder(), new MonsterMessages(),
+                new JurassicJigsaw()
+        };
+        AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
     }
 }
