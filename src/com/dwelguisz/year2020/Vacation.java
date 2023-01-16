@@ -17,7 +17,8 @@ public class Vacation extends AoCYear {
                 new HandheldHalting(), new EncodingError(), new AdapterArray(), new SeatingSystem(),
                 new RainRisk(), new ShuttleSearch(), new DockingData(), new RambunctiousRecitation(),
                 new TicketTranslation(), new ConwayCubes(), new OperationOrder(), new MonsterMessages(),
-                new JurassicJigsaw(), new AllergenAssessment(), new CrabCombat(), new CrabCups()
+                new JurassicJigsaw(), new AllergenAssessment(), new CrabCombat(), new CrabCups(),
+                new LobbyLayout()
         };
         AoCDay aocDay = aocDays[day-1];
         aocDay.solve();
