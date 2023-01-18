@@ -193,6 +193,7 @@ public class BeverageBandits extends AoCDay {
                     if (elves.isEmpty() || goblins.isEmpty()) {
                         Integer score = elves.isEmpty() ? goblins.entrySet().stream().mapToInt(g -> g.getValue().hitPoints).sum() :
                                 elves.entrySet().stream().mapToInt(e -> e.getValue().hitPoints).sum();
+                        printMap(elves, goblins, empty);
                         System.out.println(String.format("Round %d, Score: %d",round, score));
                         return Pair.of(round, score);
                     }
@@ -237,6 +238,7 @@ public class BeverageBandits extends AoCDay {
         }
         Integer score = elves.isEmpty() ? goblins.entrySet().stream().mapToInt(g -> g.getValue().hitPoints).sum() :
                 elves.entrySet().stream().mapToInt(e -> e.getValue().hitPoints).sum();
+        printMap(elves, goblins, empty);
         System.out.println(String.format("Round %d, Score: %d",round, score));
         return Pair.of(round, score);
     }
