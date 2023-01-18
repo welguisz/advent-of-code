@@ -46,55 +46,8 @@ public class ChronalClassification extends AoCDay {
                 for (Long i = 0L; i < registersBefore.size(); i++) {
                     registers.put(i, registersBefore.get(i.intValue()));
                 }
-                if(inst.equals("addr")) {
-                    addr(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("addi")) {
-                    addi(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("mulr")) {
-                    mulr(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("muli")) {
-                    muli(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("banr")) {
-                    banr(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("bani")) {
-                    bani(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("borr")) {
-                    borr(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("bori")) {
-                    bori(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("setr")) {
-                    setr(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("seti")) {
-                    seti(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("gtir")) {
-                    gtir(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("gtri")) {
-                    gtri(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("gtrr")) {
-                    gtrr(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("eqir")) {
-                    eqir(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("eqri")) {
-                    eqri(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                } else if (inst.equals("eqrr")) {
-                    eqrr(instruction.get(1), instruction.get(2), instruction.get(3));
-                    results.put(inst,registers.get(instruction.get(3)));
-                }
+                processInstruction(inst, instruction);
+                results.put(inst,registers.get(instruction.get(3)));
             }
             return results;
         }
