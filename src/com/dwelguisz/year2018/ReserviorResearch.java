@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class ReserviorResearch extends AoCDay {
     public void solve() {
@@ -17,9 +18,14 @@ public class ReserviorResearch extends AoCDay {
         Long parseTime = Instant.now().toEpochMilli();
         Set<Coord2D> clayLocation = parseLines(lines);
         Long startTime = Instant.now().toEpochMilli();
-        Integer part1 = solutionPart1(clayLocation);
+        Integer maxY = clayLocation.stream().mapToInt(p -> p.x).max().getAsInt();
+        Set<Coord2D> stoppedWater = new HashSet<>();
+        Set<Coord2D> flowingWater = new HashSet<>();
+        addWater(new Coord2D(0,500), new Coord2D(1,0),clayLocation,stoppedWater, flowingWater, maxY);
+        final Integer minY = clayLocation.stream().mapToInt(p -> p.x).min().getAsInt();
+        Integer part1 = solutionPart1(stoppedWater, flowingWater, minY);
         Long part1Time = Instant.now().toEpochMilli();
-        Integer part2 = solutionPart2(clayLocation);
+        Integer part2 = solutionPart2(stoppedWater);
         Long part2Time = Instant.now().toEpochMilli();
         System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
         System.out.println(String.format("Part 1 Answer: %d",part1));
@@ -50,23 +56,15 @@ public class ReserviorResearch extends AoCDay {
         return clayLocation;
     }
 
-    public Integer solutionPart1(Set<Coord2D> clayLocation) {
-        Integer maxY = clayLocation.stream().mapToInt(p -> p.x).max().getAsInt();
-        Set<Coord2D> stoppedWater = new HashSet<>();
-        Set<Coord2D> flowingWater = new HashSet<>();
-        addWater(new Coord2D(0,500), new Coord2D(1,0),clayLocation,stoppedWater, flowingWater, maxY);
+    public Integer solutionPart1(Set<Coord2D> stoppedWater, Set<Coord2D> flowingWater, Integer minY) {
         Set<Coord2D> total = new HashSet<>();
         total.addAll(stoppedWater);
         total.addAll(flowingWater);
-        total.remove(new Coord2D(0,500));
+        total = total.stream().filter(t -> t.x >= minY).collect(Collectors.toSet());
         return total.size();
     }
 
-    public Integer solutionPart2(Set<Coord2D> clayLocation) {
-        Integer maxY = clayLocation.stream().mapToInt(p -> p.x).max().getAsInt();
-        Set<Coord2D> stoppedWater = new HashSet<>();
-        Set<Coord2D> flowingWater = new HashSet<>();
-        addWater(new Coord2D(0,500), new Coord2D(1,0),clayLocation,stoppedWater, flowingWater, maxY);
+    public Integer solutionPart2(Set<Coord2D> stoppedWater) {
         return stoppedWater.size();
     }
 
@@ -104,18 +102,3 @@ public class ReserviorResearch extends AoCDay {
 
 
 }
-
-//......+.......
-//......|.....#. //y=1,                                              500          500
-//.#..#||**...#. //y=2, x=499..502    499                                         500,501,502
-//.#..#~~#|..... //y=3, x=499..500 .. 499,500 CHECKED                502          502
-//.#..#~~#|..... //y=4, x=499..500 .. 499,500 CHECKED                502          502
-//.#~~~~~#|..... //y=5, x=496..500 .. 496,497,498,499,500 CHECKED    502
-//.#~~~~~#|..... //y=6, x=496..500 .. 496,497,498,499,500 CHECKED    502          502
-//.#######|..... //y=7                                               502          502
-//........|..... //y=8                                               502          502
-//...|****||**.. //y=9                                               497 ... 505  497,498,499,500,501,502
-//...|#~~~~~#|.. //y=10, x=499..503 ..  499,500,501,502,503 CHECKED  497,505      497, 505
-//...|#~~~~~#|.. //y=11, x=499..503 ... 499,500,501,502,503 CHECKED  497,505      497, 505
-//...|#~~~~~#|.. //y=12, x=499..503 ... 499,500,501,502,503 CHECKED  497,505      497, 505
-//...|#######|.. //y=13                                              497,505      497, 505
