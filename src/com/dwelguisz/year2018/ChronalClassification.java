@@ -16,176 +16,6 @@ public class ChronalClassification extends AoCDay {
 
     List<List<Long>> programs;
 
-    public static class WristDevice {
-        Map<Long, Long> registers;
-        List<List<Long>> program;
-        Map<Long, String> opCodeDecode;
-        public WristDevice() {
-            registers = new HashMap<>();
-            registers.put(0L,0L);
-            registers.put(1L,0L);
-            registers.put(2L,0L);
-            registers.put(3L,0L);
-            program = new ArrayList<>();
-            opCodeDecode = new HashMap<>();
-        };
-
-        public void setProgram(List<List<Long>> program) {
-            this.program = program;
-        }
-
-        public void setOpCodeDecode(Map<Long,String> opCodeDecode) {
-            this.opCodeDecode = opCodeDecode;
-        }
-        List<String> instructions = List.of("addr","addi","mulr","muli","banr","bani","borr","bori",
-                "setr","seti","gtir","gtri","gtrr","eqir","eqri","eqrr");
-
-        public Map<String, Long> possibleInstructions(List<Long> registersBefore, List<Long> instruction) {
-            Map<String, Long> results = new HashMap<>();
-            for (String inst : instructions) {
-                for (Long i = 0L; i < registersBefore.size(); i++) {
-                    registers.put(i, registersBefore.get(i.intValue()));
-                }
-                processInstruction(inst, instruction);
-                results.put(inst,registers.get(instruction.get(3)));
-            }
-            return results;
-        }
-
-        public void processInstruction(String inst, List<Long> instruction) {
-            if(inst.equals("addr")) {
-                addr(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("addi")) {
-                addi(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("mulr")) {
-                mulr(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("muli")) {
-                muli(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("banr")) {
-                banr(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("bani")) {
-                bani(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("borr")) {
-                borr(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("bori")) {
-                bori(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("setr")) {
-                setr(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("seti")) {
-                seti(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("gtir")) {
-                gtir(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("gtri")) {
-                gtri(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("gtrr")) {
-                gtrr(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("eqir")) {
-                eqir(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("eqri")) {
-                eqri(instruction.get(1), instruction.get(2), instruction.get(3));
-            } else if (inst.equals("eqrr")) {
-                eqrr(instruction.get(1), instruction.get(2), instruction.get(3));
-            }
-        }
-
-        public void run() {
-            for (List<Long> inst : program) {
-                processInstruction(opCodeDecode.get(inst.get(0)), inst);
-            }
-        }
-
-        public void addr(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            Long value2 = registers.get(b);
-            registers.put(c, value1+value2);
-        }
-
-        public void addi(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            registers.put(c, value1 + b);
-        }
-
-        public void mulr(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            Long value2 = registers.get(b);
-            registers.put(c, value1*value2);
-        }
-
-        public void muli(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            registers.put(c, value1 * b);
-        }
-
-        public void banr(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            Long value2 = registers.get(b);
-            registers.put(c, value1&value2);
-        }
-
-        public void bani(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            registers.put(c, value1 & b);
-        }
-
-        public void borr(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            Long value2 = registers.get(b);
-            registers.put(c, value1|value2);
-        }
-
-        public void bori(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            registers.put(c, value1 | b);
-        }
-
-        public void setr(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            registers.put(c, value1);
-        }
-
-        public void seti(Long a, Long b, Long c) {
-            registers.put(c,a);
-        }
-
-        public void gtir(Long a, Long b, Long c) {
-            Long value2 = registers.get(b);
-            Long putValue = (a > value2) ? 1L : 0L;
-            registers.put(c,putValue);
-        }
-
-        public void gtri(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            Long putValue = (value1 > b) ? 1L : 0L;
-            registers.put(c,putValue);
-        }
-
-        public void gtrr(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            Long value2 = registers.get(b);
-            Long putValue = (value1 > value2) ? 1L : 0L;
-            registers.put(c,putValue);
-        }
-
-        public void eqir(Long a, Long b, Long c) {
-            Long value2 = registers.get(b);
-            Long putValue = (a == value2) ? 1L : 0L;
-            registers.put(c,putValue);
-        }
-
-        public void eqri(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            Long putValue = (value1 == b) ? 1L : 0L;
-            registers.put(c,putValue);
-        }
-
-        public void eqrr(Long a, Long b, Long c) {
-            Long value1 = registers.get(a);
-            Long value2 = registers.get(b);
-            Long putValue = (value1 == value2) ? 1L : 0L;
-            registers.put(c,putValue);
-        }
-
-    }
     public static class InstructionProcessing {
         List<Long> beforeRegisters;
         List<Long> instruction;
@@ -198,7 +28,7 @@ public class ChronalClassification extends AoCDay {
         }
 
         public Set<String> possibleOpcodes() {
-            WristDevice wristDevice = new WristDevice();
+            WristDevice wristDevice = new WristDevice(false);
             Map<String, Long> results = wristDevice.possibleInstructions(beforeRegisters, instruction);
             Long finalAnswer = afterRegsiters.get(instruction.get(3).intValue());
             Set<String> opCodes = new HashSet<>();
@@ -313,7 +143,7 @@ public class ChronalClassification extends AoCDay {
                 }
             }
         }
-        WristDevice wristDevice = new WristDevice();
+        WristDevice wristDevice = new WristDevice(false);
         wristDevice.setProgram(programs);
         wristDevice.setOpCodeDecode(opCodeDecode);
         wristDevice.run();
