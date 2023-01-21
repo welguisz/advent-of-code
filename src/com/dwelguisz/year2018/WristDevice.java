@@ -17,6 +17,7 @@ public class WristDevice {
     Boolean useProgramCounter;
     List<Long> heatMap;
     Integer stopCount;
+    Integer cycleCount;
     public WristDevice(Boolean useProgramCounter) {
         registers = new HashMap<>();
         registers.put(0L,0L);
@@ -32,6 +33,7 @@ public class WristDevice {
         programCounter = 0L;
         stopCount = -1;
         heatMap = new ArrayList<>();
+        cycleCount = 0;
         this.useProgramCounter = useProgramCounter;
     };
 
@@ -117,23 +119,22 @@ public class WristDevice {
 
     public void run() {
         if (useProgramCounter) {
-            Integer cycleCount = 0;
-            Integer printArea = (8*10551347);
+            cycleCount = 0;
             while ((programCounter >= 0) && (programCounter < programStr.size())) {
+                String instr = programStr.get(programCounter.intValue());
+                String[] split = instr.split(" ");
                 if ((stopCount >= 0) && (stopCount < cycleCount)) {
                     break;
+                }
+                if (cycleCount + 100 > stopCount) {
+                    List<Long> regs = LongStream.range(0,6).boxed().map(r -> registers.get(r)).collect(Collectors.toList());
+                    System.out.println(String.format("%d: %s (%s)",cycleCount,regs,instr));
                 }
                 if (stopCount > 0) {
                     Long tmp = heatMap.remove(programCounter.intValue());
                     tmp++;
                     heatMap.add(programCounter.intValue(),tmp);
                 }
-                if ((cycleCount > printArea) && (cycleCount < (printArea+50))) {
-                    List<Long> regs = LongStream.range(0,6).boxed().map(l -> registers.get(l)).collect(Collectors.toList());
-                    System.out.println(String.format("%d: %s",cycleCount,regs));
-                }
-                String instr = programStr.get(programCounter.intValue());
-                String[] split = instr.split(" ");
                 processInstruction(split[0], List.of(0L,Long.parseLong(split[1]),Long.parseLong(split[2]),Long.parseLong(split[3])));
                 cycleCount++;
             }
