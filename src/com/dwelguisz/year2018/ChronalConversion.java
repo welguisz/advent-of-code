@@ -3,17 +3,14 @@ package com.dwelguisz.year2018;
 import com.dwelguisz.base.AoCDay;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ChronalConversion extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day21/input.txt");
         Long parseTime = Instant.now().toEpochMilli();
+        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day21/input.txt");
         Long startTime = Instant.now().toEpochMilli();
         Long part1 = solutionPart1(lines);
         Long part1Time = Instant.now().toEpochMilli();
@@ -24,7 +21,6 @@ public class ChronalConversion extends AoCDay {
         System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
         System.out.println(String.format("Part 2 Answer: %d",part2));
         System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
-
     }
 
 //    #ip: 2
