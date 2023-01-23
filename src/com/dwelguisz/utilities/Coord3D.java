@@ -40,4 +40,8 @@ public class Coord3D {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z);
     }
 
+    public String toString() {
+        return "["+x+","+y+","+z+"]";
+    }
+
 }
