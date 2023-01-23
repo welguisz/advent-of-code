@@ -13,7 +13,8 @@ public class TemporalAnomalies extends AoCYear {
                 new MarbleMania(), new TheStarsAlign(), new ChronalCharge(), new SubterraneanSustainability(),
                 new MineCartMadness(), new ChocolateCharts(), new BeverageBandits(), new ChronalClassification(),
                 new ReserviorResearch(), new SettlersOfTheNorthPole(), new GoWithTheFlow(), new ARegularMap(),
-                new ChronalConversion(), new ModeMaze(), new ExperimentalEmergencyTeleportation()
+                new ChronalConversion(), new ModeMaze(), new ExperimentalEmergencyTeleportation(),
+                new ImmuneSystemSimulator20XX()
         };
         AoCDay aocDay = days[day-1];
         aocDay.solve();
