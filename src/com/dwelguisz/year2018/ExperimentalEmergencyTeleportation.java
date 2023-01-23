@@ -144,6 +144,7 @@ public class ExperimentalEmergencyTeleportation extends AoCDay {
             result.add(new NanoBot(new Coord3D(src.position.x, src.position.y, src.position.z),newRadius));
         }
         else if (src.radius.equals(2L)) {
+            offset = 1L;
             newRadius = 1L;
         } else {
             newRadius = (long) Math.ceil(0.556*src.radius);

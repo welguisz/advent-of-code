@@ -12,7 +12,6 @@
 ### Year 2018
 * Mine Cart Madness, Day 13
 * Mode Maze, Day 22
-* Day 23, part2
 
 ### Year 2019
 * May Worlds Interpreation, Day 18, Part 2. My runs, but takes forever. Good one to come back to optimize this one.
