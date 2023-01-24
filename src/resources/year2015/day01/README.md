@@ -54,3 +54,5 @@ use a loop and return the position when the level is -1.
     }
 
 ```
+
+[Next Day](../day02/README.md)
