@@ -1,5 +1,16 @@
 # Advent of Code
 
+## Overview
+After completing all puzzles, I am going through my repo and trying to clean it 
+up to make it more readable. As I go through it, I will be updating my thoughts
+and put the general solution in this repository. During the actual event, I will
+not update the current year's solution thoughts until January of the next year 
+(e.g. Advent of Code 2022 README's will not be available until January 2023 at 
+the earliest.)
+
+## Year 2015
+* [Day 1, Not Quite Lisp](./src/resources/year2015/day01/README.md)
+
 ## Puzzles to come back to
 
 ### Year 2015
