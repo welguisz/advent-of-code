@@ -2,7 +2,12 @@ package com.dwelguisz.base;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,8 +21,59 @@ import static java.lang.Integer.parseInt;
 
 public class AoCDay {
 
+    public Long timeMarkers[] = new Long[]{0L,0L,0L,0L};
+    public Object part1Answer;
+    public Object part2Answer;
     public void solve() {
         System.out.println("Not yet implemented");
+    }
+
+    public void run() {
+        solve();
+        System.out.println("---------"+getClass().getName()+"------------");
+        System.out.println(String.format("%20s|%20s |%20s |%20s |","Elapsed Times:","Parsing Time(ms)","Part 1 Time(ms)","Part 2 Time(ms)"));
+        System.out.println(String.format("%20s|%20d |%20d |%20d |","",timeMarkers[1]-timeMarkers[0],timeMarkers[2]-timeMarkers[1],timeMarkers[3]-timeMarkers[2]));
+        System.out.println("Part 1 Answer: " + part1Answer);
+        System.out.println("Part 2 Answer: " + part2Answer);
+    }
+
+    public InputStream getFileFromResourceStream(Integer year, Integer day, boolean test) {
+        return getFileFromResourceStream(year, day, test, 0);
+    }
+
+    public InputStream getFileFromResourceStream(Integer year, Integer day, boolean test, Integer testSuffix) {
+        String separator = FileSystems.getDefault().getSeparator();
+        String filename = test ? "testcase" : "input";
+        filename += (testSuffix > 0) ? String.format("%d",testSuffix) : "";
+        filename += ".txt";
+        String directories[] = new String[]{String.format("year%d",year),String.format("day%2d",day).replace(" ","0"),filename};
+        String resourceFile = Arrays.stream(directories).collect(Collectors.joining(separator));
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(resourceFile);
+        if (inputStream == null) {
+            throw new IllegalArgumentException("file not found! " + resourceFile);
+        }
+        return inputStream;
+    }
+
+    public List<String> readResourceFile(Integer year, Integer day, boolean test) {
+        return readResoruceFile(year, day, test, 0);
+    }
+
+    public List<String> readResoruceFile(Integer year, Integer day, boolean test, Integer testSuffix) {
+        InputStream is = getFileFromResourceStream(year,day,test,testSuffix);
+        List<String> lines = new ArrayList<>();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(is));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to read file" + e);
+        }
+        return lines;
     }
 
     public List<String> readFile(String fileName) {

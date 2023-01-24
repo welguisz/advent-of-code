@@ -18,7 +18,7 @@ public class WeatherMachine extends AoCYear {
                 new WizardSimulator20XX(), new OpeningTheTuringLock(), new ItHangsInTheBalance(),
                 new LetItSnow()};
         AoCDay aocDay = aocDays[day-1];
-        aocDay.solve();
+        aocDay.run();
 
     }
 }
