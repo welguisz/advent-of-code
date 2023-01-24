@@ -12,6 +12,9 @@ the earliest.)
 * [Day 1, Not Quite Lisp](./src/resources/year2015/day01/README.md)
 * [Day 2, I Was Told There Would Be No Math](./src/resources/year2015/day02/README.md)
 * [Day 3, Perfectly Spherical Houses In a Vacuum](./src/resources/year2015/day03/README.md)
+* [Day 4, The Ideal Stocking Stuffer](./src/resources/year2015/day04/README.md)
+* [Day 5, Doesn't He Have Intern-Elves For This?](./src/resources/year/2015/day05/README.md)
+
 ## Puzzles to come back to
 
 ### Year 2015
