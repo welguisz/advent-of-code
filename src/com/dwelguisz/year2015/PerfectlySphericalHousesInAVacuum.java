@@ -1,100 +1,63 @@
 package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.utilities.Coord2D;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class PerfectlySphericalHousesInAVacuum extends AoCDay {
-    static Integer MAX_ROW = 400;
-    static Boolean[][] visited = new Boolean[MAX_ROW][MAX_ROW];
-    static Boolean[][] visitedPart2 = new Boolean[MAX_ROW][MAX_ROW];
-    static {
-        for (int i = 0; i < MAX_ROW; i++) {
-            for (int j = 0; j < MAX_ROW; j++) {
-                visited[i][j] = false;
-                visitedPart2[i][j] = false;
-            }
-        }
-    }
+    public static Coord2D UP = new Coord2D(-1,0);
+    public static Coord2D RIGHT = new Coord2D(0,1);
+    public static Coord2D DOWN = new Coord2D(1,0);
+    public static Coord2D LEFT = new Coord2D(0,-1);
+    public static Map<String, Coord2D> DIRECTIONS = Map.of("^",UP,">",RIGHT,"v",DOWN,"<",LEFT);
 
     public void solve() {
-        List<String> instructions = readFile("/home/dwelguisz/advent_of_code/src/resources/year2015/day03/input.txt");
-        Long part1 = solutionPart1(Arrays.asList(instructions.get(0).split("")));
-        Long part2 = solutionPart2(Arrays.asList(instructions.get(0).split("")));
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2015,3,false,0);
+        List<String> directions = parseLine(instructions.get(0));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(directions);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(directions);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    static Long solutionPart1(List<String> instructions) {
-        Integer santaX = 200;
-        Integer santaY = 200;
-        Long total = 0L;
-        for (String in : instructions) {
-            if (!visited[santaX][santaY]) {
-                total += 1;
-                visited[santaX][santaY] = true;
-            }
-            if ("^".equals(in)) {
-                santaY--;
-            } else if ("v".equals(in)) {
-                santaY++;
-            } else if ("<".equals(in)) {
-                santaX--;
-            } else if (">".equals(in)) {
-                santaX++;
-            }
-        }
-        if (!visited[santaX][santaY]) {
-            total += 1;
-            visited[santaX][santaY] = true;
-        }
-        return total;
+    public List<String> parseLine(String line) {
+        return Arrays.asList(line.split(""));
     }
 
-    static Long solutionPart2(List<String> instructions) {
-        Integer santaX = 200;
-        Integer santaY = 200;
-        Integer roboX = 200;
-        Integer roboY = 200;
-        boolean  step = false; //false means Santa info; true means Robo Santa info
-        Long total = 0L;
-        for (String in : instructions) {
-            int tempX = step ? roboX : santaX;
-            int tempY = step ? roboY : santaY;
-            if (!visitedPart2[tempX][tempY])  {
-                total += 1;
-                visitedPart2[tempX][tempY] = true;
-            }
-            if ("^".equals(in)) {
-                tempY--;
-            } else if ("v".equals(in)) {
-                tempY++;
-            } else if ("<".equals(in)) {
-                tempX--;
-            } else if (">".equals(in)) {
-                tempX++;
-            }
-            if (!visitedPart2[tempX][tempY]) {
-                total += 1;
-                visitedPart2[tempX][tempY] = true;
-            }
-            if (!step) {
-                santaX = tempX;
-                santaY = tempY;
-            } else {
-                roboX = tempX;
-                roboY = tempY;
-            }
-            step ^= true;
+    Integer visitedHouse(List<String> directions, Integer numberOfSantas) {
+        Set<Coord2D> visited = new HashSet<>();
+        List<Coord2D> locations = new ArrayList<>();
+        for (int i = 0; i < numberOfSantas; i++) {
+            locations.add(new Coord2D(0, 0));
         }
-        int tempX = step ? roboX : santaX;
-        int tempY = step ? roboY : santaY;
-        if (!visitedPart2[tempX][tempY]) {
-            total += 1;
-            visitedPart2[santaX][santaY] = true;
+        Integer counter = 0;
+        visited.addAll(locations);
+        for (String direction : directions) {
+            int choice = counter % locations.size();
+            Coord2D currentTurn = locations.remove(choice);
+            currentTurn = currentTurn.add(DIRECTIONS.get(direction));
+            visited.add(currentTurn);
+            locations.add(choice,currentTurn);
+            counter++;
         }
-        return total;
+        return visited.size();
+    }
+
+    Integer solutionPart1(List<String> directions) {
+        return visitedHouse(directions, 1);
+    }
+
+    Integer solutionPart2(List<String> directions) {
+        return visitedHouse(directions, 2);
     }
 
 

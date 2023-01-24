@@ -11,7 +11,7 @@ the earliest.)
 ## Year 2015
 * [Day 1, Not Quite Lisp](./src/resources/year2015/day01/README.md)
 * [Day 2, I Was Told There Would Be No Math](./src/resources/year2015/day02/README.md)
-
+* [Day 3, Perfectly Spherical Houses In a Vacuum](./src/resources/year2015/day03/README.md)
 ## Puzzles to come back to
 
 ### Year 2015
