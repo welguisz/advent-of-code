@@ -43,25 +43,22 @@ For Part 2, we need to keep track of two Santas, the real one and a roboSanta.
 We can use Part1 as a starting Point for Part 2 and add a new Coord2D for roboSanta.
 For every iteration, we switch from Santa to Robo Santa and vice versa.
 
-There are many ways to keep track of the two Santas, I prefer to keep track in a List.
+There are many ways to keep track of the two Santas, I prefer to keep track in a `ArrayDeque`.
 This way if we add more Santas, it is just adding one more Coordinate.
 
 ```java
     Integer visitedHouse(List<String> directions, Integer numberOfSantas) {
         Set<Coord2D> visited = new HashSet<>();
-        List<Coord2D> locations = new ArrayList<>();
+        ArrayDeque<Coord2D> locations = new ArrayDeque<>();
         for (int i = 0; i < numberOfSantas; i++) {
             locations.add(new Coord2D(0, 0));
         }
-        Integer counter = 0;
         visited.addAll(locations);
         for (String direction : directions) {
-            int choice = counter % locations.size();
-            Coord2D currentTurn = locations.remove(choice);
+            Coord2D currentTurn = locations.pollFirst();
             currentTurn = currentTurn.add(DIRECTIONS.get(direction));
             visited.add(currentTurn);
-            locations.add(choice,currentTurn);
-            counter++;
+            locations.addLast(currentTurn);
         }
         return visited.size();
     }

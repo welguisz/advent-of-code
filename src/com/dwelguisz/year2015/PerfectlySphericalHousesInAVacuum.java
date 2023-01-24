@@ -4,6 +4,7 @@ import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
 
 import java.time.Instant;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -35,19 +36,16 @@ public class PerfectlySphericalHousesInAVacuum extends AoCDay {
 
     Integer visitedHouse(List<String> directions, Integer numberOfSantas) {
         Set<Coord2D> visited = new HashSet<>();
-        List<Coord2D> locations = new ArrayList<>();
+        ArrayDeque<Coord2D> locations = new ArrayDeque<>();
         for (int i = 0; i < numberOfSantas; i++) {
             locations.add(new Coord2D(0, 0));
         }
-        Integer counter = 0;
         visited.addAll(locations);
         for (String direction : directions) {
-            int choice = counter % locations.size();
-            Coord2D currentTurn = locations.remove(choice);
+            Coord2D currentTurn = locations.pollFirst();
             currentTurn = currentTurn.add(DIRECTIONS.get(direction));
             visited.add(currentTurn);
-            locations.add(choice,currentTurn);
-            counter++;
+            locations.addLast(currentTurn);
         }
         return visited.size();
     }
