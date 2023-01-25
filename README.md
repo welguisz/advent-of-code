@@ -14,6 +14,7 @@ the earliest.)
 * [Day 3, Perfectly Spherical Houses In a Vacuum](./src/resources/year2015/day03/README.md)
 * [Day 4, The Ideal Stocking Stuffer](./src/resources/year2015/day04/README.md)
 * [Day 5, Doesn't He Have Intern-Elves For This?](./src/resources/year2015/day05/README.md)
+* [Day 6, Probably a Fire Hazard](./src/resources/year2015/day06/README.md)
 
 ## Puzzles to come back to
 
