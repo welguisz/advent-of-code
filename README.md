@@ -17,6 +17,9 @@ the earliest.)
 * [Day 6, Probably a Fire Hazard](./src/resources/year2015/day06/README.md)
 * [Day 7, Some Assembly Required](./src/resources/year2015/day07/README.md)
 * [Day 8, Matchsticks](./src/resources/year2015/day08/README.md)
+* [Day 9, All In A Single Night](./src/resources/year2015/day09/README.md)
+
+
 ## Puzzles to come back to
 
 ### Year 2015

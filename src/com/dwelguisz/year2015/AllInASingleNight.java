@@ -2,65 +2,60 @@ package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
 import com.google.common.collect.Collections2;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.lang.Integer.parseInt;
 
 public class AllInASingleNight extends AoCDay {
 
-    Map<String, Integer> distances;
-    Set<String> places;
-
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2015/day09/input.txt");
-        createMap(lines);
-        Integer part1 = solutionPart1();
-        Integer part2 = solutionPart2();
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2015,9,false,0);
+        List<Integer> allDistances = findAllDistances(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(allDistances);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(allDistances);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    public void createMap(List<String> lines) {
-        distances = new HashMap<>();
-        places = new HashSet<>();
+    public List<Integer> findAllDistances(List<String> lines) {
+        Map<Pair<String,String>, Integer> distances = new HashMap<>();
+        Set<String> places = new HashSet<>();
         for (String line:lines) {
             String[] points = line.split(" ");
             Integer distance = parseInt(points[4]);
             places.add(points[0]);
             places.add(points[2]);
-            distances.put(points[0]+points[2], distance);
-            distances.put(points[2]+points[0], distance);
+            distances.put(Pair.of(points[0],points[2]), distance);
+            distances.put(Pair.of(points[2],points[0]), distance);
         }
+        Collection<List<String>> permutations = Collections2.permutations(places);
+        List<Integer> travelledDistance = new ArrayList<>();
+        for (List<String> p : permutations) {
+            Integer distance = 0;
+            for(int i = 0; i < p.size()-1; i++) {
+                distance += distances.get(Pair.of(p.get(i),p.get(i+1)));
+            }
+            travelledDistance.add(distance);
+        }
+        return travelledDistance;
     }
 
-    public Integer solutionPart1() {
-        int min = Integer.MAX_VALUE;
-        for (List<String> perm : Collections2.permutations(places)) {
-            int len = 0;
-            for (int i = 0; i < perm.size()-1; i++) {
-                len += distances.get(perm.get(i)+perm.get(i+1));
-            }
-            if (len < min) {
-                min = len;
-            }
-        }
-        return min;
+    public Integer solutionPart1(List<Integer> distances) {
+        return distances.stream().mapToInt(d -> d).min().getAsInt();
     }
 
-    public Integer solutionPart2() {
-        int max = Integer.MIN_VALUE;
-        for (List<String> perm : Collections2.permutations(places)) {
-            int len = 0;
-            for (int i = 0; i < perm.size()-1; i++) {
-                len += distances.get(perm.get(i)+perm.get(i+1));
-            }
-            if (len > max) {
-                max = len;
-            }
-        }
-        return max;
+    public Integer solutionPart2(List<Integer> distances) {
+        return distances.stream().mapToInt(d -> d).max().getAsInt();
     }
-
-
 }
