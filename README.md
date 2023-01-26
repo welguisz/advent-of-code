@@ -15,6 +15,7 @@ the earliest.)
 * [Day 4, The Ideal Stocking Stuffer](./src/resources/year2015/day04/README.md)
 * [Day 5, Doesn't He Have Intern-Elves For This?](./src/resources/year2015/day05/README.md)
 * [Day 6, Probably a Fire Hazard](./src/resources/year2015/day06/README.md)
+* [Day 7, Some Assembly Required](./src/resources/year2015/day07/README.md)
 
 ## Puzzles to come back to
 
