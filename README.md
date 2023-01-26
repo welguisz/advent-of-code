@@ -16,7 +16,7 @@ the earliest.)
 * [Day 5, Doesn't He Have Intern-Elves For This?](./src/resources/year2015/day05/README.md)
 * [Day 6, Probably a Fire Hazard](./src/resources/year2015/day06/README.md)
 * [Day 7, Some Assembly Required](./src/resources/year2015/day07/README.md)
-
+* [Day 8, Matchsticks](./src/resources/year2015/day08/README.md)
 ## Puzzles to come back to
 
 ### Year 2015
