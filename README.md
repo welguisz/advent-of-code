@@ -21,6 +21,7 @@ the earliest.)
 * [Day 10, Elves Look, Elves Say](docs/year2015/day10/README.md)
 * [Day 11, Corporate Policy](docs/year2015/day11/README.md)
 * [Day 12, JSAbacusFramework.io](docs/year2015/day12/README.md)
+* [Day 13, Knights of the Dinner Table](docs/year2015/day13/README.md)
 
 ## Puzzles to come back to
 

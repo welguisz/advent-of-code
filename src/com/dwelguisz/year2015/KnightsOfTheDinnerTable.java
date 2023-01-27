@@ -4,6 +4,7 @@ import com.dwelguisz.base.AoCDay;
 import com.google.common.collect.Collections2;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,58 +16,56 @@ import java.util.stream.Collectors;
 import static java.lang.Integer.parseInt;
 
 public class KnightsOfTheDinnerTable extends AoCDay {
-    Map<String, Integer> dinnerTable;
-    Set<String> people;
 
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2015/day13/input.txt");
-        createTable(lines);
-        Integer part1 = solutionPart1();
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        addMe();
-        Integer part2 = solutionPart1();
-        System.out.println(String.format("Part 2 Answer: %d", part2));
-
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2015,13,false,0);
+        Map<Pair<String,String>,Integer> dinnerTable = createTable(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(dinnerTable);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        dinnerTable = addMe(dinnerTable);
+        part2Answer = solutionPart1(dinnerTable);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    public void addMe() {
+    public Map<Pair<String, String>, Integer> addMe(Map<Pair<String, String>, Integer> dinnerTable) {
         String myName = "Steven";
-        List<String> allPeople = people.stream().collect(Collectors.toList());
-        for (String neighbor : allPeople) {
-            dinnerTable.put(neighbor+myName,0);
-            dinnerTable.put(myName+neighbor,0);
+        Set<String> people = dinnerTable.keySet().stream().map(key -> key.getLeft()).collect(Collectors.toSet());
+        for (String neighbor : people) {
+            dinnerTable.put(Pair.of(neighbor,myName),0);
+            dinnerTable.put(Pair.of(myName,neighbor),0);
         }
         people.add(myName);
+        return dinnerTable;
     }
-    public void createTable(List<String> lines) {
-        dinnerTable = new HashMap<>();
-        people = new HashSet<>();
+    public Map<Pair<String,String>, Integer> createTable(List<String> lines) {
+        Map<Pair<String, String>, Integer> dinnerTable = new HashMap<>();
         for (String fullline:lines) {
             String line = fullline.substring(0,fullline.length()-1);
             String[] points = line.split(" ");
             Integer multiplier = points[2].equals("gain") ? 1 : -1;
-            Integer distance = parseInt(points[3]) * multiplier;
-            people.add(points[0]);
-            people.add(points[10]);
-            dinnerTable.put(points[0]+points[10], distance);
+            Integer happiness = parseInt(points[3]) * multiplier;
+            dinnerTable.put(Pair.of(points[0],points[10]), happiness);
         }
+        return dinnerTable;
     }
 
-    public Integer solutionPart1() {
-        int max = Integer.MIN_VALUE;
+    public Integer solutionPart1(Map<Pair<String,String>, Integer> dinnerTable) {
+        int maxHappiness = Integer.MIN_VALUE;
+        Set<String> people = dinnerTable.keySet().stream().map(key -> key.getLeft()).collect(Collectors.toSet());
         for (List<String> perm : Collections2.permutations(people)) {
-            int len = 0;
+            int happiness = 0;
             for (int i = 0; i < perm.size(); i++) {
                 int nextNum = (i + 1 == perm.size()) ? 0 : i + 1;
-                len += dinnerTable.get(perm.get(i)+perm.get(nextNum));
-                len += dinnerTable.get(perm.get(nextNum)+perm.get(i));
+                happiness += dinnerTable.get(Pair.of(perm.get(i),perm.get(nextNum)));
+                happiness += dinnerTable.get(Pair.of(perm.get(nextNum),perm.get(i)));
             }
-            if (len > max) {
-                max = len;
+            if (happiness > maxHappiness) {
+                maxHappiness = happiness;
             }
         }
-        return max;
+        return maxHappiness;
     }
-
 }
