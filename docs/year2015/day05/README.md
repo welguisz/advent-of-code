@@ -1,6 +1,6 @@
 # Day 5: Doesn't He Have Intern-Elves For This?
 
-[Back to Top README file](../../../../README.md)
+[Back to Top README file](../../../README.md)
 ## Overview
 Difficult Level: Easy
 

@@ -1,6 +1,6 @@
 # Day 7: Some Assembly Required
 
-[Back to Top README file](../../../../README.md)
+[Back to Top README file](../../../README.md)
 ## Overview
 Difficult Level: Easy/Medium
 

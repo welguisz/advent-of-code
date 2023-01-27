@@ -1,6 +1,6 @@
 # Day 9: All In A Single Night
 
-[Back to Top README file](../../../../README.md)
+[Back to Top README file](../../../README.md)
 ## Overview
 Difficult Level: Easy
 

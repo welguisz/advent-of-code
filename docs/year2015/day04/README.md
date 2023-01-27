@@ -1,6 +1,6 @@
 # Day 4: The Ideal Stocking Stuffer
 
-[Back to Top README file](../../../../README.md)
+[Back to Top README file](../../../README.md)
 ## Overview
 Difficult Level: Easy
 

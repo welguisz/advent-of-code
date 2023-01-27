@@ -1,6 +1,6 @@
 # Day 6: Probably a Fire Hazard
 
-[Back to Top README file](../../../../README.md)
+[Back to Top README file](../../../README.md)
 ## Overview
 Difficult Level: Easy/Medium
 

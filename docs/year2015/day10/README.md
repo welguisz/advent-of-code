@@ -1,28 +1,19 @@
-package com.dwelguisz.year2015;
+# Day 10: Elves Look, Elves Say
+
+[Back to Top README file](../../../README.md)
+## Overview
+Difficult Level: Easy
+
+Input: An Integer
 
 
-import com.dwelguisz.base.AoCDay;
+## General approach to both parts
+There might be an elegant solution, but I couldn't think of one.  The only thing
+that I could think was a while loop that counts the number of consecutive
+characters and when it encounters a difference, add to the next string. This
+produces the following function:
 
-import java.time.Instant;
-
-public class ElvesLookElvesSay extends AoCDay {
-    public void solve() {
-        timeMarkers[0] = Instant.now().toEpochMilli();
-        timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = part1("1113222113", 40);
-        timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = part1("1113222113", 50);
-        timeMarkers[3] = Instant.now().toEpochMilli();
-    }
-
-    Integer part1(String newStr, Integer steps) {
-        String tmpStr = newStr;
-        for (int i = 0; i < steps; i++) {
-            tmpStr = LookAndSay(tmpStr);
-        }
-        return tmpStr.length();
-    }
-
+```java
     String LookAndSay(String inputStr) {
         char[] digits = inputStr.toCharArray();
         int currentPos = 0;
@@ -44,4 +35,8 @@ public class ElvesLookElvesSay extends AoCDay {
         }
         return newString.toString();
     }
-}
+```
+
+For both parts, run the string through the loop the requested time.
+
+|[Previous (Day 9)](../day09/README.md)|[Next (Day 11)](../day11/README.md)|

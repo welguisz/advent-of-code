@@ -1,6 +1,6 @@
 # Day 8: Matchsticks
 
-[Back to Top README file](../../../../README.md)
+[Back to Top README file](../../../README.md)
 ## Overview
 Difficult Level: Easy
 

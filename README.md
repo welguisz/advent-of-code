@@ -9,15 +9,15 @@ not update the current year's solution thoughts until January of the next year
 the earliest.)
 
 ## Year 2015
-* [Day 1, Not Quite Lisp](./src/resources/year2015/day01/README.md)
-* [Day 2, I Was Told There Would Be No Math](./src/resources/year2015/day02/README.md)
-* [Day 3, Perfectly Spherical Houses In a Vacuum](./src/resources/year2015/day03/README.md)
-* [Day 4, The Ideal Stocking Stuffer](./src/resources/year2015/day04/README.md)
-* [Day 5, Doesn't He Have Intern-Elves For This?](./src/resources/year2015/day05/README.md)
-* [Day 6, Probably a Fire Hazard](./src/resources/year2015/day06/README.md)
-* [Day 7, Some Assembly Required](./src/resources/year2015/day07/README.md)
-* [Day 8, Matchsticks](./src/resources/year2015/day08/README.md)
-* [Day 9, All In A Single Night](./src/resources/year2015/day09/README.md)
+* [Day 1, Not Quite Lisp](docs/year2015/day01/README.md)
+* [Day 2, I Was Told There Would Be No Math](docs/year2015/day02/README.md)
+* [Day 3, Perfectly Spherical Houses In a Vacuum](docs/year2015/day03/README.md)
+* [Day 4, The Ideal Stocking Stuffer](docs/year2015/day04/README.md)
+* [Day 5, Doesn't He Have Intern-Elves For This?](docs/year2015/day05/README.md)
+* [Day 6, Probably a Fire Hazard](docs/year2015/day06/README.md)
+* [Day 7, Some Assembly Required](docs/year2015/day07/README.md)
+* [Day 8, Matchsticks](docs/year2015/day08/README.md)
+* [Day 9, All In A Single Night](docs/year2015/day09/README.md)
 
 
 ## Puzzles to come back to

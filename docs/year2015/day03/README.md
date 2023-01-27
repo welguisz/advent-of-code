@@ -1,6 +1,6 @@
 # Day 3: Perfectly Spherical Houses In a Vacuum
 
-[Back to Top README file](../../../../README.md)
+[Back to Top README file](../../../README.md)
 ## Overview
 Difficult Level: Easy
 

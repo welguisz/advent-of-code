@@ -1,6 +1,6 @@
 # Day 2: I Was Told There Would Be No Math
 
-[Back to Top README file](../../../../README.md)
+[Back to Top README file](../../../README.md)
 ## Overview
 Difficult Level: Easy
 
