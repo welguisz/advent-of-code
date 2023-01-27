@@ -22,6 +22,7 @@ the earliest.)
 * [Day 11, Corporate Policy](docs/year2015/day11/README.md)
 * [Day 12, JSAbacusFramework.io](docs/year2015/day12/README.md)
 * [Day 13, Knights of the Dinner Table](docs/year2015/day13/README.md)
+* [Day 14, Reindeer Olympics](docs/year2015/day14/README.md)
 
 ## Puzzles to come back to
 

@@ -2,6 +2,7 @@ package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,10 +62,8 @@ public class ReindeerOlympics extends AoCDay {
             return distanceTraveledInSecondRace;
         }
 
-        public void atMaxDistance(Integer distance) {
-            if (distanceTraveledInSecondRace.equals(distance)) {
-                currentPoints++;
-            }
+        public void incPoints() {
+            currentPoints++;
         }
 
         public Integer getCurrentPoints() {
@@ -75,12 +74,14 @@ public class ReindeerOlympics extends AoCDay {
     List<Reindeer> reindeers;
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2015/day14/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2015,14,false,0);
         createReindeers(lines);
-        Integer part1 = findWinnerDistance(2503);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        Integer part2 = findNewWinnerPoints(2503);
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = findWinnerDistance(2503);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = findNewWinnerPoints(2503);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public void createReindeers(List<String> lines) {
@@ -96,16 +97,17 @@ public class ReindeerOlympics extends AoCDay {
     }
 
     public Integer findWinnerDistance(Integer seconds) {
-        List<Integer> distances = reindeers.stream().map(r -> r.distanceTraveled(seconds)).collect(Collectors.toList());
-        return distances.stream().max(Integer::compareTo).get();
+        return reindeers.stream().mapToInt(r -> r.distanceTraveled(seconds)).max().getAsInt();
     }
 
     public Integer findNewWinnerPoints(Integer seconds) {
         for (int i = 0; i < seconds; i++) {
             reindeers.stream().forEach(r -> r.stepOneSecond());
-            Integer currentMaxDistance = reindeers.stream().map(Reindeer::getDistanceTraveledInSecondRance).max(Integer::compareTo).get();
-            reindeers.stream().forEach(r -> r.atMaxDistance(currentMaxDistance));
+            Integer currentMaxDistance = reindeers.stream().mapToInt(Reindeer::getDistanceTraveledInSecondRance).max().getAsInt();
+            reindeers.stream()
+                    .filter(r -> r.getDistanceTraveledInSecondRance().equals(currentMaxDistance)).
+                    forEach(Reindeer::incPoints);
         }
-        return reindeers.stream().map(Reindeer::getCurrentPoints).max(Integer::compareTo).get();
+        return reindeers.stream().mapToInt(Reindeer::getCurrentPoints).max().getAsInt();
     }
 }
