@@ -102,4 +102,4 @@ For both parts, we just need to find the next valid password given the input.
     }
 ```
 
-|[Previous (Day 10)](../day10/README.md)|[Next (Day 12)](../day11/README.md)|
+|[Previous (Day 10)](../day10/README.md)|[Next (Day 12)](../day12/README.md)|

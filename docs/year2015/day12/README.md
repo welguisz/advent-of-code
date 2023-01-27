@@ -1,42 +1,19 @@
-package com.dwelguisz.year2015;
+# Day 12: JSAbacusFramework.io
 
-import com.dwelguisz.base.AoCDay;
-import org.json.JSONArray;
-import org.json.JSONObject;
+[Back to Top README file](../../../README.md)
+## Overview
+Difficult Level: Easy
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.CharBuffer;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.stream.Collectors;
+Input: JSON object
 
-public class JSAbacusFramework extends AoCDay {
-    public void solve() {
-        String myJson = "";
-        timeMarkers[0] = Instant.now().toEpochMilli();
-            myJson = new Scanner(getFileFromResourceStream(2015,12,false,0))
-                    .useDelimiter("\\Z").next();
-        JSONObject myJsonObject = new JSONObject(myJson);
-        timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(myJsonObject);
-        timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(myJsonObject);
-        timeMarkers[3] = Instant.now().toEpochMilli();
-    }
+This puzzle is about how well can you understand JSON and how your programming
+language handles JSON.
 
-    public Integer solutionPart1(JSONObject jsonValue) {
-        return processHashMap(jsonValue.toMap(), false).stream().mapToInt(l -> l).sum();
-    }
+## Both parts
+When reading in the input, treat it as a JSON Document. When doing that, it makes
+the processing easier.
 
-    public Integer solutionPart2(JSONObject jsonValue) {
-        return processHashMap(jsonValue.toMap(), true).stream().mapToInt(l -> l).sum();
-    }
-
+```java
     private List<Integer> processHashMap(Map<String, Object> values, boolean part2) {
         List<Integer> numbers = new ArrayList<>();
         Long keysWithRed = values.keySet().stream().filter(key -> key.equals("red")).count();
@@ -79,4 +56,18 @@ public class JSAbacusFramework extends AoCDay {
         }
         return new ArrayList<>();
     }
-}
+```
+
+The above leads the following calls:
+
+```java
+    public Integer solutionPart1(JSONObject jsonValue) {
+        return processHashMap(jsonValue.toMap(), false).stream().mapToInt(l -> l).sum();
+    }
+
+    public Integer solutionPart2(JSONObject jsonValue) {
+        return processHashMap(jsonValue.toMap(), true).stream().mapToInt(l -> l).sum();
+    }
+```
+
+|[Previous (Day 11)](../day11/README.md)|[Next (Day 13)](../day13/README.md)|

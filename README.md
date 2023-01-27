@@ -19,7 +19,8 @@ the earliest.)
 * [Day 8, Matchsticks](docs/year2015/day08/README.md)
 * [Day 9, All In A Single Night](docs/year2015/day09/README.md)
 * [Day 10, Elves Look, Elves Say](docs/year2015/day10/README.md)
-* [Day 11, Corporate Policy](docs/year2016/day11/README.md)
+* [Day 11, Corporate Policy](docs/year2015/day11/README.md)
+* [Day 12, JSAbacusFramework.io](docs/year2015/day12/README.md)
 
 ## Puzzles to come back to
 
