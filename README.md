@@ -18,7 +18,8 @@ the earliest.)
 * [Day 7, Some Assembly Required](docs/year2015/day07/README.md)
 * [Day 8, Matchsticks](docs/year2015/day08/README.md)
 * [Day 9, All In A Single Night](docs/year2015/day09/README.md)
-
+* [Day 10, Elves Look, Elves Say](docs/year2015/day10/README.md)
+* [Day 11, Corporate Policy](docs/year2016/day11/README.md)
 
 ## Puzzles to come back to
 

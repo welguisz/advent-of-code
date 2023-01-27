@@ -1,37 +1,43 @@
-package com.dwelguisz.year2015;
+# Day 11: Corporate Policy
 
-import com.dwelguisz.base.AoCDay;
+[Back to Top README file](../../../README.md)
+## Overview
+Difficult Level: Easy
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+Input: A random string
 
-public class CorporatePolicy extends AoCDay {
-    public static List<Character> BAD_CHARS = List.of('i','o','l');
+Given a set of rules, increment the string until a string matches the Corporate
+Policy for passwords.
 
-    public void solve() {
-        timeMarkers[0] = Instant.now().toEpochMilli();
-        String oldPassword = "cqjxjnds";
-        timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(oldPassword);
-        timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart1((String) part1Answer);
-        timeMarkers[3] = Instant.now().toEpochMilli();
+###
+As an Electrical Engineer, I saw this problem as an adder with a carry. So starting
+at the end of the string, add 1 and work to the beginning of the string.  The
+simplified algorithm is:
+
+```java
+char[] chars = password.toCharArray();
+char[] newPasswordAttempt = new char[chars.length];
+char carry = 1;
+for (int i = str.length-1;i >= 0;i--) {
+    char tmp = (char)(chars[i]+carry);
+    if (tmp > 'z') {
+       tmp = 'a';
+       carry = 1;
+    } else {
+       carry = 0; 
     }
+}
+```
 
-    public String solutionPart1(String oldPassword) {
-        String newPassword = incrementPassword(oldPassword);
-        while (!passwordValid(newPassword)) {
-            newPassword = incrementPassword(newPassword);
-        }
-        return newPassword;
-    }
+Then just check that the password is valid.  This is the most brute force method
+to get things done.  If we want to make it faster, we should skip any password
+as soon as we know it is bad.  There is only rule that gives us the chance to skip
+lots of bad passwords and that is to avoid the unallowed characters ('i', 'o', 'l').
 
+So if we see a character that is bad, increment the count and change the characters
+after the change to 'a'.  So the above code changes to:
+
+```java
     public String incrementPassword(String oldPassword) {
         char chars[] = oldPassword.toCharArray();
         char newChars[] = oldPassword.toCharArray();
@@ -55,7 +61,12 @@ public class CorporatePolicy extends AoCDay {
         }
         return String.valueOf(newChars);
     }
+```
 
+### Valid checks
+We need to make sure the password is valid so we have the following checks:
+
+```java
     public boolean passwordValid(String currentPassword) {
         char charsT[] = currentPassword.toCharArray();
         Character chars[] = new Character[charsT.length];
@@ -76,4 +87,19 @@ public class CorporatePolicy extends AoCDay {
         Set<List<Character>> doubleLetters = characterGroups.stream().filter(cg -> cg.get(0) == cg.get(1)).collect(Collectors.toSet());
         return (doubleLetters.size() == 2);
     }
-}
+```
+
+# Part 1 and Part 2
+For both parts, we just need to find the next valid password given the input.
+
+```java
+    public String solutionPart1(String oldPassword) {
+        String newPassword = incrementPassword(oldPassword);
+        while (!passwordValid(newPassword)) {
+            newPassword = incrementPassword(newPassword);
+        }
+        return newPassword;
+    }
+```
+
+|[Previous (Day 10)](../day10/README.md)|[Next (Day 12)](../day11/README.md)|
