@@ -1,7 +1,9 @@
 package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,6 @@ public class ScienceForHungryPeople extends AoCDay {
         public Integer flavor;
         public Integer texture;
         public Integer calories;
-
         public Integer currentTsp;
 
         public Ingredient(String name, Integer capacity, Integer durability, Integer flavor, Integer texture, Integer calories) {
@@ -28,10 +29,6 @@ public class ScienceForHungryPeople extends AoCDay {
 
         public void setCurrentTsp(Integer tsp) {
             currentTsp = tsp;
-        }
-
-        public Integer getCurrentTsp() {
-            return currentTsp;
         }
 
         public Integer getCapacityScore() {
@@ -51,88 +48,27 @@ public class ScienceForHungryPeople extends AoCDay {
         }
     }
 
-    List<Ingredient> ingredientList;
-
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2015/day15/input.txt");
-        createIngredients(lines);
-        Long part1 = solutionPart1();
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        Long part2 = solutionPart2();
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2015,15,false,0);
+        List<Pair<Integer,Integer>> recipes = createIngredients(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(recipes);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(recipes);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    public Long solutionPart1() {
-        int numberOfIngredients = ingredientList.size();
-        Long maxScore = 0L;
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                for (int k = 0; k < 100; k++) {
-                    for (int l = 0; l < 100; l++) {
-                        if (i + j + k + l != 100) {
-                            continue;
-                        }
-                        ingredientList.get(0).setCurrentTsp(i);
-                        ingredientList.get(1).setCurrentTsp(j);
-                        ingredientList.get(2).setCurrentTsp(k);
-                        ingredientList.get(3).setCurrentTsp(l);
-                        int totalCapacityScore = ingredientList.stream().map(Ingredient::getCapacityScore).reduce(0, (a,b) -> a+b);
-                        int totalDurabilityScore = ingredientList.stream().map(Ingredient::getDurabilityScore).reduce(0, (a,b) -> a+b);
-                        int totalFlavorScore = ingredientList.stream().map(Ingredient::getFlavorScore).reduce(0, (a,b) -> a+b);
-                        int totalTextureScore = ingredientList.stream().map(Ingredient::getTextureScore).reduce(0, (a,b) -> a+b);
-                        if (totalCapacityScore <=0 || totalDurabilityScore <= 0 || totalFlavorScore <= 0 || totalTextureScore <= 0) {
-                            continue;
-                        }
-                        Long totalScore = 1L * totalCapacityScore * totalDurabilityScore * totalFlavorScore * totalTextureScore;
-                        if (totalScore > maxScore) {
-                            maxScore = totalScore;
-                        }
-                    }
-                }
-            }
-        }
-        return maxScore;
+    public Integer solutionPart1(List<Pair<Integer,Integer>> recipes) {
+        return recipes.stream().mapToInt(r -> r.getLeft()).max().getAsInt();
     }
 
-    public Long solutionPart2() {
-        int numberOfIngredients = ingredientList.size();
-        Long maxScore = 0L;
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                for (int k = 0; k < 100; k++) {
-                    for (int l = 0; l < 100; l++) {
-                        if (i + j + k + l != 100) {
-                            continue;
-                        }
-                        ingredientList.get(0).setCurrentTsp(i);
-                        ingredientList.get(1).setCurrentTsp(j);
-                        ingredientList.get(2).setCurrentTsp(k);
-                        ingredientList.get(3).setCurrentTsp(l);
-                        int totalCapacityScore = ingredientList.stream().map(Ingredient::getCapacityScore).reduce(0, (a,b) -> a+b);
-                        int totalDurabilityScore = ingredientList.stream().map(Ingredient::getDurabilityScore).reduce(0, (a,b) -> a+b);
-                        int totalFlavorScore = ingredientList.stream().map(Ingredient::getFlavorScore).reduce(0, (a,b) -> a+b);
-                        int totalTextureScore = ingredientList.stream().map(Ingredient::getTextureScore).reduce(0, (a,b) -> a+b);
-                        int totalCaloires = ingredientList.stream().map(Ingredient::getCaloriesScore).reduce(0, (a,b) -> a+b);
-                        if (totalCapacityScore <=0 || totalDurabilityScore <= 0 || totalFlavorScore <= 0 || totalTextureScore <= 0) {
-                            continue;
-                        }
-                        if (totalCaloires != 500) {
-                            continue;
-                        }
-                        Long totalScore = 1L * totalCapacityScore * totalDurabilityScore * totalFlavorScore * totalTextureScore;
-                        if (totalScore > maxScore) {
-                            maxScore = totalScore;
-                        }
-                    }
-                }
-            }
-        }
-        return maxScore;
+    public Integer solutionPart2(List<Pair<Integer,Integer>> recipes) {
+        return recipes.stream().filter(r -> r.getRight().equals(500)).mapToInt(r -> r.getLeft()).max().getAsInt();
     }
 
-
-    public void createIngredients(List<String> lines) {
-        ingredientList = new ArrayList<>();
+    public List<Pair<Integer, Integer>> createIngredients(List<String> lines) {
+        List<Ingredient> ingredientList = new ArrayList<>();
         for (String line : lines) {
             String splits[] = line.split(" ");
             String name = splits[0].substring(0,splits[0].length()-1);
@@ -143,5 +79,29 @@ public class ScienceForHungryPeople extends AoCDay {
             Integer calories = Integer.parseInt(splits[10]);
             ingredientList.add(new Ingredient(name, capacity, durability, flavor, texture, calories));
         }
+        List<Pair<Integer,Integer>> recipes = new ArrayList<>();
+        for (int i = 1; i < 97; i++) {
+            for (int j = 1; j < (98-i); j++) {
+                for (int k = 1; k < (99-(i+j)); k++) {
+                    int l = 100 - (i + j + k);
+                    ingredientList.get(0).setCurrentTsp(i);
+                    ingredientList.get(1).setCurrentTsp(j);
+                    ingredientList.get(2).setCurrentTsp(k);
+                    ingredientList.get(3).setCurrentTsp(l);
+                    List<Integer> noNegatives = new ArrayList<>();
+                    noNegatives.add(ingredientList.stream().mapToInt(Ingredient::getCapacityScore).sum());
+                    noNegatives.add(ingredientList.stream().mapToInt(Ingredient::getDurabilityScore).sum());
+                    noNegatives.add(ingredientList.stream().mapToInt(Ingredient::getFlavorScore).sum());
+                    noNegatives.add(ingredientList.stream().mapToInt(Ingredient::getTextureScore).sum());
+                    int totalCaloires = ingredientList.stream().mapToInt(Ingredient::getCaloriesScore).sum();
+                    if (noNegatives.stream().anyMatch(n -> n <= 0)) {
+                        continue;
+                    }
+                    Integer totalScore = noNegatives.stream().reduce(1, (a, b) -> a * b);
+                    recipes.add(Pair.of(totalScore, totalCaloires));
+                }
+            }
+        }
+        return recipes;
     }
 }

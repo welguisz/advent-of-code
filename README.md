@@ -23,6 +23,7 @@ the earliest.)
 * [Day 12, JSAbacusFramework.io](docs/year2015/day12/README.md)
 * [Day 13, Knights of the Dinner Table](docs/year2015/day13/README.md)
 * [Day 14, Reindeer Olympics](docs/year2015/day14/README.md)
+* [Day 15, Science for Hungry People](docs/year2015/day15/README.md)
 
 ## Puzzles to come back to
 
