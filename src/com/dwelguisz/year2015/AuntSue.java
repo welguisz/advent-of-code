@@ -2,6 +2,7 @@ package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,99 +40,120 @@ public class AuntSue extends AoCDay {
             this.perfumes = perfumes;
         }
 
-        public boolean checkChildren(Integer val) {
-            if (children < 0) {
-                return true;
+        public Integer checkChildren(Integer val) {
+            if (children == -1) {
+                return 0;
             }
-            return children == val;
+            return (children == val) ? 1 : 0;
         }
-        public boolean checkCats(Integer val) {
-            if (cats < 0) {
-                return true;
+        public Integer checkCats(Integer val) {
+            if (cats == -1) {
+                return 0;
             }
-            return cats == val;
+            return (cats == val) ? 1: 0;
         }
-        public boolean checkRetroCats(Integer val) {
-            if (cats < 0) {
-                return true;
+        public Integer checkRetroCats(Integer val) {
+            if (cats == -1) {
+                return 0;
             }
-            return cats > val;
+            return (cats > val) ? 1 : 0;
         }
-        public boolean checkSamoyeds(Integer val) {
-            if (samoyeds < 0) {
-                return true;
+        public Integer checkSamoyeds(Integer val) {
+            if (samoyeds == -1) {
+                return 0;
             }
-            return samoyeds == val;
+            return (samoyeds == val) ? 1 : 0;
         }
-        public boolean checkPomerians(Integer val) {
-            if (pomerians < 0) {
-                return true;
+        public Integer checkPomerians(Integer val) {
+            if (pomerians == -1) {
+                return 0;
             }
-            return pomerians == val;
+            return (pomerians == val) ? 1 : 0;
         }
-        public boolean checkRetroPomerians(Integer val) {
-            if (pomerians < 0) {
-                return true;
+        public Integer checkRetroPomerians(Integer val) {
+            if (pomerians == -1) {
+                return 0;
             }
-            return pomerians < val;
+            return (pomerians < val) ? 1: 0;
         }
-        public boolean checkAkitas(Integer val) {
-            if (akitas < 0) {
-                return true;
+        public Integer checkAkitas(Integer val) {
+            if (akitas == -1) {
+                return 0;
             }
-            return akitas == val;
+            return (akitas == val) ? 1 : 0;
         }
-        public boolean checkVizslas(Integer val) {
-            if (vizslas < 0) {
-                return true;
+        public Integer checkVizslas(Integer val) {
+            if (vizslas == -1) {
+                return 0;
             }
-            return vizslas == val;
+            return (vizslas == val) ? 1 : 0;
         }
-        public boolean checkGoldfish(Integer val) {
-            if (goldfish < 0) {
-                return true;
+        public Integer checkGoldfish(Integer val) {
+            if (goldfish == -1) {
+                return 0;
             }
-            return goldfish == val;
+            return (goldfish == val) ? 1 : 0;
         }
-        public boolean checkRetroGoldfish(Integer val) {
-            if (goldfish < 0) {
-                return true;
+        public Integer checkRetroGoldfish(Integer val) {
+            if (goldfish == -1) {
+                return 0;
             }
-            return goldfish < val;
+            return (goldfish < val) ? 1 : 0;
         }
-        public boolean checkTrees(Integer val) {
-            if (trees < 0) {
-                return true;
+        public Integer checkTrees(Integer val) {
+            if (trees == -1) {
+                return 0;
             }
-            return trees == val;
+            return (trees == val) ? 1 : 0;
         }
-        public boolean checkRetroTrees(Integer val) {
-            if (trees < 0) {
-                return true;
+        public Integer checkRetroTrees(Integer val) {
+            if (trees == -1) {
+                return 0;
             }
-            return trees > val;
+            return (trees > val) ? 1 : 0;
         }
-        public boolean checkCars(Integer val) {
-            if (cars < 0) {
-                return true;
+        public Integer checkCars(Integer val) {
+            if (cars == -1) {
+                return 0;
             }
-            return cars == val;
+            return (cars == val) ? 1 : 0;
         }
-        public boolean checkPerfumes(Integer val) {
-            if (perfumes < 0) {
-                return true;
+        public Integer checkPerfumes(Integer val) {
+            if (perfumes == -1) {
+                return 0;
             }
-            return perfumes == val;
+            return (perfumes == val) ? 1 : 0;
+        }
+
+        public Integer calculateScore(Integer children, Integer cats, Integer samoyeds, Integer pomerians, Integer akitas,
+                              Integer vizslas, Integer goldfish, Integer trees, Integer cars, Integer perfumes) {
+            return List.of(checkChildren(children), checkCats(cats), checkSamoyeds(samoyeds), checkPomerians(pomerians),
+                    checkAkitas(akitas), checkVizslas(vizslas), checkGoldfish(goldfish), checkTrees(trees), checkCars(cars),
+                    checkPerfumes(perfumes)).stream().mapToInt(i -> i).sum();
+        }
+
+        public Integer calculateRetroScore(Integer children, Integer cats, Integer samoyeds, Integer pomerians, Integer akitas,
+                                           Integer vizslas, Integer goldfish, Integer trees, Integer cars, Integer perfumes) {
+            return List.of(checkChildren(children), checkRetroCats(cats), checkSamoyeds(samoyeds),
+                    checkRetroPomerians(pomerians), checkAkitas(akitas), checkVizslas(vizslas), checkRetroGoldfish(goldfish),
+                    checkRetroTrees(trees), checkCars(cars), checkPerfumes(perfumes)).stream().mapToInt(i -> i).sum();
+        }
+        @Override
+        public String toString() {
+            return String.format("%d: children: %d, cats: %d, samoyeds: %d, pomerians: %d, akitas: %d, vizslas: %d, goldfish: %d, trees: %d, cars: %d, perfumes: %d",
+                    number, children, cats, samoyeds, pomerians, akitas, vizslas, goldfish, trees, cars, perfumes);
         }
     }
     List<Aunt> aunts;
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2015/day16/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2015,16,false,0);
         createAunts(lines);
-        Integer part1 = findGoodAunt(3,7,2,3,0,0,5,3,2,1);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        Integer part2 = findRetroencabulatorAunt(3,7,2,3,0,0,5,3,2,1);
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = findGoodAunt(3,7,2,3,0,0,5,3,2,1);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = findRetroencabulatorAunt(3,7,2,3,0,0,5,3,2,1);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public void createAunts(List<String> lines) {
@@ -164,42 +186,22 @@ public class AuntSue extends AoCDay {
 
     public Integer findGoodAunt(Integer children, Integer cats, Integer samoyeds, Integer pomerians, Integer akitas,
                                 Integer vizslas, Integer goldfish, Integer trees, Integer cars, Integer perfumes) {
-        List<Aunt> goodAunt = aunts.stream()
-                .filter(a -> a.checkChildren(children))
-                .filter(a -> a.checkCats(cats))
-                .filter(a -> a.checkSamoyeds(samoyeds))
-                .filter(a -> a.checkPomerians(pomerians))
-                .filter(a -> a.checkAkitas(akitas))
-                .filter(a -> a.checkVizslas(vizslas))
-                .filter(a -> a.checkGoldfish(goldfish))
-                .filter(a -> a.checkTrees(trees))
-                .filter(a -> a.checkCars(cars))
-                .filter(a -> a.checkPerfumes(perfumes))
-                .collect(Collectors.toList());
-        return goodAunt.get(0).number;
+        Integer goodAuntScore = aunts.stream()
+                .mapToInt(a -> a.calculateScore(children, cats, samoyeds,pomerians,akitas,vizslas,goldfish,trees,cars,perfumes))
+                .max().getAsInt();
+        return aunts.stream()
+                .filter(a -> a.calculateScore(children, cats, samoyeds,pomerians,akitas,vizslas,goldfish,trees,cars,perfumes) == goodAuntScore)
+                .collect(Collectors.toList()).get(0).number;
     }
 
     public Integer findRetroencabulatorAunt(Integer children, Integer cats, Integer samoyeds, Integer pomerians, Integer akitas,
                                 Integer vizslas, Integer goldfish, Integer trees, Integer cars, Integer perfumes) {
-        List<Aunt> goodAunt = aunts.stream()
-                .filter(a -> a.checkChildren(children))
-                .filter(a -> a.checkRetroCats(cats))
-                .filter(a -> a.checkSamoyeds(samoyeds))
-                .filter(a -> a.checkRetroPomerians(pomerians))
-                .filter(a -> a.checkAkitas(akitas))
-                .filter(a -> a.checkVizslas(vizslas))
-                .filter(a -> a.checkRetroGoldfish(goldfish))
-                .filter(a -> a.checkRetroTrees(trees))
-                .filter(a -> a.checkCars(cars))
-                .filter(a -> a.checkPerfumes(perfumes))
-                .collect(Collectors.toList());
-        StringBuffer sb = new StringBuffer();
-        for (Aunt aunt : goodAunt) {
-            sb.append(aunt.number);
-            sb.append(", ");
-        }
-        System.out.println(sb.toString());
-        return goodAunt.get(0).number;
+        Integer goodAuntScore = aunts.stream()
+                .mapToInt(a -> a.calculateRetroScore(children, cats, samoyeds,pomerians,akitas,vizslas,goldfish,trees,cars,perfumes))
+                .max().getAsInt();
+        return aunts.stream()
+                .filter(a -> a.calculateRetroScore(children, cats, samoyeds,pomerians,akitas,vizslas,goldfish,trees,cars,perfumes) == goodAuntScore)
+                .collect(Collectors.toList()).get(0).number;
     }
 
 }
