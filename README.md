@@ -24,6 +24,7 @@ the earliest.)
 * [Day 13, Knights of the Dinner Table](docs/year2015/day13/README.md)
 * [Day 14, Reindeer Olympics](docs/year2015/day14/README.md)
 * [Day 15, Science for Hungry People](docs/year2015/day15/README.md)
+* [Day 16, Aunt Sue](docs/year2015/day16/README.md)
 
 ## Puzzles to come back to
 
