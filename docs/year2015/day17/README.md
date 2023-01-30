@@ -1,23 +1,18 @@
-package com.dwelguisz.year2015;
+# Day 17: No Such Thing as Too Much
 
-import com.dwelguisz.base.AoCDay;
+[Back to Top README file](../../../README.md)
+## Overview
+Difficult Level: Easy
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+Input: List of container sizes
 
-public class NoSuchThingasTooMuch extends AoCDay {
-    public void solve() {
-        timeMarkers[0] = Instant.now().toEpochMilli();
-        List<String> lines = readResoruceFile(2015,17,false,0);
-        List<List<Integer>> possibleCombinations = createPossibleCombinations(lines, 150);
-        timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(possibleCombinations);
-        timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(possibleCombinations);
-        timeMarkers[3] = Instant.now().toEpochMilli();
-    }
+## The key idea
+The key to this problem is to see that we are looking for as many combinations
+of the containers that will hold the requested amount of egg nog.  We will be
+looking at possible combinations of containers and the sum of the list. To do this,
+we have to create a way to get all of the combinations and store them.
 
+```java
     public List<List<Integer>> createPossibleCombinations(List<String> lines, Integer target) {
         List<Integer> containerSizes = new ArrayList<>();
         for (String line : lines){
@@ -28,15 +23,6 @@ public class NoSuchThingasTooMuch extends AoCDay {
             possibleItems.addAll(combinations(containerSizes,i, target));
         }
         return possibleItems;
-    }
-
-    public Integer solutionPart1(List<List<Integer>> possibleCombinations) {
-        return possibleCombinations.size();
-    }
-
-    public Long solutionPart2(List<List<Integer>> possibleCombinations) {
-        Integer minimum = possibleCombinations.stream().mapToInt(nums -> nums.size()).min().getAsInt();
-        return possibleCombinations.stream().filter(pi -> pi.size() == minimum).count();
     }
 
     public List<List<Integer>> combinations(List<Integer> inputSet, int k, int target) {
@@ -55,7 +41,7 @@ public class NoSuchThingasTooMuch extends AoCDay {
                 return;
             }
             if (sum > target) {
-                return;
+              return;
             }
         } else if (needToAccumulate <= canAccumulate) {
             combinationsInternal(inputSet, k, results, accumulator, index + 1, target);
@@ -64,4 +50,24 @@ public class NoSuchThingasTooMuch extends AoCDay {
             accumulator.remove(accumulator.size()-1);
         }
     }
-}
+```
+
+Now for part1, we can just do the following:
+
+```java
+    public Integer solutionPart1(List<List<Integer>> possibleCombinations) {
+        return possibleCombinations.size();
+    }
+```
+
+And part 2 requires to find the minimum number of containers used and find any
+other combinations that use the same number of containers.
+
+```java
+    public Long solutionPart2(List<List<Integer>> possibleCombinations) {
+        Integer minimum = possibleCombinations.stream().mapToInt(nums -> nums.size()).min().getAsInt();
+        return possibleCombinations.stream().filter(pi -> pi.size() == minimum).count();
+    }
+```
+
+|[Previous (Day 16)](../day16/README.md)|[Next (Day 18)](../day18/README.md)|
