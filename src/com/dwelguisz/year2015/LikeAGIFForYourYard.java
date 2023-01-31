@@ -1,126 +1,90 @@
 package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.utilities.Coord2D;
 
+import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class LikeAGIFForYourYard extends AoCDay {
-    Integer[][] grid;
+
+    public static Coord2D NORTHWEST = new Coord2D(-1,-1);
+    public static Coord2D NORTH = new Coord2D(-1,0);
+    public static Coord2D NORTHEAST = new Coord2D(-1,1);
+    public static Coord2D WEST = new Coord2D(0,-1);
+    public static Coord2D EAST = new Coord2D(0,1);
+    public static Coord2D SOUTHWEST = new Coord2D(1,-1);
+    public static Coord2D SOUTH = new Coord2D(1,0);
+    public static Coord2D SOUTHEAST = new Coord2D(1,1);
+    public static List<Coord2D> NEIGHBORS = List.of(NORTHWEST, NORTH, NORTHEAST, WEST, EAST, SOUTHWEST, SOUTH, SOUTHEAST);
+
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2015/day18/input.txt");
-        createGrid(lines, false);
-        Integer part1 = solutionPart1();
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        createGrid(lines, true);
-        Integer part2 = solutionPart1();
-        System.out.println(String.format("Part 1 Answer: %d", part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2015,18,false,0);
+        Set<Coord2D> lightsOn = createGrid(lines, false);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lightsOn, false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        lightsOn = createGrid(lines, true);
+        part2Answer = solutionPart1(lightsOn, true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    public Integer solutionPart1() {
+    public Integer solutionPart1(Set<Coord2D> lights, Boolean part2) {
         for (int i = 0; i < 100; i++) {
-            updateGrid();
+            lights = updateGrid(lights, part2);
         }
-        return countLights();
+        return lights.size();
     }
-    public void createGrid(List<String> lines, boolean part2) {
-        grid = new Integer[100][100];
+
+    public Set<Coord2D> createGrid(List<String> lines, boolean part2) {
+        Set<Coord2D> newGrid = new HashSet<>();
         Integer row = 0;
         for (String line : lines) {
-            String temp[] = line.split("");
+            char[] lights = line.toCharArray();
             int col = 0;
-            for (String t : temp) {
-                grid[row][col] = (t.equals("#")) ? 1 : 0;
+            for (Character l : lights) {
+                if (l == '#') {
+                    newGrid.add(new Coord2D(row,col));
+                }
                 col++;
             }
             row++;
         }
         if (part2) {
-            grid[0][0] = 1;
-            grid[0][99] = 1;
-            grid[99][0] = 1;
-            grid[99][99] = 1;
+            newGrid.add(new Coord2D(0,0));
+            newGrid.add(new Coord2D(0,99));
+            newGrid.add(new Coord2D(99,0));
+            newGrid.add(new Coord2D(99,99));
         }
+        return newGrid;
     }
 
-    public void updateGrid() {
-        Integer[][] newGrid = new Integer[100][100];
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                newGrid[i][j] = newLight(i,j);
-            }
-        }
-        newGrid[0][0] = 1;
-        newGrid[0][99] = 1;
-        newGrid[99][0] = 1;
-        newGrid[99][99] = 1;
-        grid = newGrid;
-    }
-
-    public Integer newLight(int x, int y) {
-        int negativeX = x - 1;
-        int negativeY = y - 1;
-        int positiveX = x + 1;
-        int positiveY = y + 1;
-        int sum = 0;
-        if (negativeX >= 0) {
-            if(negativeY >= 0) {
-                sum += grid[negativeX][negativeY];
-            }
-            sum += grid[negativeX][y];
-            if (positiveY < 100) {
-                sum += grid[negativeX][positiveY];
-            }
-        }
-        if (negativeY >= 0) {
-            sum += grid[x][negativeY];
-        }
-        if (positiveY < 100) {
-            sum += grid[x][positiveY];
-        }
-        if (positiveX < 100) {
-            if(negativeY >= 0) {
-                sum += grid[positiveX][negativeY];
-            }
-            sum += grid[positiveX][y];
-            if (positiveY < 100) {
-                sum += grid[positiveX][positiveY];
-            }
-
-        }
-        if (grid[x][y] == 1) {
-            if (sum == 2 || sum == 3) {
-                return 1;
-            } else {
-                return 0;
-            }
-        } else {
-            if (sum == 3) {
-                return 1;
-            }
-        }
-        return 0;
-    }
-
-    public void printGrid() {
-        for (int i = 0; i < 100; i++) {
-            StringBuffer sb = new StringBuffer();
-            for (int j = 0; j < 100; j++) {
-                if (grid[i][j] == 0) {
-                    sb.append('.');
-                } else {
-                    sb.append('#');
+    public Set<Coord2D> updateGrid(final Set<Coord2D> lights, Boolean part2) {
+        Set<Coord2D> lightsOn = new HashSet<>();
+        IntStream.range(0,100).boxed().forEach(row -> {
+            IntStream.range(0,100).boxed().forEach(col -> {
+                if (newLight(lights, new Coord2D(row,col))) {
+                    lightsOn.add(new Coord2D(row,col));
                 }
-            }
-            System.out.println(sb);
+            });
+        });
+        if (part2) {
+            lightsOn.add(new Coord2D(0,0));
+            lightsOn.add(new Coord2D(0,99));
+            lightsOn.add(new Coord2D(99,0));
+            lightsOn.add(new Coord2D(99,99));
         }
+        return lightsOn;
     }
-    public Integer countLights() {
-        Integer sum = 0;
-        for (int i = 0; i < 100; i++) {
-            for (int j = 0; j < 100; j++) {
-                sum += grid[i][j];
-            }
-        }
-        return sum;
+
+    public Boolean newLight(Set<Coord2D> lights, Coord2D coordinate) {
+        Long sum = NEIGHBORS.stream().map(n -> coordinate.add(n)).filter(n -> lights.contains(n)).count();
+        List<Long> keepOn = List.of(2L,3L);
+        return (lights.contains(coordinate) && (keepOn.contains(sum))) || (!lights.contains(coordinate) && sum.equals(3L));
     }
 }
