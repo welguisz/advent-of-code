@@ -2,6 +2,7 @@ package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,13 +17,15 @@ public class MedicineForRudolph extends AoCDay {
     String initialMolecule;
     Set<String> possibleValues;
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2015/day19/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2015,19,false,0);
         createReplacements(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
         doCalibrationStep();
-        Integer part1 = possibleValues.size();
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        Integer part2 = solutionPart2();
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        part1Answer = possibleValues.size();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public void doCalibrationStep() {
@@ -50,7 +53,6 @@ public class MedicineForRudolph extends AoCDay {
         for(String line : lines) {
             if (line.contains("=>")) {
                 String sides[] = line.split(" => ");
-                Integer reduxSize = sides[1].length();
                 List<String> values = replacements.getOrDefault(sides[0], new ArrayList<>());
                 values.add(sides[1]);
                 replacements.put(sides[0], values);
