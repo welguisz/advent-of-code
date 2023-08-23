@@ -23,6 +23,15 @@ import java.util.stream.Collectors;
 public class AoC2022Day16 extends BreadthFirstSearch {
 
 
+    Map<String, Valve> graph;
+    Map<String, Integer> flows;
+    Map<String, Integer> indicies;
+    Map<Pair<String, String>, Integer> distances;
+
+    Map<Pair<String,String>,Integer> pathCosts;
+    Map<String, Valve> valveMap;
+
+
     //Thoughts ... Find the valves that have a flow rate on them. Those are the ones that you want to visit
     //Find the time from one valve to another.
     // So to go from valve AA to valve BB, it will take 4 steps, so keep that number
@@ -42,12 +51,12 @@ public class AoC2022Day16 extends BreadthFirstSearch {
 
     public void solve() {
         System.out.println("Day 16 ready to go.");
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day16/testcase.txt");
+        List<String> lines = readResoruceFile(2022,16,false,0);
         Long parseTime = Instant.now().toEpochMilli();
-        List<Valve> parsedClass = parseLines(lines);
-        setUpImportantThings(parsedClass);
+        parseLines(lines);
+        setUpImportantThings();
         Long startTime = Instant.now().toEpochMilli();
-        Integer part1 = solutionPart1(parsedClass);
+        Integer part1 = solutionPart1(graph.values().stream().collect(Collectors.toList()));
         Long part1Time = Instant.now().toEpochMilli();
         //Integer part2 = solutionPart2(parsedClass);
         Long part2Time = Instant.now().toEpochMilli();
@@ -58,8 +67,8 @@ public class AoC2022Day16 extends BreadthFirstSearch {
         System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
     }
 
-    List<Valve> parseLines(List<String> lines) {
-        List<Valve> values = new ArrayList<>();
+    void parseLines(List<String> lines) {
+        graph = new HashMap<>();
         valveMap = new HashMap<>();
         for (String l : lines) {
             String s[] = l.split(" ");
@@ -68,28 +77,45 @@ public class AoC2022Day16 extends BreadthFirstSearch {
             Integer tunnelIndex = l.contains("valves") ? 7 : 6;
             String tunnels = l.substring(l.indexOf("valve") + tunnelIndex);
             Valve tmp = new Valve(name,flowRate,tunnels);
-            values.add(tmp);
+            graph.put(name, tmp);
             valveMap.put(name, tmp);
         }
-        return values;
     }
-    Map<Pair<String,String>,Integer> pathCosts;
-    Map<String, Valve> valveMap;
 
-    public void setUpImportantThings(List<Valve> valves) {
-        pathCosts = new HashMap<>();
-        List<String> valvesWithFlow = valves.stream().filter(v -> v.flowRate > 0).map(v -> v.name).collect(Collectors.toList());
-        if (!valvesWithFlow.contains("AA")) {
-            valvesWithFlow.add("AA");
+    public void setUpImportantThings() {
+        flows = graph.entrySet().stream()
+                .filter(entry -> entry.getValue().flowRate > 0)
+                .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().flowRate));
+        int bitnumber = 0;
+        indicies = new HashMap<>();
+        for (Map.Entry<String, Integer> val : flows.entrySet()) {
+            indicies.put(val.getKey(), 1 << bitnumber);
+            bitnumber++;
         }
-        List<List<String>> interestingPaths = combinations(valvesWithFlow, 2);
-        for (List<String> path : interestingPaths) {
-            TunnelNode initialNode = new TunnelNode(valveMap.get(path.get(0)),valveMap.get(path.get(1)),new ArrayList<>(),valveMap);
-            Integer cost = findShortestPathAllEqual(List.of(valveMap.get(path.get(0))), List.of(initialNode)) + 1;
-            pathCosts.put(Pair.of(path.get(0), path.get(1)), cost);
-            pathCosts.put(Pair.of(path.get(1), path.get(0)), cost);
+        List<String> valveNames = graph.values().stream()
+                .map(v -> v.name)
+                .collect(Collectors.toList());
+        distances = new HashMap<>();
+        for (String valve1 : valveNames) {
+            List<String> adjacentValves = graph.get(valve1).tunnelsDestinations;
+            for (String valve2 : valveNames) {
+                if (valve1.equals(valve2)) {
+                    distances.put(Pair.of(valve1, valve2), 0);
+                } else if (adjacentValves.contains(valve2)) {
+                    distances.put(Pair.of(valve1, valve2), 1);
+                } else {
+                    distances.put(Pair.of(valve1, valve2), 1_000_000);
+                }
+            }
         }
 
+        for (String k: valveNames) {
+            for (String i : valveNames) {
+                for (String j : valveNames) {
+                    distances.put(Pair.of(i,j), Integer.min(distances.get(Pair.of(i,j)), distances.get(Pair.of(i,k))+distances.get(Pair.of(k,j))));
+                }
+            }
+        }
     }
 
     public List<List<String>> combinations(List<String> inputSet, int k) {
@@ -141,15 +167,47 @@ public class AoC2022Day16 extends BreadthFirstSearch {
         return bFlow - aFlow;
     }
 
+    Map<Integer, List<Pair<Integer, Valve>>> calculatePressureMap(List<String> valvesWithFlow, Integer maxTime) {
+        Map<Integer, List<Pair<Integer, Valve>>> pressureMap = new HashMap<>();
+        for (String valve : valvesWithFlow) {
+            Valve currentValve = valveMap.get(valve);
+            Integer flowRate = valveMap.get(valve).flowRate;
+            for (int time = 0; time < maxTime; time++) {
+                Integer pressure = flowRate * (maxTime - time);
+                List<Pair<Integer,Valve>> temp = pressureMap.getOrDefault(pressure, new ArrayList<>());
+                temp.add(Pair.of(time, currentValve));
+                pressureMap.put(pressure, temp);
+            }
+        }
+        return pressureMap;
+    }
+
+    Map<Integer, Integer> visit(Valve valve, Integer minutes, Integer bitMask, Integer pressure, Map<Integer, Integer> answer) {
+        answer.put(bitMask, Integer.max(answer.getOrDefault(bitMask, 0), pressure));
+        for (Map.Entry<String, Integer> valve2 : flows.entrySet()) {
+            String valveName = valve2.getKey();
+            Valve valve2Tmp = graph.get(valveName);
+            Integer remainingMinutes = minutes - distances.get(Pair.of(valve.name, valve2Tmp.name)) - 1;
+            if (((indicies.get(valveName) & bitMask) != 0) || (remainingMinutes <= 0)) {
+                continue;
+            }
+
+            answer.putAll(
+                    visit(
+                            graph.get(valve2.getKey()),
+                            remainingMinutes,
+                            bitMask | indicies.get(valve2.getKey()),
+                            pressure + flows.get(valveName)*remainingMinutes,
+                            answer
+                    )
+            );
+        }
+        return answer;
+    }
+
     Integer solutionPart1(List<Valve> valves) {
-        List<String> valvesWithFlow = valves.stream().filter(v -> v.flowRate > 0).map(v -> v.name).sorted((a,b) -> compareFlow(a,b)).collect(Collectors.toList());
-        Boolean addedToList = true;
-        Integer k = 2;
-        Integer maxPressure = Integer.MIN_VALUE;
-        Integer totalTime = 30;
-        TunnelPathNode initialNode = new TunnelPathNode(valveMap.get("AA"),pathCosts, new ArrayList<>(),valveMap,30,0,valvesWithFlow);
-        Integer cost = findBestPathInTimeLimit(List.of(valveMap.get("AA")), List.of(initialNode), TunnelPathNode::compare);
-        return cost;
+        Map<Integer, Integer> answers = visit(graph.get("AA"), 30, 0, 0, new HashMap<>());
+        return answers.values().stream().mapToInt(i -> i).max().getAsInt();
     }
 
     Integer solutionPart2(List<Valve> valves) {

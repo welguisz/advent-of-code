@@ -97,7 +97,6 @@ public class TunnelPathNode extends SearchNode<String>  {
             }
         }
         return pressure;
-
     }
 
     public static int compare(Object o, Object o1) {
