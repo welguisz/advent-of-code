@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
 public class ProboscideaVolcanium extends AoCDay{
@@ -28,8 +29,21 @@ public class ProboscideaVolcanium extends AoCDay{
         }
     }
 
+    public static class PressureState {
+        public Valve valve;
+        public Integer bitMask;
+        public Integer pressure;
+        public Integer minutes;
+
+        public PressureState(Valve valve, Integer bitMask, Integer pressure, Integer minutes) {
+            this.valve = valve;
+            this.bitMask = bitMask;
+            this.pressure = pressure;
+            this.minutes = minutes;
+        }
+    }
+
     public void solve() {
-        System.out.println("Day 16 ready to go.");
         List<String> lines = readResoruceFile(2022,16,false,0);
         Long parseTime = Instant.now().toEpochMilli();
         parseLines(lines);
@@ -85,7 +99,6 @@ public class ProboscideaVolcanium extends AoCDay{
                 }
             }
         }
-
         for (String k: valveNames) {
             for (String i : valveNames) {
                 for (String j : valveNames) {
@@ -95,35 +108,38 @@ public class ProboscideaVolcanium extends AoCDay{
         }
     }
 
-    Map<Integer, Integer> visit(Valve valve, Integer minutes, Integer bitMask, Integer pressure, Map<Integer, Integer> answer) {
-        answer.put(bitMask, Integer.max(answer.getOrDefault(bitMask, 0), pressure));
-        for (Map.Entry<String, Integer> valve2 : flows.entrySet()) {
-            String valveName = valve2.getKey();
-            Valve valve2Tmp = graph.get(valveName);
-            Integer remainingMinutes = minutes - distances.get(Pair.of(valve.name, valve2Tmp.name)) - 1;
-            if (((indicies.get(valveName) & bitMask) != 0) || (remainingMinutes <= 0)) {
-                continue;
+    Map<Integer, Integer> visit(Valve valve, Integer minutes, Integer bitMask, Integer pressure) {
+        Map<Integer, Integer> result = new HashMap<>();
+        PriorityQueue<PressureState> pressureStates = new PriorityQueue<>(2000, (a,b) -> b.minutes - a.minutes);
+        pressureStates.add(new PressureState(valve, bitMask, pressure, minutes));
+        while (!pressureStates.isEmpty()) {
+            PressureState currentState = pressureStates.poll();
+            result.put(currentState.bitMask, Integer.max(result.getOrDefault(currentState.bitMask, 0), currentState.pressure));
+            for (Map.Entry<String, Integer> valve2 : flows.entrySet()) {
+                String valveName = valve2.getKey();
+                Valve valve2Name = graph.get(valveName);
+                Integer remainingMinutes = currentState.minutes - distances.get(Pair.of(currentState.valve.name, valve2Name.name)) - 1;
+                if (((indicies.get(valveName) & currentState.bitMask) != 0) || (remainingMinutes <= 0)) {
+                    continue;
+                }
+                pressureStates.add(new PressureState(
+                        graph.get(valveName),
+                        currentState.bitMask | indicies.get(valve2.getKey()),
+                        currentState.pressure + flows.get(valveName) * remainingMinutes,
+                        remainingMinutes
+                ));
             }
-            answer.putAll(
-                    visit(
-                            graph.get(valve2.getKey()),
-                            remainingMinutes,
-                            bitMask | indicies.get(valve2.getKey()),
-                            pressure + flows.get(valveName)*remainingMinutes,
-                            answer
-                    )
-            );
         }
-        return answer;
+        return result;
     }
 
     Integer solutionPart1() {
-        Map<Integer, Integer> answers = visit(graph.get("AA"), 30, 0, 0, new HashMap<>());
+        Map<Integer, Integer> answers = visit(graph.get("AA"), 30, 0, 0);
         return answers.values().stream().mapToInt(i -> i).max().getAsInt();
     }
 
     Integer solutionPart2() {
-        Map<Integer, Integer> visited = visit(graph.get("AA"), 26, 0, 0, new HashMap<>());
+        Map<Integer, Integer> visited = visit(graph.get("AA"), 26, 0, 0);
         Integer maxValue = Integer.MIN_VALUE;
         for (Map.Entry<Integer, Integer> visit1 : visited.entrySet()) {
             for (Map.Entry<Integer, Integer> visit2 : visited.entrySet()) {
