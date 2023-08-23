@@ -1,28 +1,27 @@
 package com.dwelguisz.year2022.helper;
 
 import com.dwelguisz.base.SearchNode;
-import com.dwelguisz.year2022.AoC2022Day16;
+import com.dwelguisz.year2022.ProboscideaVolcanium;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TunnelPathNode extends SearchNode<String>  {
-    public AoC2022Day16.Valve currentValve;
+    public ProboscideaVolcanium.Valve currentValve;
     Map<Pair<String,String>,Integer> pathCosts;
-    Map<String, AoC2022Day16.Valve> valveMap;
+    Map<String, ProboscideaVolcanium.Valve> valveMap;
     public List<String> valvesWithFlows;
     Integer timeLeft;
     Integer pressure;
 
     public TunnelPathNode (
-            AoC2022Day16.Valve currentValve,
+            ProboscideaVolcanium.Valve currentValve,
             Map<Pair<String,String>,Integer> pathCosts,
             List<SearchNode> visitedNodes,
-            Map<String, AoC2022Day16.Valve> valveMap,
+            Map<String, ProboscideaVolcanium.Valve> valveMap,
             Integer timeLeft,
             Integer pressure,
             List<String> valvesWithFlows) {
@@ -71,7 +70,7 @@ public class TunnelPathNode extends SearchNode<String>  {
     }
 
     public String getName() {
-        String tmp = visitedNodes.stream().map(vn -> ((AoC2022Day16.Valve)vn.getObj()).name).collect(Collectors.joining(" -> "));
+        String tmp = visitedNodes.stream().map(vn -> ((ProboscideaVolcanium.Valve)vn.getObj()).name).collect(Collectors.joining(" -> "));
         if (tmp.length() > 0) {
             tmp += " -> ";
         }

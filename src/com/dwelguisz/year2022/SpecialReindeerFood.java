@@ -14,7 +14,7 @@ public class SpecialReindeerFood extends AoCYear {
                 new CampCleanup(), new SupplyStacks(), new TuningTrouble(), new NoSpaceLeftOnDevice(),
                 new TreetopTreeHouse(), new RopeBridge(), new CathodeRayTube(), new MonkeyInTheMiddle(),
                 new HillClimbingAlgorithm(), new DistressSignal(), new RegolithReservoir(), new BeaconExclusionZone(),
-                new AoC2022Day16(), new PyroclasticFlow(), new BoilingBoulders(), new NotEnoughMinerals(),
+                new ProboscideaVolcanium(), new PyroclasticFlow(), new BoilingBoulders(), new NotEnoughMinerals(),
                 new GrovePositioningSystem(), new MonkeyMath(), new MonkeyMap(), new UnstableDiffusion(),
                 new BlizzardBasin(), new FullOfHotAir()
         };

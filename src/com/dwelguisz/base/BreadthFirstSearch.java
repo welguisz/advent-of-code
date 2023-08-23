@@ -1,6 +1,6 @@
 package com.dwelguisz.base;
 
-import com.dwelguisz.year2022.AoC2022Day16;
+import com.dwelguisz.year2022.ProboscideaVolcanium;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.function.BinaryOperator;
 
 public abstract class BreadthFirstSearch<T> extends AoCDay{
 
@@ -68,7 +67,7 @@ public abstract class BreadthFirstSearch<T> extends AoCDay{
 
 
     public Integer findShortestPathAllEqual(
-            List<AoC2022Day16.Valve> startingPoints,
+            List<ProboscideaVolcanium.Valve> startingPoints,
             List<SearchNode> initialNodes
     ) {
         Integer minSteps = Integer.MAX_VALUE;
@@ -83,7 +82,7 @@ public abstract class BreadthFirstSearch<T> extends AoCDay{
         }
         List<SearchNode> visitedNodes = new ArrayList<>();
         Set<String> currentlyInTheQueue = new HashSet<>();
-        for(AoC2022Day16.Valve points : startingPoints) {
+        for(ProboscideaVolcanium.Valve points : startingPoints) {
             currentlyInTheQueue.add(points.name);
         }
         while (!queue.isEmpty()) {
@@ -105,7 +104,7 @@ public abstract class BreadthFirstSearch<T> extends AoCDay{
     }
 
     public Integer findBestPathInTimeLimit(
-            List<AoC2022Day16.Valve> startingPoints,
+            List<ProboscideaVolcanium.Valve> startingPoints,
             List<SearchNode> initialNodes,
             Comparator<SearchNode> comparisonFunction
     ) {
@@ -116,7 +115,7 @@ public abstract class BreadthFirstSearch<T> extends AoCDay{
         }
         List<SearchNode> visitedNodes = new ArrayList<>();
         Set<String> currentlyInTheQueue = new HashSet<>();
-        for(AoC2022Day16.Valve points : startingPoints) {
+        for(ProboscideaVolcanium.Valve points : startingPoints) {
             currentlyInTheQueue.add(points.name);
         }
         while (!queue.isEmpty()) {
