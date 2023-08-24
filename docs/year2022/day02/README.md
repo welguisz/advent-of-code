@@ -1,4 +1,4 @@
-# Day 1: Rock Paper Scissors
+# Day 2: Rock Paper Scissors
 
 [Back to Top README file](../../../README.md)
 

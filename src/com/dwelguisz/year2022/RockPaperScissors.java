@@ -9,7 +9,7 @@ import java.util.Map;
 public class RockPaperScissors extends AoCDay {
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day02/input.txt");
+        List<String> lines = readResoruceFile(2022,2,false,0);
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = simulate(lines, false);
         timeMarkers[2] = Instant.now().toEpochMilli();

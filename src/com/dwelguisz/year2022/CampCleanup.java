@@ -3,6 +3,7 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,12 +12,14 @@ import java.util.stream.IntStream;
 
 public class CampCleanup extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day04/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022, 4, false, 0);
         List<Pair<List<Integer>,List<Integer>>> pairs = createPairs(lines);
-        Integer part1 = solutionPart1(pairs);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = solutionPart2(pairs);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(pairs);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(pairs);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public List<Pair<List<Integer>,List<Integer>>> createPairs(List<String> lines) {
@@ -30,27 +33,17 @@ public class CampCleanup extends AoCDay {
         return pairs;
     }
 
-    public Integer solutionPart1(List<Pair<List<Integer>,List<Integer>>> pairs) {
-        int count = 0;
-        for (Pair<List<Integer>,List<Integer>> pair : pairs) {
-            List<Integer> first = pair.getLeft();
-            List<Integer> second = pair.getRight();
-            boolean contained = first.containsAll(second);
-            contained = contained || second.containsAll(first);
-            count += contained ? 1 : 0;
-        }
-        return count;
+    public Long solutionPart1(List<Pair<List<Integer>,List<Integer>>> pairs) {
+        return pairs.stream()
+                .filter(p -> p.getRight().containsAll(p.getLeft()) || p.getLeft().containsAll(p.getRight()))
+                .count();
     }
 
-    public Integer solutionPart2(List<Pair<List<Integer>,List<Integer>>> pairs) {
-        Integer count = 0;
-        for (Pair<List<Integer>,List<Integer>> pair : pairs) {
-            List<Integer> first = pair.getLeft();
-            List<Integer> second = pair.getRight();
-            boolean overlap = first.stream().anyMatch(f -> second.contains(f));
-            count += overlap ? 1 : 0;
-        }
-        return count;
+    public Long solutionPart2(List<Pair<List<Integer>,List<Integer>>> pairs) {
+        return pairs.stream()
+                .filter(p -> p.getRight().stream()
+                        .anyMatch(f -> p.getLeft().contains(f)))
+                .count();
     }
 
 }
