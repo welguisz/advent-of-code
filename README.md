@@ -28,6 +28,9 @@ the earliest.)
 * [Day 17, No Such Thing as Too Much](docs/year2015/day17/README.md)
 * [Day 18, Like A GIF For Your Yard](docs/year2015/day18/README.md)
 
+## Year 2022
+* [Day 16, Proboscidea Volcanium](docs/year2022/day16/README.md)
+
 ## Puzzles to come back to
 
 ### Year 2015

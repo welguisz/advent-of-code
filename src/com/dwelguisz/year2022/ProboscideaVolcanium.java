@@ -44,20 +44,15 @@ public class ProboscideaVolcanium extends AoCDay{
     }
 
     public void solve() {
+        timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2022,16,false,0);
-        Long parseTime = Instant.now().toEpochMilli();
         parseLines(lines);
         setUpImportantThings();
-        Long startTime = Instant.now().toEpochMilli();
-        Integer part1 = solutionPart1();
-        Long part1Time = Instant.now().toEpochMilli();
-        Integer part2 = solutionPart2();
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     void parseLines(List<String> lines) {
@@ -79,8 +74,8 @@ public class ProboscideaVolcanium extends AoCDay{
                 .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue().flowRate));
         int bitnumber = 0;
         indicies = new HashMap<>();
-        for (Map.Entry<String, Integer> val : flows.entrySet()) {
-            indicies.put(val.getKey(), 1 << bitnumber);
+        for (String valName : flows.keySet()) {
+            indicies.put(valName, 1 << bitnumber);
             bitnumber++;
         }
         List<String> valveNames = graph.values().stream()

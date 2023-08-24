@@ -19,6 +19,6 @@ public class SpecialReindeerFood extends AoCYear {
                 new BlizzardBasin(), new FullOfHotAir()
         };
         AoCDay aocDay = aocDays[day-1];
-        aocDay.solve();
+        aocDay.run();
     }
 }

@@ -3,6 +3,7 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -10,12 +11,14 @@ import java.util.stream.Collectors;
 
 public class CalorieCounting extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day01/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,1,false,0);
         PriorityQueue<Integer> queue = createQueue(lines);
-        Integer part1 = queue.peek();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = queue.poll() + queue.poll() + queue.poll();
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = queue.peek();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = queue.poll() + queue.poll() + queue.poll();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public PriorityQueue<Integer> createQueue(List<String> lines) {
