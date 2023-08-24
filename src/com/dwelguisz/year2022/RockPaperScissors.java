@@ -2,16 +2,19 @@ package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
 public class RockPaperScissors extends AoCDay {
     public void solve() {
+        timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day02/input.txt");
-        Integer part1 = simulate(lines, false);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = simulate(lines, true);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = simulate(lines, false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = simulate(lines, true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer simulate(List<String> lines, Boolean part2) {
