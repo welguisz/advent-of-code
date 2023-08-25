@@ -33,6 +33,7 @@ the earliest.)
 * [Day 2, Rock Paper Scissors](docs/year2022/day02/README.md)
 * [Day 3, Rucksack Reorganization](docs/year2022/day03/README.md)
 * [Day 4, Camp Cleanup](docs/year2022/day04/README.md)
+* [Day 5, Supply Stacks](docs/year2022/day05/README.md)
 * [Day 16, Proboscidea Volcanium](docs/year2022/day16/README.md)
 
 ## Puzzles to come back to

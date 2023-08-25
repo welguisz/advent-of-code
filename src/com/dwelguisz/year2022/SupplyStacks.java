@@ -2,6 +2,7 @@ package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,11 +13,13 @@ import java.util.stream.Collectors;
 
 public class SupplyStacks extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day05/reddit.txt");
-        String part1 = solutionPart1(lines);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        String part2 = solutionPart2(lines);
-        System.out.println(String.format("Part 2 Answer: %s",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022, 5, false, 0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public List<Stack<String>> createStacks(List<String> lines) {
@@ -70,11 +73,7 @@ public class SupplyStacks extends AoCDay {
                 }
             }
         }
-        String returnStr = "";
-        for (Stack<String> c : curStack) {
-            returnStr += c.pop();
-        }
-        return returnStr;
+        return curStack.stream().map(stack -> stack.pop()).collect(Collectors.joining());
     }
 
     public String solutionPart2(List<String> lines) {
@@ -94,10 +93,6 @@ public class SupplyStacks extends AoCDay {
                 }
             }
         }
-        String returnStr = "";
-        for (Stack<String> c : curStack) {
-            returnStr += c.pop();
-        }
-        return returnStr;
+        return curStack.stream().map(stack -> stack.pop()).collect(Collectors.joining());
     }
 }
