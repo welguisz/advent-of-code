@@ -9,6 +9,7 @@ import com.dwelguisz.year2019.SolarSystem;
 import com.dwelguisz.year2020.Vacation;
 import com.dwelguisz.year2021.RetrieveTheKeys;
 import com.dwelguisz.year2022.SpecialReindeerFood;
+import com.dwelguisz.year2023.AoCYear2023;
 
 import static java.lang.Integer.parseInt;
 
@@ -52,6 +53,10 @@ public class AdventOfCode {
             }
             case 2022 : {
                 aoCYear = new SpecialReindeerFood(2022);
+                break;
+            }
+            case 2023: {
+                aoCYear = new AoCYear2023(2023);
                 break;
             }
         }
