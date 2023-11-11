@@ -3,16 +3,19 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TuningTrouble extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day06/input.txt");
-        Integer part1 = findPacket(lines.get(0),4);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = findPacket(lines.get(0),14);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022, 6, false, 0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = findPacket(lines.get(0),4);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = findPacket(lines.get(0),14);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer findPacket(String line, Integer size) {
@@ -30,7 +33,6 @@ public class TuningTrouble extends AoCDay {
             currentPosition += result.getRight();
         }
     }
-
 
     public Pair<Boolean,Integer> checkAllCombos(String line, List<List<Integer>> combos) {
         for (List<Integer> c : combos) {
