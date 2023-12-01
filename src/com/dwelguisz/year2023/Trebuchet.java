@@ -20,18 +20,19 @@ public class Trebuchet extends AoCDay {
 
     Long solutionPart1(List<String> lines) {
        return lines.stream().map(line ->
-            Arrays.stream(line.split(""))
-            .filter(str -> (str.toCharArray()[0] > 48) && (str.toCharArray()[0] < 58))
-            .map(Integer::parseInt)
-            .collect(Collectors.toList()))
-            .mapToLong(arr -> arr.get(0) * 10 + arr.get(arr.size()-1))
-            .sum();
+                       line.chars()
+                               .mapToObj(c -> c)
+                               .filter(val -> val > 48 && val < 58)
+                               .map(c -> c - 48)
+                               .collect(Collectors.toList()))
+               .mapToLong(arr -> arr.get(0) * 10 + arr.get(arr.size()-1))
+               .sum();
     }
 
     Long solutionPart2(List<String> lines) {
         return lines.stream()
                 .map(line ->
-                        Arrays.stream(line.toLowerCase()
+                        line.toLowerCase()
                                 .replaceAll("one","oe1oe") //only the first last and characters matter for overlap
                                 .replaceAll("two","to2to")
                                 .replaceAll("three","te3te")
@@ -41,10 +42,11 @@ public class Trebuchet extends AoCDay {
                                 .replaceAll("seven","sn7sn")
                                 .replaceAll("eight","et8et")
                                 .replaceAll("nine","e9e")
-                                .split(""))
-                        .filter(str -> (str.toCharArray()[0] > 48) && (str.toCharArray()[0] < 58))
-                        .map(Integer::parseInt)
-                        .collect(Collectors.toList()))
+                                .chars()
+                                .mapToObj(c -> c)
+                                .filter(val -> val > 48 && val < 58)
+                                .map(c -> c - 48)
+                                .collect(Collectors.toList()))
                 .mapToLong(arr -> arr.get(0) * 10 + arr.get(arr.size()-1))
                 .sum();
     }
