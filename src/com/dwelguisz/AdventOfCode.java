@@ -19,47 +19,14 @@ public class AdventOfCode {
             System.out.println("expected input:  <year> <day>, e.g. 2021 1");
             return;
         }
-        AoCYear aoCYear = new AoCYear(-1);
         Integer year = parseInt(args[0]);
         Integer day = parseInt(args[1]);
-        switch(year) {
-            case 2015 : {
-                aoCYear = new WeatherMachine(2015);
-                break;
-            }
-            case 2016 : {
-                aoCYear = new EasterBunny(2016);
-                break;
-            }
-            case 2017: {
-                aoCYear = new NaughtyOrNiceList(2017);
-                break;
-            }
-            case 2018: {
-                aoCYear = new TemporalAnomalies(2018);
-                break;
-            }
-            case 2019: {
-                aoCYear = new SolarSystem(2019);
-                break;
-            }
-            case 2020 : {
-                aoCYear = new Vacation(2020);
-                break;
-            }
-            case 2021 : {
-                aoCYear = new RetrieveTheKeys(2021);
-                break;
-            }
-            case 2022 : {
-                aoCYear = new SpecialReindeerFood(2022);
-                break;
-            }
-            case 2023: {
-                aoCYear = new GlobalSnowProduction(2023);
-                break;
-            }
-        }
+        AoCYear aocYears[] = {
+                new WeatherMachine(year), new EasterBunny(year), new NaughtyOrNiceList(year),
+                new TemporalAnomalies(year), new SolarSystem(year), new Vacation(year),
+                new RetrieveTheKeys(year), new SpecialReindeerFood(year), new GlobalSnowProduction(year)
+        };
+        AoCYear aoCYear = aocYears[year - 2015];
         if (day > 0) {
             aoCYear.runOneDay(day);
         } else {
