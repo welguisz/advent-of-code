@@ -29,22 +29,22 @@ public class Trebuchet extends AoCDay {
     }
 
     Long solutionPart2(List<String> lines) {
-        return lines.stream().map(line ->
+        return lines.stream()
+                .map(line ->
                         Arrays.stream(line.toLowerCase()
-                                        .replaceAll("one","one1one")
-                                        .replaceAll("two","two2two")
-                                        .replaceAll("three","three3three")
-                                        .replaceAll("four","four4four")
-                                        .replaceAll("five","five5five")
-                                        .replaceAll("six","six6six")
-                                        .replaceAll("seven","seven7seven")
-                                        .replaceAll("eight","eight8eight")
-                                        .replaceAll("nine","nine9nine")
-                                        .replaceAll("zero","zero0zero")
+                                .replaceAll("one","oe1oe") //only the first last and characters matter for overlap
+                                .replaceAll("two","to2to")
+                                .replaceAll("three","te3te")
+                                .replaceAll("four","4") //no overlaps with first/last char
+                                .replaceAll("five","e5e") //only overlaps with eight
+                                .replaceAll("six","s6s") //only overlaps with seven
+                                .replaceAll("seven","sn7sn")
+                                .replaceAll("eight","et8et")
+                                .replaceAll("nine","e9e")
                                 .split(""))
-                                .filter(str -> (str.toCharArray()[0] > 47) && (str.toCharArray()[0] < 58))
-                                .map(Integer::parseInt)
-                                .collect(Collectors.toList()))
+                        .filter(str -> (str.toCharArray()[0] > 48) && (str.toCharArray()[0] < 58))
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList()))
                 .mapToLong(arr -> arr.get(0) * 10 + arr.get(arr.size()-1))
                 .sum();
     }

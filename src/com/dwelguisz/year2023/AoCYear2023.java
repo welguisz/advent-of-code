@@ -8,7 +8,7 @@ public class AoCYear2023 extends AoCYear {
 
     @Override
     public void runOneDay(int day) {
-        AoCDay aocDays[] = {new Trebuchet()};
+        AoCDay aocDays[] = {new Trebuchet(), new AoCDay02()};
         AoCDay aoCDay = aocDays[day-1];
         aoCDay.run();
     }
