@@ -5,7 +5,9 @@ import com.dwelguisz.utilities.Coord3D;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CubeConundrum extends AoCDay {
@@ -20,21 +22,13 @@ public class CubeConundrum extends AoCDay {
             results = new ArrayList<>();
             String[] split2 = split1[1].split("; ");
             for(String sp : split2) {
-                int blue = 0;
-                int red = 0;
-                int green = 0;
                 String[] tmp = sp.split(", ");
+                Map<String, Integer> map = new HashMap<>();
                 for (String t : tmp) {
                     String info[] = t.split(" ");
-                    if (info[1].equals("blue")) {
-                        blue = Integer.parseInt(info[0]);
-                    } else if (info[1].equals("red")) {
-                        red = Integer.parseInt(info[0]);
-                    } else if (info[1].equals("green")) {
-                        green = Integer.parseInt(info[0]);
-                    }
+                    map.put(info[1], Integer.parseInt(info[0]));
                 }
-                results.add(new Coord3D(blue,red,green));
+                results.add(new Coord3D(map.getOrDefault("blue",0),map.getOrDefault("red",0),map.getOrDefault("green",0)));
             }
         }
 
