@@ -2,6 +2,7 @@ package com.dwelguisz.year2023;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord3D;
+import com.google.common.collect.Lists;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -17,19 +18,24 @@ public class CubeConundrum extends AoCDay {
         public List<Coord3D> results;
 
         public Games(String line) {
-            String[] split1 = line.split(": ");
-            id = Integer.parseInt(split1[0].split(" ")[1]);
+            String[] spaceSplits = line.split(" ");
+            String idString = spaceSplits[1].substring(0,spaceSplits[1].length()-1);
+            id = Integer.parseInt(idString);
             results = new ArrayList<>();
-            String[] split2 = split1[1].split("; ");
-            for(String sp : split2) {
-                String[] tmp = sp.split(", ");
-                Map<String, Integer> map = new HashMap<>();
-                for (String t : tmp) {
-                    String info[] = t.split(" ");
-                    map.put(info[1], Integer.parseInt(info[0]));
+            Map<String, Integer> map = new HashMap<>();
+            List<String> specialChars = Lists.newArrayList(",", ";");
+            for (int i = 2; i < spaceSplits.length; i+=2) {
+                final Integer lcv = i;
+                Integer lookback = specialChars.stream().anyMatch(c -> spaceSplits[lcv+1].contains(c)) ? 1 : 0;
+                String color = spaceSplits[i+1].substring(0,spaceSplits[i+1].length()-lookback);
+                Integer num = Integer.parseInt(spaceSplits[i]);
+                map.put(color,num);
+                if (spaceSplits[i+1].contains(";")) {
+                    results.add(new Coord3D(map.getOrDefault("blue",0),map.getOrDefault("red",0),map.getOrDefault("green",0)));
+                    map = new HashMap<>();
                 }
-                results.add(new Coord3D(map.getOrDefault("blue",0),map.getOrDefault("red",0),map.getOrDefault("green",0)));
             }
+            results.add(new Coord3D(map.getOrDefault("blue",0),map.getOrDefault("red",0),map.getOrDefault("green",0)));
         }
 
         public boolean isPossible(int blueNum, int redNum, int greenNum) {
