@@ -38,15 +38,15 @@ public class CubeConundrum extends AoCDay {
             results.add(new Coord3D(map.getOrDefault("blue",0),map.getOrDefault("red",0),map.getOrDefault("green",0)));
         }
 
-        public boolean isPossible(int blueNum, int redNum, int greenNum) {
-            boolean bluePossible = results.stream().allMatch(c -> c.x <= blueNum);
-            boolean redPossible = results.stream().allMatch(c -> c.y <= redNum);
-            boolean greenPossible = results.stream().allMatch(c -> c.z <= greenNum);
+        public boolean isPossible(Coord3D maxima) {
+            boolean bluePossible = results.stream().allMatch(c -> c.x <= maxima.x);
+            boolean redPossible = results.stream().allMatch(c -> c.y <= maxima.y);
+            boolean greenPossible = results.stream().allMatch(c -> c.z <= maxima.z);
             return bluePossible && redPossible && greenPossible;
         }
 
-        public int gameId(int blueNum, int redNum, int greenNum) {
-            return isPossible(blueNum, redNum, greenNum) ? id : 0;
+        public int gameId(Coord3D maxima) {
+            return isPossible(maxima) ? id : 0;
         }
 
         public int part2() {
@@ -68,7 +68,7 @@ public class CubeConundrum extends AoCDay {
     }
 
     public Integer solutionPart1(List<Games> games) {
-        return games.stream().mapToInt(g -> g.gameId(14,12,13)).sum();
+        return games.stream().mapToInt(g -> g.gameId(new Coord3D(14,12,13))).sum();
     }
 
     public Long solutionPart2(List<Games> games) {
