@@ -6,10 +6,10 @@ import com.dwelguisz.utilities.Coord2D;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GearRatios extends AoCDay {
 
@@ -24,44 +24,58 @@ public class GearRatios extends AoCDay {
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    private Long solutionPart1(List<String> lines) {
-        char[][] grid = convertToCharGrid(lines);
-        Long total = 0L;
-        gears = new HashMap<>();
-        for (int row = 0; row < grid.length; row++) {
-            Set<Coord2D> nums = new HashSet<>();
-            Integer num = 0;
-            boolean hasPart = false;
-            for(int col = 0; col < grid[row].length+1; col++) {
-                if (row < grid.length && col < grid[row].length && Character.isDigit(grid[row][col])) {
-                    num = num * 10 + Integer.parseInt(""+grid[row][col]);
-                    for (int rr = -1; rr <= 1; rr++) {
-                        for (int cc = -1; cc <= 1; cc++) {
-                            if (0<=row+rr && row+rr<lines.size() && 0<=col+cc && col+cc<lines.get(row).length()) {
-                                char ch = grid[row+rr][col+cc];
-                                if ((!Character.isDigit(ch)) && (ch != '.')) {
-                                    hasPart = true;
-                                }
-                                if (ch == '*') {
-                                    nums.add(new Coord2D(row+rr,col+cc));
-                                }
-                            }
+    private boolean checkNeighbors(final Integer startRow,
+                                   final Integer startCol,
+                                   final Integer endRow,
+                                   final Integer endCol,
+                                   final Integer number,
+                                   final char[][] grid
+                                   ) {
+        for (Integer row = startRow ; row <= endRow; row++) {
+            for (Integer col = startCol; col <= endCol; col++) {
+                if (row >= 0 && row < grid.length && col >= 0 && col < grid[row].length) {
+                    char gridValue = grid[row][col];
+                    if ((!Character.isDigit(gridValue)) && (gridValue != '.')) {
+                        if (gridValue == '*') {
+                            Coord2D loc = new Coord2D(row, col);
+                            List<Integer> vals = gears.getOrDefault(loc,new ArrayList<>());
+                            vals.add(number);
+                            gears.put(loc,vals);
                         }
+                        return true;
                     }
-                } else if (num > 0) {
-                    for (Coord2D n : nums) {
-                        List<Integer> tmp = gears.getOrDefault(n, new ArrayList<>());
-                        tmp.add(num);
-                        gears.put(n, tmp);
-                    }
-                    if (hasPart) {
-                        total += num;
-                    }
-                    num = 0;
-                    hasPart = false;
-                    nums = new HashSet<>();
                 }
             }
+        }
+        return false;
+    }
+    private Long solutionPart1(List<String> lines) {
+        Long total = 0L;
+        char[][] grid = convertToCharGrid(lines);
+        gears = new HashMap<>();
+        int rowNum = 0;
+        for (String line : lines) {
+            //Find any number and combine into one group
+            Pattern pattern = Pattern.compile("\\d+");
+            Matcher matcher = pattern.matcher(line);
+            //Go through each match and do some tests
+            while (matcher.find()) {
+                //Get the starting location and ending location of the number, so it will check all locations
+                // Example:
+                //  ....1234....
+                // Will check the following box:
+                //   (rowNum-1,startOfMatch-1) ---> (rowNum-1,endOfMatch) //endOfMatch is the location of the next char
+                //       V                                 V
+                //   (rowNum+1,startOfMatch-1) -->  (rowNum+1,endOfMatch)
+                int startNum = matcher.start();
+                int endNum = matcher.end();
+                Integer num = Integer.parseInt(matcher.group());
+                //Do the actual checking of neighbors
+                if (checkNeighbors(rowNum-1, startNum-1, rowNum+1, endNum, num, grid)) {
+                    total += num;
+                }
+            }
+            rowNum++;
         }
         return total;
     }
