@@ -24,13 +24,14 @@ public class GearRatios extends AoCDay {
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    private boolean checkNeighbors(final Integer startRow,
-                                   final Integer startCol,
-                                   final Integer endRow,
-                                   final Integer endCol,
-                                   final Integer number,
-                                   final char[][] grid
-                                   ) {
+    private boolean checkNeighbors(
+            final Integer startRow,
+            final Integer startCol,
+            final Integer endRow,
+            final Integer endCol,
+            final Integer number,
+            final char[][] grid
+    ) {
         for (Integer row = startRow ; row <= endRow; row++) {
             for (Integer col = startCol; col <= endCol; col++) {
                 if (row >= 0 && row < grid.length && col >= 0 && col < grid[row].length) {
