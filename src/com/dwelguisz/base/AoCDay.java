@@ -102,6 +102,18 @@ public class AoCDay {
         return grid;
     }
 
+    protected char[][] convertToCharGrid(List<String> lines) {
+        char[][] grid = new char[lines.size()][lines.get(0).length()];
+        Integer i = 0;
+        for(String line : lines) {
+            for (int j = 0; j < line.length(); j++) {
+                grid[i][j] = line.charAt(j);
+            }
+            i++;
+        }
+        return grid;
+    }
+
     protected String[][] copy2DArray(String [][] source) {
         String[][] newGrid = Arrays.stream(source)
                 .map((String[] row) -> row.clone())
