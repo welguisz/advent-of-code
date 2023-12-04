@@ -20,7 +20,7 @@ public class Scratchcards extends AoCDay {
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = solutionPart1(lines);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(lines);
+        part2Answer = solutionPart2();
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
@@ -34,26 +34,24 @@ public class Scratchcards extends AoCDay {
             List<Integer> myNumbers = Arrays.stream(parts[1].split("\\s+"))
                     .filter(s -> s.length() > 0)
                     .map(Integer::parseInt).collect(Collectors.toList());
-            List<Integer> goodNumbers = myNumbers.stream().filter(num -> winningNumbers.contains(num)).collect(Collectors.toList());
-            winningSizePerCard.add(goodNumbers.size());
-            Long val = (long) Math.pow(2,goodNumbers.size()-1);
+            Long count = myNumbers.stream().filter(num -> winningNumbers.contains(num)).count();
+            winningSizePerCard.add(count.intValue());
+            Long val = (long) Math.pow(2,count-1);
             total += val;
         }
         return total;
     }
 
-    private Long solutionPart2(List<String> lines) {
+    private Long solutionPart2() {
         Map<Integer, Integer> winners = new HashMap<>();
-        for (int i = 0; i < lines.size(); i++) {
+        for (int i = 0; i < winningSizePerCard.size(); i++) {
             winners.put(i, 1);
         }
         int cardNumber = 0;
         for (Integer winningSize : winningSizePerCard) {
-            Integer currentNumber = winners.get(cardNumber);
+            final Integer tmpNum = cardNumber;
             for (int i = 1; i <= winningSize; i++) {
-                Integer val = winners.get(cardNumber + i);
-                val += currentNumber;
-                winners.put(cardNumber+i,val);
+                winners.compute(cardNumber+i,(key, val) -> val += winners.get(tmpNum));
             }
             cardNumber++;
         }
