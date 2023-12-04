@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Scratchcards extends AoCDay {
@@ -24,19 +25,20 @@ public class Scratchcards extends AoCDay {
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
+    private Set<Integer> createSet(String val) {
+        return Arrays.stream(val.split(("\\s+"))).filter(s -> s.length() > 0).map(Integer::parseInt).collect(Collectors.toSet());
+    }
     private Long solutionPart1(List<String> lines) {
         Long total = 0L;
         for (String line : lines) {
-            String [] parts = line.split(" \\| ");
-            List<Integer> winningNumbers = Arrays.stream(parts[0].split(": ")[1].split("\\s+"))
-            .filter(s -> s.length() > 0)
-                    .map(Integer::parseInt).collect(Collectors.toList());
-            List<Integer> myNumbers = Arrays.stream(parts[1].split("\\s+"))
-                    .filter(s -> s.length() > 0)
-                    .map(Integer::parseInt).collect(Collectors.toList());
-            Long count = myNumbers.stream().filter(num -> winningNumbers.contains(num)).count();
-            winningSizePerCard.add(count.intValue());
-            Long val = (long) Math.pow(2,count-1);
+            // We don't care about the Card #: portion, so just ignore it.
+            String goodPart = line.split(":\\s+")[1];
+            String [] parts = goodPart.split(" \\| ");
+            Set<Integer> winningNumbers = createSet(parts[0]);
+            Set<Integer> myNumbers = createSet(parts[1]);
+            myNumbers.retainAll(winningNumbers);
+            winningSizePerCard.add(myNumbers.size());
+            Long val = (long) Math.pow(2, myNumbers.size()-1);
             total += val;
         }
         return total;
