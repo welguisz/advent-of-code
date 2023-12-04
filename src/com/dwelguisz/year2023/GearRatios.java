@@ -38,10 +38,7 @@ public class GearRatios extends AoCDay {
                     char gridValue = grid[row][col];
                     if ((!Character.isDigit(gridValue)) && (gridValue != '.')) {
                         if (gridValue == '*') {
-                            Coord2D loc = new Coord2D(row, col);
-                            List<Integer> vals = gears.getOrDefault(loc,new ArrayList<>());
-                            vals.add(number);
-                            gears.put(loc,vals);
+                            gears.computeIfAbsent(new Coord2D(row, col), k -> new ArrayList<>()).add(number);
                         }
                         return true;
                     }

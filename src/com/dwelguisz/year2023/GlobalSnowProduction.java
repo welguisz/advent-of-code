@@ -8,7 +8,8 @@ public class GlobalSnowProduction extends AoCYear {
 
     @Override
     public void runOneDay(int day) {
-        AoCDay aocDays[] = {new Trebuchet(), new CubeConundrum(), new GearRatios(), new Scratchcards()};
+        AoCDay aocDays[] = {new Trebuchet(), new CubeConundrum(), new GearRatios(), new Scratchcards(),
+        new AoC2023Day05()};
         AoCDay aoCDay = aocDays[day-1];
         aoCDay.run();
     }

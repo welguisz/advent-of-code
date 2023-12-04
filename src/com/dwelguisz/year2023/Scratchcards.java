@@ -54,9 +54,9 @@ public class Scratchcards extends AoCDay {
         }
         int cardNumber = 0;
         for (Integer winningSize : winningSizePerCard) {
-            final Integer tmpNum = cardNumber;
+            final Integer tmpNum = winners.get(cardNumber);
             for (int i = 1; i <= winningSize; i++) {
-                winners.compute(cardNumber+i,(key, val) -> val += winners.get(tmpNum));
+                winners.merge(cardNumber+i,tmpNum,(v1,v2) -> v1+v2);
             }
             cardNumber++;
         }
