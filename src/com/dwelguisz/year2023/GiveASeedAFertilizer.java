@@ -98,12 +98,8 @@ public class GiveASeedAFertilizer extends AoCDay {
         for (int i = 0; i < seeds.size(); i+=2) {
             newSeeds.add(Pair.of(seeds.get(i), seeds.get(i+1)));
         }
-        List<Long> mins = new ArrayList<>();
-        for (Pair<Long, Long> s : newSeeds) {
-            mins.add(processAllMapsByRange(s));
-        }
-        return mins.stream()
-                .min(Long::compare)
-                .get();
+        return newSeeds.stream()
+                .map(s -> processAllMapsByRange(s))
+                .min(Long::compare).get();
     }
 }
