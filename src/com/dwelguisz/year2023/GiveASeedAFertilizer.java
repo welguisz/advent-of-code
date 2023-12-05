@@ -3,7 +3,6 @@ package com.dwelguisz.year2023;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord3DLong;
 import org.apache.commons.lang3.tuple.Pair;
-import org.checkerframework.checker.units.qual.A;
 
 import java.time.Instant;
 import java.util.ArrayList;
