@@ -78,11 +78,10 @@ public class GiveASeedAFertilizer extends AoCDay {
         //Sample here
         Long delta = (long) Math.sqrt(seed.getRight());
         PriorityQueue<Pair<Long,Long>> pq = new PriorityQueue<>(20000, Comparator.comparingLong(Pair::getRight));
-        //Todo: Can this be turned into a LongStream
-        for (Long s = seed.getLeft(); s < seedEnd; s += delta) {
-            Long value = processAllMapsByOne(s);
-            pq.add(Pair.of(s,value));
-        }
+        LongStream.range(0,delta)
+                .map(l -> seed.getLeft() + (delta*l))
+                .filter(l -> l < seedEnd)
+                .forEach(l -> pq.add(Pair.of(l, processAllMapsByOne(l))));
         Pair<Long,Long> mins = pq.poll();
         Long seedSubStart = (mins.getLeft() - delta) < seed.getLeft() ? seed.getLeft() : mins.getLeft() - delta;
         Long seedSubEnd = (mins.getLeft() + delta) > seedEnd ? seedEnd : mins.getLeft() + delta;
