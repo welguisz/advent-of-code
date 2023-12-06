@@ -28,21 +28,16 @@ public class WaitForIt extends AoCDay {
     public Long solutionPart1(List<String> lines) {
         List<Long> time = parseLinePart1(lines.get(0));
         List<Long> distance = parseLinePart1(lines.get(1));
-        List<Pair<Long,Long>> records = IntStream.range(0, time.size()).boxed()
+        return runBoatRaces(IntStream.range(0, time.size()).boxed()
                 .map(i -> Pair.of(time.get(i),distance.get(i)))
-                .collect(Collectors.toList());
-        return runBoatRaces(records);
+                .collect(Collectors.toList()));
     }
 
     private Long parseLinePart2(String line) {
         return Long.parseLong(line.split(":\\s+")[1].replaceAll(" ",""));
     }
     public Long solutionPart2(List<String> lines) {
-        Long time = parseLinePart2(lines.get(0));
-        Long distance = parseLinePart2(lines.get(1));
-        List<Pair<Long,Long>> records = new ArrayList<>();
-        records.add(Pair.of(time,distance));
-        return runBoatRaces(records);
+        return runBoatRaces(List.of(Pair.of(parseLinePart2(lines.get(0)),parseLinePart2(lines.get(1)))));
     }
 
     public Long runBoatRaces(List<Pair<Long,Long>> records) {
