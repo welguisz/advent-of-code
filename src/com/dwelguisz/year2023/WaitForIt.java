@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.LongStream;
 
-public class AoC2023Day06 extends AoCDay {
+public class WaitForIt extends AoCDay {
     public void solve() {
         List<Pair<Long, Long>> records = new ArrayList<>();
         records.add(Pair.of(44L,202L));
