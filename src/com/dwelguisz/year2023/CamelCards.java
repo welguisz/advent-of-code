@@ -7,13 +7,24 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CamelCards extends AoCDay {
+    List<List<Long>> HAND_ORDER = List.of(
+            List.of(1L,1L,1L,1L,1L),  //High card
+            List.of(2L,1L,1L,1L),  //Pair
+            List.of(2L,2L,1L), //Two Pair
+            List.of(3L,1L,1L), //Three of a Kind
+            List.of(3L,2L), //Full House
+            List.of(4L,1L), // Four of a Kind
+            List.of(5L) //Five of a kind
+    );
+    
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2023, 7, false, 0);
@@ -26,17 +37,12 @@ public class CamelCards extends AoCDay {
 
     public Long solutionPart1(List<String> lines, boolean part2) {
         PriorityQueue<Pair<Integer, Integer>> camelCards = new PriorityQueue<>(1000, Comparator.comparingInt((Pair<Integer, Integer> a) -> a.getLeft()));
-        for(String l : lines) {
-            String s[] = l.split(" ");
-            camelCards.add(Pair.of(parseCards(s[0], part2), Integer.parseInt(s[1])));
-        }
-        Long total = 0L;
-        int i = 1;
-        while (!camelCards.isEmpty()) {
-            total += i * camelCards.poll().getRight();
-            i++;
-        }
-        return total;
+        lines.stream()
+                .forEach(l -> {
+                    String s[] = l.split(" ");
+                    camelCards.add(Pair.of(parseCards(s[0], part2), Integer.parseInt(s[1])));
+                });
+        return IntStream.range(1,camelCards.size()+1).mapToLong(i -> i * camelCards.poll().getRight()).sum();
     }
     Integer parseCards(final String a, boolean part2) {
         String newA = a;
@@ -60,15 +66,10 @@ public class CamelCards extends AoCDay {
     }
 
     Integer scoringHands(String a) {
-        Map<Character, Integer> values = new HashMap<>();
-        for (char b : a.toCharArray()) {
-            Integer value = values.getOrDefault(b, 0);
-            value ++;
-            values.put(b,value);
-        }
-        List<List<Integer>> handOrder = List.of(List.of(1,1,1,1,1), List.of(2,1,1,1), List.of(2,2,1), List.of(3,1,1),List.of(3,2),List.of(4,1),List.of(5));
-        List<Integer> valueSizes = values.values().stream().sorted().collect(Collectors.toList());
+        Map<Character, Long> values = a.chars().mapToObj(c -> (char)c)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        List<Long> valueSizes = values.values().stream().sorted().collect(Collectors.toList());
         Collections.reverse(valueSizes);
-        return handOrder.indexOf(valueSizes);
+        return HAND_ORDER.indexOf(valueSizes);
     }
 }
