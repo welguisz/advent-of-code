@@ -4,7 +4,6 @@ import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +23,9 @@ public class CamelCards extends AoCDay {
             List.of(4L,1L), // Four of a Kind
             List.of(5L) //Five of a kind
     );
-    
+
+    String RANK_CARDS = "X23456789TJQKA";
+
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2023, 7, false, 0);
@@ -45,29 +46,34 @@ public class CamelCards extends AoCDay {
         return IntStream.range(1,camelCards.size()+1).mapToLong(i -> i * camelCards.poll().getRight()).sum();
     }
     Integer parseCards(final String a, boolean part2) {
+        Integer maxHand = scoringHands(a, part2);
+        Integer score = maxHand;
         String newA = a;
-        if (!part2) {
+        if (part2) {
             newA = newA.replaceAll("J","X");
         }
-        Integer maxHand = 0;
-        for (String c : "23456789TJQKA".split("")) {
-            String tmp = new String(newA);
-            tmp = tmp.replaceAll("J",c);
-            maxHand = Integer.max(maxHand, scoringHands(tmp));
-        }
-        String rankOrder = part2 ? "J23456789TQKA" : "23456789TJQKA";
-        List<Character> rank = Arrays.stream(rankOrder.split("")).map(s -> s.charAt(0)).collect(Collectors.toList());
-        Integer score = maxHand;
-        for(char b : a.toCharArray()) {
-            score *= rank.size();
-            score += rank.indexOf(b);
+        for(char b : newA.toCharArray()) {
+            score *= RANK_CARDS.length();
+            score += RANK_CARDS.indexOf(b);
         }
         return score;
     }
 
-    Integer scoringHands(String a) {
+    Integer scoringHands(String a, boolean part2) {
         Map<Character, Long> values = a.chars().mapToObj(c -> (char)c)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        if (part2 && values.containsKey('J') && values.size() > 1) {
+            Long maxValue = values.entrySet().stream()
+                    .filter(e -> e.getKey() != 'J')
+                    .mapToLong(e -> e.getValue())
+                    .max().getAsLong();
+            Character maxKey = values.entrySet().stream()
+                    .filter(e -> e.getKey() != 'J')
+                    .filter(e -> e.getValue() == maxValue)
+                    .map(e -> e.getKey()).findFirst().get();
+            Long jValue = values.remove('J');
+            values.compute(maxKey, (k,v) -> v + jValue);
+        }
         List<Long> valueSizes = values.values().stream().sorted().collect(Collectors.toList());
         Collections.reverse(valueSizes);
         return HAND_ORDER.indexOf(valueSizes);
