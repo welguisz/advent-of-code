@@ -4,8 +4,9 @@ import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,10 @@ public class CamelCards extends AoCDay {
     }
 
     public Long solutionPart1(List<String> lines, boolean part2) {
-        PriorityQueue<Pair<String, Integer>> camelCards = new PriorityQueue<>(1000, (a,b) -> compareCards(a.getLeft(),b.getLeft(), part2));
+        PriorityQueue<Pair<Integer, Integer>> camelCards = new PriorityQueue<>(1000, Comparator.comparingInt((Pair<Integer, Integer> a) -> a.getLeft()));
         for(String l : lines) {
             String s[] = l.split(" ");
-            camelCards.add(Pair.of(s[0], Integer.parseInt(s[1])));
+            camelCards.add(Pair.of(parseCards(s[0], part2), Integer.parseInt(s[1])));
         }
         Long total = 0L;
         int i = 1;
@@ -37,22 +38,7 @@ public class CamelCards extends AoCDay {
         }
         return total;
     }
-
-    public int compareCards(String a, String b, boolean part2) {
-        List<Integer> aValue = parseCards(a, part2);
-        List<Integer> bValue = parseCards(b, part2);
-        for (int i = 0; i < 6; i++) {
-            if (aValue.get(i) > bValue.get(i)) {
-                return 1;
-            }
-            if (aValue.get(i) < bValue.get(i)) {
-                return -1;
-            }
-        }
-        return 0;
-    }
-
-    List<Integer> parseCards(final String a, boolean part2) {
+    Integer parseCards(final String a, boolean part2) {
         String newA = a;
         if (!part2) {
             newA = newA.replaceAll("J","X");
@@ -65,12 +51,12 @@ public class CamelCards extends AoCDay {
         }
         String rankOrder = part2 ? "J23456789TQKA" : "23456789TJQKA";
         List<Character> rank = Arrays.stream(rankOrder.split("")).map(s -> s.charAt(0)).collect(Collectors.toList());
-        List<Integer> retValues = new ArrayList<>();
-        retValues.add(maxHand);
+        Integer score = maxHand;
         for(char b : a.toCharArray()) {
-            retValues.add(rank.indexOf(b));
+            score *= rank.size();
+            score += rank.indexOf(b);
         }
-        return retValues;
+        return score;
     }
 
     Integer scoringHands(String a) {
@@ -80,25 +66,9 @@ public class CamelCards extends AoCDay {
             value ++;
             values.put(b,value);
         }
-        switch (values.size()) {
-            case 1: //5 of a kind
-                return 100;
-            case 2: //4 of a kind or full house
-                if (values.values().contains(4)) {
-                    return 90;
-                } else {
-                    return 80;
-                }
-            case 3: //Could be 3 of a kind or two pair
-                if (values.values().contains(3)) {
-                    return 70;
-                } else {
-                    return 60;
-                }
-            case 4: // Can only be a pair
-                return 50;
-            default:
-                return 40;
-        }
+        List<List<Integer>> handOrder = List.of(List.of(1,1,1,1,1), List.of(2,1,1,1), List.of(2,2,1), List.of(3,1,1),List.of(3,2),List.of(4,1),List.of(5));
+        List<Integer> valueSizes = values.values().stream().sorted().collect(Collectors.toList());
+        Collections.reverse(valueSizes);
+        return handOrder.indexOf(valueSizes);
     }
 }
