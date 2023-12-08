@@ -31,14 +31,11 @@ public class HauntedWasteland extends AoCDay {
 
     void parseLines(List<String> lines) {
         dir = lines.get(0);
-        map = new HashMap<>();
-        IntStream.range(2, lines.size()).forEach(i -> {
-            String l = lines.get(i);
-            String key = l.substring(0,3);
-            String left = l.substring(7,10);
-            String right = l.substring(12,15);
-            map.put(key,Pair.of(left,right));
-        });
+        map = IntStream.range(2, lines.size()).boxed()
+                .collect(Collectors.toMap(
+                        i -> lines.get(i).substring(0,3),
+                        i -> Pair.of(lines.get(i).substring(7,10), lines.get(i).substring(12,15))
+                ));
     }
 
     Long solutionPart1() {
@@ -57,12 +54,9 @@ public class HauntedWasteland extends AoCDay {
     }
 
     Long solutionPart2() {
-        List<String> current = map.keySet().stream()
+        return map.keySet().stream()
                 .filter(l -> l.endsWith("A"))
-                .collect(Collectors.toList());
-        List<Long> allSteps = current.stream()
-                        .map(l -> walkThePath(l,string -> !string.endsWith("Z")))
-                .collect(Collectors.toList());
-        return allSteps.stream().mapToLong(l -> l).reduce(1L, (a,b) -> lcm(a,b));
+                .map(l -> walkThePath(l,string -> !string.endsWith("Z")))
+                .reduce(1L, (a,b) -> lcm(a,b));
     }
 }
