@@ -62,20 +62,17 @@ public class CamelCards extends AoCDay {
     Integer scoringHands(String a, boolean part2) {
         Map<Character, Long> values = a.chars().mapToObj(c -> (char)c)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-        if (part2 && values.containsKey('J') && values.size() > 1) {
-            Long maxValue = values.entrySet().stream()
-                    .filter(e -> e.getKey() != 'J')
-                    .mapToLong(e -> e.getValue())
-                    .max().getAsLong();
-            Character maxKey = values.entrySet().stream()
-                    .filter(e -> e.getKey() != 'J')
-                    .filter(e -> e.getValue() == maxValue)
-                    .map(e -> e.getKey()).findFirst().get();
-            Long jValue = values.remove('J');
-            values.compute(maxKey, (k,v) -> v + jValue);
+        long jokers = 0;
+        if (part2 && values.containsKey('J')) {
+            jokers = values.remove('J');
         }
         List<Long> valueSizes = values.values().stream().sorted().collect(Collectors.toList());
         Collections.reverse(valueSizes);
+        if (valueSizes.size() == 0) {
+            valueSizes.add(jokers);
+        } else {
+            valueSizes.set(0, valueSizes.get(0) + jokers);
+        }
         return HAND_ORDER.indexOf(valueSizes);
     }
 }
