@@ -42,7 +42,7 @@ public class HauntedWasteland extends AoCDay {
         return walkThePath("AAA", string -> !string.equals("ZZZ"));
     }
 
-    Long walkThePath(String startingPoint, Function<String, Boolean> func) {
+    Long walkThePath(String startingPoint, Function<? super String, ? extends Boolean> func) {
         String current = startingPoint;
         long steps = 0;
         while(func.apply(current)) {
