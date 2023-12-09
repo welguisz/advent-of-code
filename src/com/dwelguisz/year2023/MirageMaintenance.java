@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -43,12 +44,18 @@ public class MirageMaintenance extends AoCDay {
         return stack;
     }
 
-    Long solutionPart1(List<List<Long>> ints) {
-        return ints.stream().map(r -> createStack(r).stream().map(row -> row.get(row.size()-1)).reduce(0L, (a,b) -> a+b)).reduce(0L,(a,b) -> a+b);
+    Long solutionPart1(List<List<Long>> values) {
+        return values.stream().mapToLong(
+                r -> createStack(r).stream()
+                        .mapToLong(row -> row.get(row.size()-1)).sum())
+                .sum();
     }
 
     Long solutionPart2(List<List<Long>> ints) {
-        return ints.stream().map(r -> createStack(r).stream().map(row -> row.get(0)).reduce(0L, (a,b) -> b-a)).reduce(0L,(a,b) -> a+b);
+        return ints.stream().mapToLong(
+                r -> createStack(r).stream()
+                        .mapToLong(row -> row.get(0)).reduce(0L, (a,b) -> b-a))
+                .sum();
     }
 
 }
