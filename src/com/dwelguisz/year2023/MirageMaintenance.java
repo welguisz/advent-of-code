@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Stack;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,9 +22,9 @@ public class MirageMaintenance extends AoCDay {
                         .collect(Collectors.toList())
         ).collect(Collectors.toList());;
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(values);
+        part1Answer = processOASISdata(values, (list) -> list.size()-1, (a, b) -> a+b);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(values);
+        part2Answer = processOASISdata(values, (list) -> 0, (a, b) -> b-a);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
@@ -44,18 +44,14 @@ public class MirageMaintenance extends AoCDay {
         return stack;
     }
 
-    Long solutionPart1(List<List<Long>> values) {
+    Long processOASISdata(List<List<Long>> values,
+                          Function<List, ? extends Integer> func1,
+                          BiFunction<Long, Long, Long> func2) {
         return values.stream().mapToLong(
                 r -> createStack(r).stream()
-                        .mapToLong(row -> row.get(row.size()-1)).sum())
+                        .mapToLong(
+                                row -> row.get(func1.apply(row)))
+                        .reduce(0L, (a,b) -> func2.apply(a,b)))
                 .sum();
     }
-
-    Long solutionPart2(List<List<Long>> ints) {
-        return ints.stream().mapToLong(
-                r -> createStack(r).stream()
-                        .mapToLong(row -> row.get(0)).reduce(0L, (a,b) -> b-a))
-                .sum();
-    }
-
 }
