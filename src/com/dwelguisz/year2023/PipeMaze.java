@@ -55,11 +55,8 @@ public class PipeMaze extends AoCDay {
     Set<Coord2D> path;
     void findLoop(char[][] grid, Coord2D startingPoint) {
         path = new HashSet<>();
-
-        List<Character> possibleSteps = List.of('-','|','L','J','7','F');
-        possibleStartingSteps = possibleSteps.stream()
-                .flatMap(s -> DIRECTIONS.stream().map(coord2D -> Pair.of(coord2D,""+s)))
-                .filter(p -> TRANSFORMS.containsKey(p))
+        
+        possibleStartingSteps = TRANSFORMS.keySet().stream()
                 .map(p -> Pair.of(startingPoint.add(p.getLeft()), p.getRight()))
                 .filter(p -> grid[p.getLeft().x][p.getLeft().y] == p.getRight().charAt(0))
                 .map(point -> point.getLeft().add(startingPoint.multiply(-1)))
