@@ -28,16 +28,16 @@ public class MirageMaintenance extends AoCDay {
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    List<List<Long>> createStack(List<Long> values) {
-        List<List<Long>> stack = new ArrayList<>();
-        stack.add(values);
+    List<Long> createStack(List<Long> values, Function<List, Integer> func) {
+        List<Long> stack = new ArrayList<>();
+        stack.add(values.get(func.apply(values)));
         List<Long> currentRow = new ArrayList<>(values);
         while (!currentRow.stream().allMatch(i -> i == 0l)) {
             final List<Long> t = currentRow;
             List<Long> diffRow = IntStream.range(0, currentRow.size() - 1).boxed()
                     .map(i -> t.get(i + 1) - t.get(i))
                     .collect(Collectors.toList());
-            stack.add(diffRow);
+            stack.add(diffRow.get(Math.toIntExact(func.apply(diffRow))));
             currentRow = new ArrayList<>(diffRow);
         }
         Collections.reverse(stack);
@@ -45,12 +45,11 @@ public class MirageMaintenance extends AoCDay {
     }
 
     Long processOASISdata(List<List<Long>> values,
-                          Function<List, ? extends Integer> func1,
+                          Function<List, Integer> func1,
                           BiFunction<Long, Long, Long> func2) {
         return values.stream().mapToLong(
-                r -> createStack(r).stream()
-                        .mapToLong(
-                                row -> row.get(func1.apply(row)))
+                r -> createStack(r, func1).stream()
+                        .mapToLong(v -> v)
                         .reduce(0L, (a,b) -> func2.apply(a,b)))
                 .sum();
     }
