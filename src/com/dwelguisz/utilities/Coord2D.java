@@ -69,6 +69,7 @@ public class Coord2D {
         return new Coord2D(a.x + b.x, a.y+b.y);
     }
 
+
     public Coord2D multiply(Integer t) {
         return new Coord2D(t*x, t*y);
     }
