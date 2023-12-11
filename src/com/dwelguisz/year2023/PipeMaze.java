@@ -42,7 +42,7 @@ public class PipeMaze extends AoCDay {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2023, 10, false, 0);
         char[][] grid =convertToCharGrid(lines);
-        findLoop(grid, findStartingLocation(grid));
+        findLoop(grid, findStartingLocation(grid,'S'));
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = solutionPart1();
         timeMarkers[2] = Instant.now().toEpochMilli();
@@ -71,13 +71,6 @@ public class PipeMaze extends AoCDay {
         }
     }
 
-    Coord2D findStartingLocation(char[][] grid) {
-        return IntStream.range(0, grid.length).boxed()
-                .flatMap(row -> IntStream.range(0,grid[0].length).boxed()
-                        .map(col -> new Coord2D(row,col)))
-                .filter(pos -> grid[pos.x][pos.y] == 'S')
-                .findFirst().get();
-    }
     Long solutionPart1() {
         return (long) (path.size() / 2);
     }

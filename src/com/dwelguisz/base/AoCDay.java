@@ -1,5 +1,6 @@
 package com.dwelguisz.base;
 
+import com.dwelguisz.utilities.Coord2D;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.BufferedInputStream;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.lang.Integer.parseInt;
@@ -151,4 +153,11 @@ public class AoCDay {
         return Arrays.stream(input.split("")).collect(Collectors.toList());
     }
 
+    public Coord2D findStartingLocation(char[][] grid, char startingChar) {
+        return IntStream.range(0, grid.length).boxed()
+                .flatMap(row -> IntStream.range(0,grid[0].length).boxed()
+                        .map(col -> new Coord2D(row,col)))
+                .filter(pos -> grid[pos.x][pos.y] == startingChar)
+                .findFirst().get();
+    }
 }
