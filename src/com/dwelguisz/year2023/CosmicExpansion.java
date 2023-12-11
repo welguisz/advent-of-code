@@ -15,17 +15,17 @@ public class CosmicExpansion extends AoCDay {
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2023, 11, false, 0);
-        char[][] map = parseMap(lines);
+        parseMap(lines);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(map);
+        part1Answer = solutionPart1();
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(map);
+        part2Answer = solutionPart2();
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
     Set<Integer> emptyColNum;
     Set<Integer> emptyRowNum;
     List<Coord2D> galaxies;
-    char[][] parseMap(List<String> lines) {
+    void parseMap(List<String> lines) {
         char[][] map = convertToCharGrid(lines);
         galaxies = IntStream.range(0, map.length).boxed()
                 .flatMap(row -> IntStream.range(0, map[row].length).boxed()
@@ -38,7 +38,6 @@ public class CosmicExpansion extends AoCDay {
         Set<Integer> allCols = IntStream.range(0,lines.get(0).length()).boxed().collect(Collectors.toSet());
         emptyRowNum = Sets.difference(allRows, rowCoordinatesWithGalaxies);
         emptyColNum = Sets.difference(allCols, colCoordinatesWithGalaxies);
-        return map;
     }
 
     Long findSteps(Coord2D starA, Coord2D starB, Long expansion) {
@@ -54,17 +53,17 @@ public class CosmicExpansion extends AoCDay {
                 .count();
         return starA.manhattanDistance(starB) + ((skippedRows+skippedCols)*(expansion-1));
     }
-    Long calculateItems(char[][] map, Long expansion) {
+    Long calculateItems(Long expansion) {
         return IntStream.range(0, galaxies.size()).boxed()
                 .flatMap(i -> IntStream.range(i+1,galaxies.size()).boxed().map(j -> Pair.of(galaxies.get(i), galaxies.get(j))))
                 .mapToLong(p -> findSteps(p.getLeft(), p.getRight(), expansion))
                 .sum();
     }
-    Long solutionPart1(char[][] map) {
-        return calculateItems(map, 2L);
+    Long solutionPart1() {
+        return calculateItems(2L);
     }
 
-    Long solutionPart2(char[][] map) {
-        return calculateItems(map, 1000000L);
+    Long solutionPart2() {
+        return calculateItems(1000000L);
     }
 }
