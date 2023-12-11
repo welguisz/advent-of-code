@@ -72,13 +72,11 @@ public class PipeMaze extends AoCDay {
     }
 
     Coord2D findStartingLocation(char[][] grid) {
-        Integer startingPointRow = IntStream.range(0, grid.length).boxed()
-                .filter(i -> Arrays.toString(grid[i]).toString().contains("S"))
+        return IntStream.range(0, grid.length).boxed()
+                .flatMap(row -> IntStream.range(0,grid[0].length).boxed()
+                        .map(col -> new Coord2D(row,col)))
+                .filter(pos -> grid[pos.x][pos.y] == 'S')
                 .findFirst().get();
-        Integer startingPointCol = IntStream.range(0,grid[startingPointRow].length).boxed()
-                .filter(i -> grid[startingPointRow][i]=='S')
-                .findFirst().get();
-        return new Coord2D(startingPointRow, startingPointCol);
     }
     Long solutionPart1() {
         return (long) (path.size() / 2);
