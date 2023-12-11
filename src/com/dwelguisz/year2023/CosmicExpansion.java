@@ -2,11 +2,10 @@ package com.dwelguisz.year2023;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
+import com.google.common.collect.Sets;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -25,24 +24,21 @@ public class CosmicExpansion extends AoCDay {
     }
     Set<Integer> emptyColNum;
     Set<Integer> emptyRowNum;
-
+    List<Coord2D> galaxies;
     char[][] parseMap(List<String> lines) {
-        emptyRowNum = IntStream.range(0, lines.size()).boxed()
-                .filter(row -> Arrays.stream(lines.get(row).split("")).allMatch(s -> s.equals(".")))
-                .collect(Collectors.toSet());
-
-        List<String> rotatedGrid = IntStream.range(0, lines.get(0).length()).boxed()
-                .map(col -> {
-                    StringBuilder sb = new StringBuilder();
-                    IntStream.range(0, lines.size()).boxed()
-                            .forEach(row -> sb.append(lines.get(row).charAt(col)));
-                    return sb.toString();}
-                )
+        char[][] map = convertToCharGrid(lines);
+        galaxies = IntStream.range(0, map.length).boxed()
+                .flatMap(row -> IntStream.range(0, map[row].length).boxed()
+                        .map(col -> new Coord2D(row,col)))
+                .filter(p -> map[p.x][p.y] == '#')
                 .collect(Collectors.toList());
-        emptyColNum = IntStream.range(0, rotatedGrid.size()).boxed()
-                .filter(row -> Arrays.stream(rotatedGrid.get(row).split("")).allMatch(s -> s.equals(".")))
-                .collect(Collectors.toSet());
-        return convertToCharGrid(lines);
+        Set<Integer> rowCoordinatesWithGalaxies = galaxies.stream().map(g -> g.x).collect(Collectors.toSet());
+        Set<Integer> colCoordinatesWithGalaxies = galaxies.stream().map(g -> g.y).collect(Collectors.toSet());
+        Set<Integer> allRows = IntStream.range(0,lines.size()).boxed().collect(Collectors.toSet());
+        Set<Integer> allCols = IntStream.range(0,lines.get(0).length()).boxed().collect(Collectors.toSet());
+        emptyRowNum = Sets.difference(allRows, rowCoordinatesWithGalaxies);
+        emptyColNum = Sets.difference(allCols, colCoordinatesWithGalaxies);
+        return map;
     }
 
     Long findSteps(Coord2D starA, Coord2D starB, Long expansion) {
@@ -59,11 +55,6 @@ public class CosmicExpansion extends AoCDay {
         return starA.manhattanDistance(starB) + ((skippedRows+skippedCols)*(expansion-1));
     }
     Long calculateItems(char[][] map, Long expansion) {
-        List<Coord2D> galaxies = IntStream.range(0, map.length).boxed()
-                .flatMap(row -> IntStream.range(0, map[row].length).boxed()
-                        .map(col -> new Coord2D(row,col)))
-                .filter(p -> map[p.x][p.y] == '#')
-                .collect(Collectors.toList());
         return IntStream.range(0, galaxies.size()).boxed()
                 .flatMap(i -> IntStream.range(i+1,galaxies.size()).boxed().map(j -> Pair.of(galaxies.get(i), galaxies.get(j))))
                 .mapToLong(p -> findSteps(p.getLeft(), p.getRight(), expansion))
