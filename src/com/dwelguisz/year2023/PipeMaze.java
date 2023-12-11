@@ -21,22 +21,21 @@ public class PipeMaze extends AoCDay {
     public static Coord2D EAST = new Coord2D(0,1);
     public static Coord2D WEST = new Coord2D(0,-1);
 
-    public static List<Coord2D> DIRECTIONS = List.of(EAST, SOUTH ,WEST, NORTH);
-    public static Map<Pair<Coord2D, String>, Coord2D> TRANSFORMS;
+    public static Map<Pair<Coord2D, String>, Coord2D> NEXT_DIRECTION;
     static {
-        TRANSFORMS = new HashMap<>();
-        TRANSFORMS.put(Pair.of(EAST, "-"), EAST);
-        TRANSFORMS.put(Pair.of(EAST, "7"), SOUTH);
-        TRANSFORMS.put(Pair.of(EAST, "J"), NORTH);
-        TRANSFORMS.put(Pair.of(SOUTH, "|"), SOUTH);
-        TRANSFORMS.put(Pair.of(SOUTH, "L"), EAST);
-        TRANSFORMS.put(Pair.of(SOUTH, "J"), WEST);
-        TRANSFORMS.put(Pair.of(WEST, "-"), WEST);
-        TRANSFORMS.put(Pair.of(WEST, "F"), SOUTH);
-        TRANSFORMS.put(Pair.of(WEST, "L"), NORTH);
-        TRANSFORMS.put(Pair.of(NORTH, "|"), NORTH);
-        TRANSFORMS.put(Pair.of(NORTH, "F"), EAST);
-        TRANSFORMS.put(Pair.of(NORTH, "7"), WEST);
+        NEXT_DIRECTION = new HashMap<>();
+        NEXT_DIRECTION.put(Pair.of(EAST, "-"), EAST);
+        NEXT_DIRECTION.put(Pair.of(EAST, "7"), SOUTH);
+        NEXT_DIRECTION.put(Pair.of(EAST, "J"), NORTH);
+        NEXT_DIRECTION.put(Pair.of(SOUTH, "|"), SOUTH);
+        NEXT_DIRECTION.put(Pair.of(SOUTH, "L"), EAST);
+        NEXT_DIRECTION.put(Pair.of(SOUTH, "J"), WEST);
+        NEXT_DIRECTION.put(Pair.of(WEST, "-"), WEST);
+        NEXT_DIRECTION.put(Pair.of(WEST, "F"), SOUTH);
+        NEXT_DIRECTION.put(Pair.of(WEST, "L"), NORTH);
+        NEXT_DIRECTION.put(Pair.of(NORTH, "|"), NORTH);
+        NEXT_DIRECTION.put(Pair.of(NORTH, "F"), EAST);
+        NEXT_DIRECTION.put(Pair.of(NORTH, "7"), WEST);
     }
 
     public void solve() {
@@ -55,8 +54,8 @@ public class PipeMaze extends AoCDay {
     Set<Coord2D> path;
     void findLoop(char[][] grid, Coord2D startingPoint) {
         path = new HashSet<>();
-        
-        possibleStartingSteps = TRANSFORMS.keySet().stream()
+
+        possibleStartingSteps = NEXT_DIRECTION.keySet().stream()
                 .map(p -> Pair.of(startingPoint.add(p.getLeft()), p.getRight()))
                 .filter(p -> grid[p.getLeft().x][p.getLeft().y] == p.getRight().charAt(0))
                 .map(point -> point.getLeft().add(startingPoint.multiply(-1)))
@@ -67,7 +66,7 @@ public class PipeMaze extends AoCDay {
         path.add(startingPoint);
         while (!startingPoint.equals(current)) {
             path.add(current);
-            currentStep = TRANSFORMS.get(Pair.of(currentStep, ""+grid[current.x][current.y]));
+            currentStep = NEXT_DIRECTION.get(Pair.of(currentStep, ""+grid[current.x][current.y]));
             current = current.add(currentStep);
         }
     }
