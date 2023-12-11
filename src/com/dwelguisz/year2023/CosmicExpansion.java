@@ -27,37 +27,21 @@ public class CosmicExpansion extends AoCDay {
     Set<Integer> emptyRowNum;
 
     char[][] parseMap(List<String> lines) {
-        emptyColNum = new HashSet<>();
         emptyRowNum = IntStream.range(0, lines.size()).boxed()
                 .filter(row -> Arrays.stream(lines.get(row).split("")).allMatch(s -> s.equals(".")))
                 .collect(Collectors.toSet());
 
-//        emptyColNum = IntStream.range(0, lines.get(0).length()).boxed()
-//                .map(
-//                        col -> IntStream.range(0, lines.size()).boxed()
-//                                .map(row -> lines.get(row).charAt(col))
-//                                .mapToInt(c -> c == '#' ? 1 : 0)
-//                                .collect(Collectors.toList())
-//                )
-//                .map(s -> s.sum())
-//                .filter(s -> s > 0)
-//                .collect(Collectors.toSet());
-
-        List<Boolean> emptyCol = IntStream.range(0,lines.get(0).length()).boxed()
-                .map(i -> true)
+        List<String> rotatedGrid = IntStream.range(0, lines.get(0).length()).boxed()
+                .map(col -> {
+                    StringBuilder sb = new StringBuilder();
+                    IntStream.range(0, lines.size()).boxed()
+                            .forEach(row -> sb.append(lines.get(row).charAt(col)));
+                    return sb.toString();}
+                )
                 .collect(Collectors.toList());
-        for (int i = 0; i < lines.size(); i++) {
-            for (int j = 0; j < lines.get(i).length(); j++) {
-                if (lines.get(i).charAt(j) == '#') {
-                    emptyCol.set(j, false);
-                }
-            }
-        }
-        for (int i = 0; i < emptyCol.size(); i++) {
-            if (emptyCol.get(i)) {
-                emptyColNum.add(i);
-            }
-        }
+        emptyColNum = IntStream.range(0, rotatedGrid.size()).boxed()
+                .filter(row -> Arrays.stream(rotatedGrid.get(row).split("")).allMatch(s -> s.equals(".")))
+                .collect(Collectors.toSet());
         return convertToCharGrid(lines);
     }
 
