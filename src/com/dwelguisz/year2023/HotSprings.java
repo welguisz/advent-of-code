@@ -56,6 +56,7 @@ public class HotSprings extends AoCDay {
                 return 0L;
             }
         }
+        //Just look at known springs
         char[] chrs = new char[]{'.','#'};
         Long currentValue = 0L;
         //Need to check both possibilties for a broken spring or a good spring
@@ -63,9 +64,11 @@ public class HotSprings extends AoCDay {
             //The character we are currently at is ? or the char we are interested in
             if ((springs.charAt(currentSpringNumber) == chr )|| (springs.charAt(currentSpringNumber) == '?')) {
                 //We know we are in good spring and the previous spring was good too, so just inc our current location
-                if (chr == '.' && currentSizeOfBrokenGroup == 0) { currentValue += score(springs, brokenSpringSizes, currentSpringNumber + 1, brokenGroupNumber, 0); }
+                if (chr == '.' && currentSizeOfBrokenGroup == 0) {
+                    currentValue += score(springs, brokenSpringSizes, currentSpringNumber + 1, brokenGroupNumber, 0);
+                }
                 //We just end a string of either ? or # and we have not reached the end of the brokenGroup and the current
-                //size of broken/unknown has reached the current timit
+                //size of broken/unknown has reached the current limit
                 else if (chr == '.' && currentSizeOfBrokenGroup > 0 && brokenGroupNumber < brokenSpringSizes.size() && brokenSpringSizes.get(brokenGroupNumber) == currentSizeOfBrokenGroup) {
                     currentValue += score(springs, brokenSpringSizes, currentSpringNumber + 1, brokenGroupNumber + 1, 0);
                 }
