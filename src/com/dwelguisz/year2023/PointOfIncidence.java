@@ -36,7 +36,6 @@ public class PointOfIncidence extends AoCDay {
 
     Coord2D findReflection(char[][] lavaPit, int badGoal) {
         int r = 0;
-        int reflectionRow = 0;
         for (int currentRow = 0; currentRow < lavaPit.length-1;currentRow++) {
             int bad = 0;
             for (int deltaRow = 0; deltaRow < lavaPit.length;deltaRow++) {
@@ -51,11 +50,11 @@ public class PointOfIncidence extends AoCDay {
                 }
             }
             if (bad == badGoal) {
-                reflectionRow = currentRow+1;
+                r = currentRow+1;
             }
         }
 
-        int reflectionCol = 0;
+        int c = 0;
         for (int currentCol = 0; currentCol < lavaPit[0].length-1; currentCol++) {
             int bad = 0;
             for (int deltaCol = 0; deltaCol < lavaPit[0].length;deltaCol++) {
@@ -70,11 +69,11 @@ public class PointOfIncidence extends AoCDay {
                 }
             }
             if (bad == badGoal) {
-                reflectionCol = currentCol+1;
+                c = currentCol+1;
             }
         }
 
-        return new Coord2D(reflectionRow, reflectionCol);
+        return new Coord2D(r, c);
     }
 
     Long solutionPart1(List<char[][]> lavaPits) {
