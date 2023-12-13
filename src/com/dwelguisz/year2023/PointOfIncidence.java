@@ -33,7 +33,7 @@ public class PointOfIncidence extends AoCDay {
         return lavaPits;
     }
 
-    Long findReflection(char[][] lavaPit, int badGoal) {
+    Integer findReflectionRow(char[][] lavaPit, int badGoal) {
         int r = 0;
         for (int currentRow = 0; currentRow < lavaPit.length-1;currentRow++) {
             int bad = 0;
@@ -52,26 +52,11 @@ public class PointOfIncidence extends AoCDay {
                 r = currentRow+1;
             }
         }
-
-        int c = 0;
-        for (int currentCol = 0; currentCol < lavaPit[0].length-1; currentCol++) {
-            int bad = 0;
-            for (int deltaCol = 0; deltaCol < lavaPit[0].length;deltaCol++) {
-                int left = currentCol - deltaCol;
-                int right = currentCol + deltaCol + 1;
-                if (left >= 0 && left < lavaPit[0].length && right >= 0 && right < lavaPit[0].length && left < right) {
-                    for (int row = 0; row < lavaPit.length; row++) {
-                        if (lavaPit[row][left] != lavaPit[row][right]) {
-                            bad++;
-                        }
-                    }
-                }
-            }
-            if (bad == badGoal) {
-                c = currentCol+1;
-            }
-        }
-
+        return r;
+    }
+    Long findReflection(char[][] lavaPit, int badGoal) {
+        int r = findReflectionRow(lavaPit,badGoal);
+        int c = findReflectionRow(rotateCharGrid(lavaPit),badGoal);
         return (r*100L)+c;
     }
 

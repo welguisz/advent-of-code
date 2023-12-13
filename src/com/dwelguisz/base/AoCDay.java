@@ -116,6 +116,16 @@ public class AoCDay {
         return grid;
     }
 
+    protected char[][] rotateCharGrid(char[][] grid) {
+        char[][] newGrid = new char[grid[0].length][grid.length];
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[0].length; c++) {
+                newGrid[c][r] = grid[r][c];
+            }
+        }
+        return newGrid;
+    }
+
     protected String[][] copy2DArray(String [][] source) {
         String[][] newGrid = Arrays.stream(source)
                 .map((String[] row) -> row.clone())
