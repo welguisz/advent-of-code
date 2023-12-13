@@ -18,9 +18,9 @@ public class PointOfIncidence extends AoCDay {
         List<String> lines = readResoruceFile(2023, 13, false, 0);
         List<char[][]> lavaPits = createLavaPits(lines);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(lavaPits);
+        part1Answer = solutionPart1(lavaPits,0);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(lavaPits);
+        part2Answer = solutionPart1(lavaPits,1);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
@@ -52,15 +52,10 @@ public class PointOfIncidence extends AoCDay {
                 .map(e -> e.getKey()+1)
                 .findFirst().orElse(0);
     }
-    Long findReflection(char[][] lavaPit, int badGoal) {
-        return (findReflectionRowStream(lavaPit,badGoal) * 100L) + findReflectionRowStream(rotateCharGrid(lavaPit),badGoal);
-    }
 
-    Long solutionPart1(List<char[][]> lavaPits) {
-        return lavaPits.stream().mapToLong(l -> findReflection(l,0)).sum();
-    }
-
-    Long solutionPart2(List<char[][]> lavaPits) {
-        return lavaPits.stream().mapToLong(l -> findReflection(l,1)).sum();
+    Long solutionPart1(List<char[][]> lavaPits, int badGoal) {
+        return lavaPits.stream()
+                .mapToLong(l -> findReflectionRowStream(l, badGoal) * 100 + findReflectionRowStream(rotateCharGrid(l),badGoal))
+                .sum();
     }
 }
