@@ -1,18 +1,10 @@
 package com.dwelguisz.year2023;
 
 import com.dwelguisz.base.AoCDay;
-import com.dwelguisz.utilities.Coord2D;
-import org.apache.commons.lang3.tuple.Pair;
-import org.checkerframework.checker.units.qual.C;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class PointOfIncidence extends AoCDay {
     public void solve() {
