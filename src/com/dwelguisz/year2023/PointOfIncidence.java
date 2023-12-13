@@ -2,10 +2,17 @@ package com.dwelguisz.year2023;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
+import org.apache.commons.lang3.tuple.Pair;
+import org.checkerframework.checker.units.qual.C;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class PointOfIncidence extends AoCDay {
     public void solve() {
@@ -34,13 +41,13 @@ public class PointOfIncidence extends AoCDay {
         return lavaPits;
     }
 
-    Coord2D findReflection(char[][] lavaPit, int badGoal) {
+    Long findReflection(char[][] lavaPit, int badGoal) {
         int r = 0;
         for (int currentRow = 0; currentRow < lavaPit.length-1;currentRow++) {
             int bad = 0;
-            for (int deltaRow = 0; deltaRow < lavaPit.length;deltaRow++) {
-                int up = currentRow - deltaRow;
-                int down = currentRow + deltaRow + 1;
+            for (int deltaRow = 0; deltaRow < lavaPit.length/2+1;deltaRow++) {
+                Integer up = currentRow - deltaRow;
+                Integer down = currentRow + deltaRow + 1;
                 if (up >= 0 && up < lavaPit.length && down >= 0 && down < lavaPit.length && up < down) {
                     for (int column = 0; column < lavaPit[0].length; column++) {
                         if (lavaPit[up][column] != lavaPit[down][column]) {
@@ -73,19 +80,15 @@ public class PointOfIncidence extends AoCDay {
             }
         }
 
-        return new Coord2D(r, c);
+        return (r*100L)+c;
     }
 
     Long solutionPart1(List<char[][]> lavaPits) {
-        return lavaPits.stream().map(l -> findReflection(l,0))
-                .mapToLong(c -> (c.x*100+c.y))
-                .sum();
+        return lavaPits.stream().mapToLong(l -> findReflection(l,0)).sum();
     }
 
     Long solutionPart2(List<char[][]> lavaPits) {
-        return lavaPits.stream().map(l -> findReflection(l,1))
-                .mapToLong(c -> (c.x*100+c.y))
-                .sum();
+        return lavaPits.stream().mapToLong(l -> findReflection(l,1)).sum();
     }
 
 }
