@@ -1,10 +1,16 @@
 package com.dwelguisz.year2023;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.utilities.Coord2D;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class PointOfIncidence extends AoCDay {
     public void solve() {
@@ -33,31 +39,21 @@ public class PointOfIncidence extends AoCDay {
         return lavaPits;
     }
 
-    Integer findReflectionRow(char[][] lavaPit, int badGoal) {
-        int r = 0;
-        for (int currentRow = 0; currentRow < lavaPit.length-1;currentRow++) {
-            int bad = 0;
-            for (int deltaRow = 0; deltaRow < lavaPit.length/2+1;deltaRow++) {
-                Integer up = currentRow - deltaRow;
-                Integer down = currentRow + deltaRow + 1;
-                if (up >= 0 && up < lavaPit.length && down >= 0 && down < lavaPit.length && up < down) {
-                    for (int column = 0; column < lavaPit[0].length; column++) {
-                        if (lavaPit[up][column] != lavaPit[down][column]) {
-                            bad++;
-                        }
-                    }
-                }
-            }
-            if (bad == badGoal) {
-                r = currentRow+1;
-            }
-        }
-        return r;
+    Integer findReflectionRowStream(char[][] lavaPit, int badGoal) {
+        Map<Integer, List<Pair<Integer,Integer>>> t1 = IntStream.range(0, lavaPit.length-1).boxed()
+                .flatMap(currentRow -> IntStream.range(0,lavaPit.length).boxed()
+                        .map(deltaRow -> Pair.of(currentRow, new Coord2D(currentRow - deltaRow, currentRow + deltaRow + 1)))
+                        .filter(p -> p.getRight().x >= 0 && p.getRight().y < lavaPit.length))  //Pair(currentRow, Coord2D (down, up))
+                .flatMap(rows -> IntStream.range(0,lavaPit[0].length).boxed()
+                        .map(col -> Pair.of(rows.getLeft(),lavaPit[rows.getRight().x][col] == lavaPit[rows.getRight().y][col] ? 0 : 1))
+                ).collect(Collectors.groupingBy(p -> p.getLeft(), Collectors.toList()));
+        return t1.entrySet().stream()
+                .filter(e -> e.getValue().stream().mapToLong(v -> v.getRight()).sum() == badGoal)
+                .map(e -> e.getKey()+1)
+                .findFirst().orElse(0);
     }
     Long findReflection(char[][] lavaPit, int badGoal) {
-        int r = findReflectionRow(lavaPit,badGoal);
-        int c = findReflectionRow(rotateCharGrid(lavaPit),badGoal);
-        return (r*100L)+c;
+        return (findReflectionRowStream(lavaPit,badGoal) * 100L) + findReflectionRowStream(rotateCharGrid(lavaPit),badGoal);
     }
 
     Long solutionPart1(List<char[][]> lavaPits) {
@@ -67,5 +63,4 @@ public class PointOfIncidence extends AoCDay {
     Long solutionPart2(List<char[][]> lavaPits) {
         return lavaPits.stream().mapToLong(l -> findReflection(l,1)).sum();
     }
-
 }
