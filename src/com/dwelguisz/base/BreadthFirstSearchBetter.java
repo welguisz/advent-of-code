@@ -1,11 +1,8 @@
 package com.dwelguisz.base;
 
-import com.dwelguisz.utilities.Coord2D;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,9 +12,13 @@ public abstract class BreadthFirstSearchBetter<T> {
 
     }
 
-    public abstract Stream<T> nextSteps(T currentPos, Collection<T> neighbors, Set<T> allowedSpaces);
+    public Stream<T> nextSteps(T currentPos, Collection<T> neighbors, Set<T> allowedSpaces) {
+        return Stream.of(currentPos);
+    }
 
-    public abstract Collection<T> getNeighbors(T currentPos, Collection<T> neighborsToCheck);
+    public Collection<T> getNeighbors(Object ... a) {
+        return Set.of();
+    }
     public Long bfsRoute(T start, T end, Long startTime, Collection<T> neighborsToCheck) {
         Set<T> states = new HashSet<>();
         states.add(start);
