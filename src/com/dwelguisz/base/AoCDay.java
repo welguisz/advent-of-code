@@ -1,9 +1,7 @@
 package com.dwelguisz.base;
 
 import com.dwelguisz.utilities.Coord2D;
-import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +12,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -116,11 +113,23 @@ public class AoCDay {
         return grid;
     }
 
-    protected char[][] rotateCharGrid(char[][] grid) {
+    protected char[][] rotateCharGridClockwise(char[][] grid) {
         char[][] newGrid = new char[grid[0].length][grid.length];
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {
                 newGrid[c][r] = grid[r][c];
+            }
+        }
+        return newGrid;
+    }
+
+    protected char[][] rotateCharGridCounterClockwise(char[][] grid) {
+        int maxR = grid.length;
+        int maxC = grid[0].length;
+        char[][] newGrid = new char[maxR][maxC];
+        for (int r = 0; r < maxR; r++) {
+            for (int c = 0; c < maxC; c++) {
+                newGrid[c][maxR-1-r] = grid[r][c];
             }
         }
         return newGrid;

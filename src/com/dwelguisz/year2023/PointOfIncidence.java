@@ -6,7 +6,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -39,6 +38,26 @@ public class PointOfIncidence extends AoCDay {
         return lavaPits;
     }
 
+    Integer findReflectionRow(char[][] lavaPit, int badGoal) {
+        for (int currentRow =0; currentRow < lavaPit.length-1; currentRow++) {
+            int sum = 0;
+            for (int deltaRow = 0; deltaRow < lavaPit.length / 2; deltaRow++) {
+                int up = currentRow - deltaRow;
+                int down = currentRow + deltaRow + 1;
+                if (up >= 0 && down < lavaPit.length) {
+                    for (int column = 0; column < lavaPit[0].length; column++) {
+                        if (lavaPit[up][column] != lavaPit[down][column]) {
+                            sum++;
+                        }
+                    }
+                }
+            }
+            if (sum == badGoal) {
+                return currentRow+1;
+            }
+        }
+        return 0;
+    }
     Integer findReflectionRowStream(char[][] lavaPit, int badGoal) {
         Map<Integer, List<Pair<Integer,Integer>>> t1 = IntStream.range(0, lavaPit.length-1).boxed()
                 .flatMap(currentRow -> IntStream.range(0,lavaPit.length).boxed()
@@ -55,7 +74,7 @@ public class PointOfIncidence extends AoCDay {
 
     Long solutionPart1(List<char[][]> lavaPits, int badGoal) {
         return lavaPits.stream()
-                .mapToLong(l -> findReflectionRowStream(l, badGoal) * 100 + findReflectionRowStream(rotateCharGrid(l),badGoal))
+                .mapToLong(l -> findReflectionRow(l, badGoal) * 100 + findReflectionRow(rotateCharGridClockwise(l),badGoal))
                 .sum();
     }
 }

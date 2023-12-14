@@ -37,17 +37,6 @@ public class ParabolicReflectorDish extends AoCDay {
         return grid;
     }
 
-    char[][] rotate(char[][] grid) {
-        int maxR = grid.length;
-        int maxC = grid[0].length;
-        char[][] newGrid = new char[maxR][maxC];
-        for (int r = 0; r < maxR; r++) {
-            for (int c = 0; c < maxC; c++) {
-                newGrid[c][maxR-1-r] = grid[r][c];
-            }
-        }
-        return newGrid;
-    }
 
     Long scoreGrid(char[][] grid) {
         int maxR = grid.length;
@@ -87,14 +76,15 @@ public class ParabolicReflectorDish extends AoCDay {
             currentCycle += 1;
             for (int i = 0; i < 4; i++) {
                 grid = tilt(grid);
-                grid = rotate(grid);
+                grid = rotateCharGridCounterClockwise(grid);
             }
-            if (gridHistory.containsKey(hashGrid(grid))) {
-                Long cycleLength = currentCycle - gridHistory.get(hashGrid(grid));
+            Long hash = hashGrid(grid);
+            if (gridHistory.containsKey(hash)) {
+                Long cycleLength = currentCycle - gridHistory.get(hash);
                 Long cyclesToSkip = (totalCycleNumber - currentCycle) / cycleLength;
                 currentCycle += cyclesToSkip * cycleLength;
             }
-            gridHistory.put(hashGrid(grid),currentCycle);
+            gridHistory.put(hash,currentCycle);
         }
         return scoreGrid(grid);
     }
