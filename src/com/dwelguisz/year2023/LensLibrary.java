@@ -24,12 +24,9 @@ public class LensLibrary extends AoCDay {
     }
 
     Integer doHash(String hash) {
-        char[] chArr = hash.toCharArray();
         Integer value = 0;
-        for (char ch : chArr) {
-            value += ch;
-            value *= 17;
-            value %= 256;
+        for (char ch : hash.toCharArray()) {
+            value = ((value + ch) * 17) % 256;
         }
         return value;
     }
