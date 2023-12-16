@@ -52,13 +52,13 @@ public class TheFloorWillBeLava extends AoCDay {
     }
 
 
-    Set<Pair<Coord2D,Coord2D>> nextSplitter(Coord2D loc, Coord2D dir, char val) {
+    Stream<Pair<Coord2D,Coord2D>> nextSplitter(Coord2D loc, Coord2D dir, char val) {
         if (val == '-' && SPLIT_HORIZONTAL.contains(dir)) {
-            return SPLIT_VERTICAL.stream().map(d -> Pair.of(loc.add(d),d)).collect(Collectors.toSet());
+            return SPLIT_VERTICAL.stream().map(d -> Pair.of(loc.add(d),d));
         } else if (val == '|' && SPLIT_VERTICAL.contains(dir)) {
-            return SPLIT_HORIZONTAL.stream().map(d -> Pair.of(loc.add(d),d)).collect(Collectors.toSet());
+            return SPLIT_HORIZONTAL.stream().map(d -> Pair.of(loc.add(d),d));
         }
-        return Set.of(Pair.of(loc.add(dir),dir));
+        return Stream.of(Pair.of(loc.add(dir),dir));
     }
 
     boolean filterBadLocs(char[][] grid, Coord2D loc) {
@@ -71,19 +71,19 @@ public class TheFloorWillBeLava extends AoCDay {
         Integer c = state.getLeft().y;
         if (filterBadLocs(grid, state.getLeft())) {
             char val = grid[r][c];
-            if (val == '.') {
-                Pair<Coord2D,Coord2D> next = Pair.of(state.getLeft().add(state.getRight()),state.getRight());
+            if (SPLITTER.contains(val)) {
+                return nextSplitter(state.getLeft(), state.getRight(), val).filter(s -> !seen.contains(s));
+            } else {
+                Pair<Coord2D, Coord2D> next = Pair.of(state.getLeft(), state.getRight());
+                if (val == '.') {
+                    next = Pair.of(state.getLeft().add(state.getRight()),state.getRight());
+                } else if (MIRRORS.contains(val)) {
+                    Coord2D newDir = MIRROR_TRANSFORM.get(Pair.of(state.getRight(), val));
+                    next = Pair.of(state.getLeft().add(newDir), newDir);
+                }
                 if (!seen.contains(next)) {
                     return Stream.of(next);
                 }
-            } else if (MIRRORS.contains(val)) {
-                Coord2D newDir = MIRROR_TRANSFORM.get(Pair.of(state.getRight(), val));
-                Pair<Coord2D,Coord2D> next = Pair.of(state.getLeft().add(newDir),newDir);
-                if (!seen.contains(next)) {
-                    return Stream.of(next);
-                }
-            } else if (SPLITTER.contains(val)) {
-                return nextSplitter(state.getLeft(), state.getRight(), val).stream().filter(s -> !seen.contains(s));
             }
         }
         return Stream.of();
@@ -114,6 +114,6 @@ public class TheFloorWillBeLava extends AoCDay {
             maxValue = Long.max(maxValue, energizeGrid(grid, new Coord2D(0,c),DOWN));
             maxValue = Long.max(maxValue, energizeGrid(grid, new Coord2D(grid.length-1,c),UP));
         }
-        return maxValue.longValue();
+        return maxValue;
     }
 }
