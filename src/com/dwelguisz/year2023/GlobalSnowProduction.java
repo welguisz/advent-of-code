@@ -11,7 +11,7 @@ public class GlobalSnowProduction extends AoCYear {
         AoCDay aocDays[] = {new Trebuchet(), new CubeConundrum(), new GearRatios(), new Scratchcards(),
                 new GiveASeedAFertilizer(), new WaitForIt(), new CamelCards(), new HauntedWasteland(),
                 new MirageMaintenance(), new PipeMaze(), new CosmicExpansion(), new HotSprings(),
-                new PointOfIncidence(), new ParabolicReflectorDish(), new LensLibrary()};
+                new PointOfIncidence(), new ParabolicReflectorDish(), new LensLibrary(), new TheFloorWillBeLava()};
         AoCDay aoCDay = aocDays[day-1];
         aoCDay.run();
     }
