@@ -35,7 +35,6 @@ public class TheFloorWillBeLava extends AoCDay {
             Pair.of(DOWN,'/'),LEFT
     );
 
-
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2023, 16, false, 0);
