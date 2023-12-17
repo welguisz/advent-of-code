@@ -136,7 +136,7 @@ public class ClumsyCrucible extends AoCDay {
             }
             return POSSIBLE_NEXT_STEPS.indexOf(a.direction) - POSSIBLE_NEXT_STEPS.indexOf(b.direction);
         });
-        State initialState = new State(startingLocation, new Coord2D(-1,-1), 1);
+        State initialState = new State(startingLocation, STARTING_DIRECTION, 1);
         heatMap.put(initialState.toString(), 0L);
         stateQ.add(initialState);
         Coord2D endLoc = new Coord2D(grid.length-1,grid[0].length-1);
