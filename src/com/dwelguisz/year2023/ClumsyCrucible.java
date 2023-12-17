@@ -71,14 +71,17 @@ public class ClumsyCrucible extends AoCDay {
 
         public Stream<State> nextSteps(char[][] grid, BiFunction<State, Coord2D, Boolean> func) {
             return POSSIBLE_NEXT_STEPS.stream()
-                    .filter(nxd -> !nxd.equals(STARTING_DIRECTION) && !direction.multiply(-1).equals(nxd) && func.apply(this, nxd))
-                    .filter(p -> inGrid(p, grid))
+                    .filter(nxd -> !nxd.equals(STARTING_DIRECTION) &&
+                            !direction.multiply(-1).equals(nxd) &&
+                            func.apply(this, nxd) &&
+                            inGrid(nxd, grid)
+                    )
                     .map(p -> {
                 Coord2D nextLoc = location.add(p);
                 Integer steps = direction.equals(p) ? currentSteps + 1 : 1;
                 visited.add(this);
-                return new State(nextLoc, p,steps);
-            })
+                return new State(nextLoc, p,steps);}
+                    )
                     .filter(s -> !heatMap.containsKey(s.toString()));
         }
     }
