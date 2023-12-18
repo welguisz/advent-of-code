@@ -4,7 +4,7 @@
 ## Overview
 Difficult Level: Easy/Medium
 
-Input: Initial state of lights
+Input: Initial crucibleState of lights
 
 ## Part 1 and Part 2
 This puzzle is very similar to [Day 6, Probably a Fire Hazard](../day06/README.md). 

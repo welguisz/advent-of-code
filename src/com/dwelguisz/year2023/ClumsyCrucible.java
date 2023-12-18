@@ -2,6 +2,8 @@ package com.dwelguisz.year2023;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
+import com.dwelguisz.utilities.graph.transversal.PathSearch;
+import com.dwelguisz.utilities.graph.transversal.SearchStateNode;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -25,25 +27,18 @@ public class ClumsyCrucible extends AoCDay {
 
     List<Coord2D> POSSIBLE_NEXT_STEPS = List.of(UP,RIGHT,DOWN,LEFT, STARTING_DIRECTION);
 
-    Set<State> visited;
-    Map<String, Long> heatMap;
-    public class State {
-        public Coord2D location;
-        Coord2D direction;
-        Integer currentSteps;
+    public class CrucibleState extends SearchStateNode {
 
         private int hashCode;
 
-        public State(Coord2D location, Coord2D direction, Integer currentSteps) {
-            this.location = location;
-            this.direction = direction;
-            this.currentSteps = currentSteps;
+        public CrucibleState(Coord2D location, Coord2D direction, Integer currentSteps) {
+            super(location, direction, currentSteps);
             this.hashCode = Objects.hash(location, direction, currentSteps);
         }
 
         @Override
         public String toString() {
-            return location.toString() + direction.toString() + currentSteps;
+            return location.toString() + direction.toString() + subInfo;
         }
 
         @Override
@@ -52,9 +47,9 @@ public class ClumsyCrucible extends AoCDay {
                 return true;
             }
             if (o == null | getClass() != o.getClass()) return false;
-            State other = (State) o;
+            CrucibleState other = (CrucibleState) o;
             return (this.location.equals(other.location) && this.direction.equals(other.location)
-                    && this.currentSteps.equals(other.currentSteps));
+                    && this.subInfo.equals(other.subInfo));
         }
 
         @Override
@@ -62,87 +57,63 @@ public class ClumsyCrucible extends AoCDay {
             return this.hashCode;
         }
 
-        boolean inGrid(Coord2D nextDir, char[][]grid) {
-            Coord2D nextLoc = location.add(nextDir);
-            Integer r = nextLoc.x;
-            Integer c = nextLoc.y;
-            return (0 <= r && r < grid.length && 0 <= c && c < grid[0].length);
-        }
-
-        public Stream<State> nextSteps(char[][] grid, BiFunction<State, Coord2D, Boolean> func) {
+        @Override
+        public Stream<CrucibleState> getNextNodes(
+                Object[][] grid, BiFunction<SearchStateNode, Coord2D, Boolean> func,
+                Set<SearchStateNode> visited,
+                Map<String, Long> cost
+                ) {
             return POSSIBLE_NEXT_STEPS.stream()
                     .filter(nxd -> !nxd.equals(STARTING_DIRECTION) &&
                             !direction.multiply(-1).equals(nxd) &&
                             func.apply(this, nxd) &&
-                            inGrid(nxd, grid)
+                            inGrid(grid, location.add(nxd))
                     )
                     .map(p -> {
-                Coord2D nextLoc = location.add(p);
-                Integer steps = direction.equals(p) ? currentSteps + 1 : 1;
-                visited.add(this);
-                return new State(nextLoc, p,steps);}
+                        Coord2D nextLoc = location.add(p);
+                        Integer steps = direction.equals(p) ? subInfo + 1 : 1;
+                        visited.add(this);
+                        return new CrucibleState(nextLoc, p,steps);}
                     )
-                    .filter(s -> !heatMap.containsKey(s.toString()));
+                    .filter(s -> !cost.containsKey(s.toString()));
         }
     }
+
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2023, 17, false, 0);
         char[][] grid = convertToCharGrid(lines);
+        Character[][] newGrid = new Character[grid.length][grid[0].length];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                newGrid[i][j] = grid[i][j];
+            }
+        }
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(grid);
+        part1Answer = solutionPart1(newGrid);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(grid);
+        part2Answer = solutionPart2(newGrid);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    Long solutionPart1(char[][] grid) {
-        return findShortestPath(
-                new Coord2D(0,0),
-                (state, nextLoc) -> state.currentSteps <= 3,
+    Long solutionPart1(Character[][] grid) {
+        return new PathSearch().findShortestPath(
+                new CrucibleState(new Coord2D(0,0), STARTING_DIRECTION, 1),
+                (crucibleState) -> crucibleState.location.equals(new Coord2D(grid.length-1, grid[0].length-1)),
+                (crucibleState, nextLoc) -> crucibleState.subInfo <= 3,
                 grid
         );
     }
 
-    Long solutionPart2(char[][] grid) {
-        return findShortestPath(
-                new Coord2D(0,0),
-                (state, nextLoc) -> (state.currentSteps <= 10) &&
-                        (state.direction.equals(nextLoc) ||
-                                (state.currentSteps >= 4) ||
-                                state.direction.equals(STARTING_DIRECTION)),
+    Long solutionPart2(Character[][] grid) {
+        return new PathSearch().findShortestPath(
+                new CrucibleState(new Coord2D(0,0), STARTING_DIRECTION, 1),
+                (crucibleState) -> crucibleState.location.equals(new Coord2D(grid.length-1, grid[0].length-1)),
+                (crucibleState, nextLoc) -> (crucibleState.subInfo <= 10) &&
+                        (crucibleState.direction.equals(nextLoc) ||
+                                (crucibleState.subInfo >= 4) ||
+                crucibleState.direction.equals(STARTING_DIRECTION)),
                 grid
         );
-    }
-
-
-    public Long findShortestPath(
-            Coord2D startingLocation,
-            BiFunction<State, Coord2D, Boolean> func,
-            char[][]grid
-    ) {
-        visited = new HashSet<>();
-        heatMap = new HashMap<>();
-        PriorityQueue<State> stateQ = new PriorityQueue<>(2000, (a,b) ->
-            Math.toIntExact(heatMap.get(a.toString()) - heatMap.get(b.toString()))
-        );
-        State initialState = new State(startingLocation, STARTING_DIRECTION, 1);
-        heatMap.put(initialState.toString(), 0L);
-        stateQ.add(initialState);
-        Coord2D endLoc = new Coord2D(grid.length-1,grid[0].length-1);
-        while(!stateQ.isEmpty()) {
-            State currentState = stateQ.poll();
-            if (visited.contains(currentState)) {
-                continue;
-            }
-            if (currentState.location.equals(endLoc)) {
-                return heatMap.get(currentState.toString());
-            }
-            Set<State> nextState = currentState.nextSteps(grid, func).collect(Collectors.toSet());
-            Long value = heatMap.get(currentState.toString());
-            nextState.stream().forEach(s -> heatMap.put(s.toString(), value+Integer.parseInt(""+grid[s.location.x][s.location.y])));
-            stateQ.addAll(nextState);
-        }
-        return -1L;
     }
 }

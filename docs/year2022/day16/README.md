@@ -90,7 +90,7 @@ for (String k: valveNames) {
 
 ### General Approach
 #### Create a new class PressureState
-PressureState will be a class that contains a possible state of the valves that have flow. PressureState
+PressureState will be a class that contains a possible crucibleState of the valves that have flow. PressureState
 will contain the following information:
 
 * Valve currently at
@@ -112,19 +112,19 @@ Map<Integer, Integer> visit(Valve valve, Integer minutes, Integer bitMask, Integ
     PriorityQueue<PressureState> pressureStates = new PriorityQueue<>(2000, (a,b) -> b.minutes - a.minutes);
     pressureStates.add(new PressureState(valve, bitMask, pressure, minutes));
     while (!pressureStates.isEmpty()) {
-        PressureState currentState = pressureStates.poll();
-        result.put(currentState.bitMask, Integer.max(result.getOrDefault(currentState.bitMask, 0), currentState.pressure));
+        PressureState currentCrucibleState = pressureStates.poll();
+        result.put(currentCrucibleState.bitMask, Integer.max(result.getOrDefault(currentCrucibleState.bitMask, 0), currentCrucibleState.pressure));
         for (Map.Entry<String, Integer> valve2 : flows.entrySet()) {
             String valveName = valve2.getKey();
             Valve valve2Name = graph.get(valveName);
-            Integer remainingMinutes = currentState.minutes - distances.get(Pair.of(currentState.valve.name, valve2Name.name)) - 1;
-            if (((indicies.get(valveName) & currentState.bitMask) != 0) || (remainingMinutes <= 0)) {
+            Integer remainingMinutes = currentCrucibleState.minutes - distances.get(Pair.of(currentCrucibleState.valve.name, valve2Name.name)) - 1;
+            if (((indicies.get(valveName) & currentCrucibleState.bitMask) != 0) || (remainingMinutes <= 0)) {
                 continue;
             }
             pressureStates.add(new PressureState(
                     graph.get(valveName),
-                    currentState.bitMask | indicies.get(valve2.getKey()),
-                    currentState.pressure + flows.get(valveName) * remainingMinutes,
+                    currentCrucibleState.bitMask | indicies.get(valve2.getKey()),
+                    currentCrucibleState.pressure + flows.get(valveName) * remainingMinutes,
                     remainingMinutes
             ));
         }

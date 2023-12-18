@@ -15,7 +15,7 @@ In this class, I will add the following function `distanceTraveled(int time)` th
 calculate the distance travelled.
 
 ## Part 1
-Since everything is being done in the class, we need to know the state of the
+Since everything is being done in the class, we need to know the crucibleState of the
 reindeer.  Since we need to go 2503 seconds, we fly for so many seconds, then rest
 for another period of time. This will make the function a loop that counts down
 the number of seconds and when we reach 0, stop.
