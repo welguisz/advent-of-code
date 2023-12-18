@@ -123,19 +123,9 @@ public class ClumsyCrucible extends AoCDay {
     ) {
         visited = new HashSet<>();
         heatMap = new HashMap<>();
-        PriorityQueue<State> stateQ = new PriorityQueue<>(500, (a,b) -> {
-            if (heatMap.get(a.toString()) - heatMap.get(b.toString()) != 0L) {
-                return Math.toIntExact(heatMap.get(a.toString()) - heatMap.get(b.toString()));
-            }
-            Coord2D locA = a.location;
-            Coord2D locB = b.location;
-            if (locA.x - locB.x != 0) {
-                return locA.x - locB.x;
-            } else if (locA.y-locB.y != 0) {
-                return locA.y - locB.y;
-            }
-            return POSSIBLE_NEXT_STEPS.indexOf(a.direction) - POSSIBLE_NEXT_STEPS.indexOf(b.direction);
-        });
+        PriorityQueue<State> stateQ = new PriorityQueue<>(2000, (a,b) ->
+            Math.toIntExact(heatMap.get(a.toString()) - heatMap.get(b.toString()))
+        );
         State initialState = new State(startingLocation, STARTING_DIRECTION, 1);
         heatMap.put(initialState.toString(), 0L);
         stateQ.add(initialState);
