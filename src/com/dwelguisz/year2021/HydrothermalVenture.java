@@ -4,19 +4,22 @@ package com.dwelguisz.year2021;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day5.Board;
 
+import java.time.Instant;
 import java.util.List;
 
 
 public class HydrothermalVenture extends AoCDay {
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day5/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,5,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
         Board board1 = new Board(lines, false);
+        part1Answer = board1.avoidSpaces();
+        timeMarkers[2] = Instant.now().toEpochMilli();
         Board board2 = new Board(lines, true);
-        int part1 = board1.avoidSpaces();
-        int part2 = board2.avoidSpaces();
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        part2Answer = board2.avoidSpaces();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
 }

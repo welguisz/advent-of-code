@@ -3,6 +3,7 @@ package com.dwelguisz.year2021;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day4.BingoCard;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,13 +27,15 @@ public class GiantSquid extends AoCDay {
     }
 
     public void solve() {
-        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day4/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2021,4,false,0);
         createGame(instructions);
         playThroughAllWinners();
-        int part1 = orderedWinnersValue.get(0);
-        int part2 = orderedWinnersValue.get(orderedWinnersValue.size()-1);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = orderedWinnersValue.get(0);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = orderedWinnersValue.get(orderedWinnersValue.size()-1);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private void createGame(List<String> instructions) {
@@ -57,7 +60,6 @@ public class GiantSquid extends AoCDay {
         if (card.size() == 5) {
             bingoCards.add(new BingoCard(card));
         }
-
     }
 
     private void playThroughAllWinners() {
