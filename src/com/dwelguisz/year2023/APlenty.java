@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class APlenty extends AoCDay {
-    
+
     Map<String, String> RULES;
     List<List<Integer>> parts;
 
@@ -104,8 +104,8 @@ public class APlenty extends AoCDay {
                         String op = mI[0].substring(1,2);
                         res = mI[1];
                         Integer n = Integer.parseInt(mI[0].substring(2));
-                        queue.push(Pair.of(res, new ArrayList<>(newRanges(var, op, n, new ArrayList<>(vL), false))));
-                        vL = new ArrayList<>(newRanges(var, op, n, new ArrayList<>(vL), true));
+                        queue.push(Pair.of(res, new ArrayList<>(newRanges(var, op, n, vL, false))));
+                        vL = new ArrayList<>(newRanges(var, op, n, vL, true));
                     } else {
                         queue.push(Pair.of(res, new ArrayList<>(vL)));
                         break;
@@ -139,10 +139,11 @@ public class APlenty extends AoCDay {
     }
 
     List<Coord2D> newRanges(String var, String op, Integer value, List<Coord2D> ranges, boolean negativeLogic) {
+        List<Coord2D> updatedRange = new ArrayList<>(ranges);
         List<String> options = List.of("x","m","a","s");
         Integer index = options.indexOf(var);
-        ranges.set(index, newRange(op, value, ranges.get(index).x, ranges.get(index).y, negativeLogic));
-        return ranges;
+        updatedRange.set(index, newRange(op, value, updatedRange.get(index).x, updatedRange.get(index).y, negativeLogic));
+        return updatedRange;
     }
 
 }
