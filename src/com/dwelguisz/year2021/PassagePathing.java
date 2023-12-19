@@ -4,6 +4,7 @@ import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day12.Cave;
 import com.dwelguisz.year2021.helper.day12.CavePath;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,12 +19,14 @@ public class PassagePathing extends AoCDay {
     }
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day12/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,12,false,0);
         createMap(lines);
-        Integer part1 = solution(false);
-        Integer part2 = solution(true);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solution(false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solution(true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private void createMap(List<String> lines) {

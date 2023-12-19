@@ -3,6 +3,7 @@ package com.dwelguisz.year2021;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,14 +18,15 @@ import static java.util.stream.Collectors.counting;
 public class ExtendedPolymerization extends AoCDay {
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day14/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,14,false,0);
         List<String> equations = lines.stream().filter(str -> (str.contains(" -> "))).collect(Collectors.toList());
         Map<String, List<String>> newStrings = createMap(equations);
-        Long part1 = elegantSolution(newStrings, lines.get(0), 10);
-        Long part2 = elegantSolution(newStrings, lines.get(0), 40);
-        System.out.println("--------- Day 14: Extended Polymerization------------");
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = elegantSolution(newStrings, lines.get(0), 10);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = elegantSolution(newStrings, lines.get(0), 40);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Map<String, List<String>> createMap(List<String> equations) {

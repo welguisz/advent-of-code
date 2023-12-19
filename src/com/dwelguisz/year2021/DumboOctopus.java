@@ -2,6 +2,7 @@ package com.dwelguisz.year2021;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +19,8 @@ public class DumboOctopus extends AoCDay {
     }
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day11/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,11,false,0);
         int x = 0;
         for (String line : lines) {
             List<Integer> row = Arrays.stream(line.split("")).map(str -> parseInt(str)).collect(Collectors.toList());
@@ -27,10 +29,11 @@ public class DumboOctopus extends AoCDay {
             }
             x++;
         }
-        Long part1 = solutionPart1();
-        Long part2 = solutionPart2();
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Long solutionPart1() {

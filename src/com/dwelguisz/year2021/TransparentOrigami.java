@@ -3,6 +3,7 @@ package com.dwelguisz.year2021;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day13.Point;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -23,13 +24,14 @@ public class TransparentOrigami extends AoCDay {
     }
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day13/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,13, false, 0);
         Set<Point> points = processLines(lines);
-        Integer part1 = part1(points, processInstructions);
-        System.out.println("--------- Day 13: Transparent Origami------------");
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println("Part 2:");
-        part2(points, processInstructions);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = part1(points, processInstructions);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = part2(points, processInstructions);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Set<Point> processLines(List<String> strings) {
@@ -49,7 +51,8 @@ public class TransparentOrigami extends AoCDay {
         return points;
     }
 
-    private void printGrid(Set<Point> points) {
+    private String printGrid(Set<Point> points) {
+        String current = "\n";
         Integer minX = Integer.MAX_VALUE;
         Integer minY = Integer.MAX_VALUE;
         Integer maxX= Integer.MIN_VALUE;
@@ -70,8 +73,9 @@ public class TransparentOrigami extends AoCDay {
                     sb.append(" ");
                 }
             }
-            System.out.println(sb.toString());
+            current += sb.toString() + "\n";
         }
+        return current;
     }
 
     private int part1(Set<Point> points, List<String> lines) {
@@ -79,11 +83,11 @@ public class TransparentOrigami extends AoCDay {
         return points.size();
     }
 
-    private void part2(Set<Point> points, List<String> lines) {
+    private String part2(Set<Point> points, List<String> lines) {
         for (String line : lines) {
             points = foldOnce(points, line);
         }
-        printGrid(points);
+        return printGrid(points);
     }
 
     private Set<Point> foldOnce(Set<Point> points, String line) {
