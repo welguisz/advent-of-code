@@ -2,6 +2,7 @@ package com.dwelguisz.year2021;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -9,12 +10,13 @@ import static java.lang.Integer.parseInt;
 public class Dive extends AoCDay {
 
     public void solve() {
-        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day2/input.txt");
-        int part1 = calculateLocation(instructions);
-        int part2 = calculateLocationWithAim(instructions);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
-
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2021,2,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = calculateLocation(instructions);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = calculateLocationWithAim(instructions);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Integer calculateLocation(List<String> instructions) {

@@ -2,19 +2,22 @@ package com.dwelguisz.year2021;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SonarSweep extends AoCDay {
 
     public void solve() {
-        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day1/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2021,1,false,0);
         List<Integer> values = convertStringsToInts(instructions);
-        int roughCalculation = calculateIncreases(values);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = calculateIncreases(values);
+        timeMarkers[2] = Instant.now().toEpochMilli();
         List<Integer> windowValues = calculateWindow(values);
-        int betterCalculation = calculateIncreases(windowValues);
-        System.out.println(String.format("Part 1 Answer: %d", roughCalculation));
-        System.out.println(String.format("Part 2 Answer: %d", betterCalculation));
+        part2Answer = calculateIncreases(windowValues);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Integer calculateIncreases(List<Integer> values) {

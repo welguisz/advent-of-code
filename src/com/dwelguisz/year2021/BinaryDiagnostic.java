@@ -2,6 +2,7 @@ package com.dwelguisz.year2021;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,14 +11,15 @@ import static java.lang.Integer.parseInt;
 public class BinaryDiagnostic extends AoCDay {
 
     public void solve() {
-        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day3/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2021,3,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
         int oxygen = getRating(instructions, '1', true);
         int carbondioxide = getRating(instructions, '0', false);
-        int part1 = calculateBinary(instructions);
-        int part2 = oxygen * carbondioxide;
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
-
+        part1Answer = calculateBinary(instructions);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = oxygen * carbondioxide;
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     static private Integer getRating(final List<String> binaryValues, final char midVal, final boolean oxygen) {
