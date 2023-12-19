@@ -13,8 +13,7 @@ import java.util.stream.Collectors;
 
 public class PathSearch {
 
-    Set<SearchStateNode
-            > visited;
+    Set<SearchStateNode> visited;
     Map<String, Long> cost;
     public Long findShortestPath(
             SearchStateNode initialState,
@@ -31,7 +30,7 @@ public class PathSearch {
         stateQ.add(initialState);
         while(!stateQ.isEmpty()) {
             SearchStateNode currentState = stateQ.poll();
-            if (visited.contains(currentState.toString())) {
+            if (visited.contains(currentState)) {
                 continue;
             }
             if (endCondition.apply(currentState)) {
