@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class APlenty extends AoCDay {
-
-
+    
     Map<String, String> RULES;
     List<List<Integer>> parts;
 
