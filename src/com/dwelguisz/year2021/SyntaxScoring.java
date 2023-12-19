@@ -2,6 +2,7 @@ package com.dwelguisz.year2021;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,11 +36,13 @@ public class SyntaxScoring extends AoCDay {
         scoreMap.put("<", 4);
     }
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day10/input.txt");
-        Long part1 = parseLines(lines, false);
-        Long part2 = parseLines(lines, true);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,10,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = parseLines(lines, false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = parseLines(lines, true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Long parseLines(List<String> lines, boolean part2) {

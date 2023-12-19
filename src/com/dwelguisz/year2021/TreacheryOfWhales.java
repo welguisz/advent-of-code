@@ -2,6 +2,7 @@ package com.dwelguisz.year2021;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -19,12 +20,14 @@ public class TreacheryOfWhales extends AoCDay {
     }
 
     public void solve() {
-        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day7/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2021,7,false,0);
         createArray(instructions.get(0));
-        Long part1 = findMinSteps(false);
-        Long part2 = findMinSteps(true);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = findMinSteps(false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = findMinSteps(true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public void createArray(String crabLocs) {

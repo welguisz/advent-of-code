@@ -3,23 +3,25 @@ package com.dwelguisz.year2021;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day6.School;
 
+import java.time.Instant;
 import java.util.List;
 
 public class LanternFish extends AoCDay {
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day6/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,6,false,0);
         School school = new School(lines.get(0));
-        Long part1 = 0L;
+        timeMarkers[1] = Instant.now().toEpochMilli();
         for(int i = 0; i < 256; i++) {
             if (i == 80) {
-                part1 = school.getFishes();
+                part1Answer = school.getFishes();
+                timeMarkers[2] = Instant.now().toEpochMilli();
             }
             school.advanceOneDay();
         }
-        Long part2 = school.getFishes();
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        part2Answer = school.getFishes();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
 }

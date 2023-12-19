@@ -3,6 +3,7 @@ package com.dwelguisz.year2021;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day8.SevenWireDisplay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,12 +20,14 @@ public class SevenSegmentSearch extends AoCDay {
     }
 
     public void solve() {
-        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day8/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2021,8,false,0);
         parseString(instructions);
-        int part1 = countEasyNumbers(output);
-        int part2 = SumNumbers(input, output);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = countEasyNumbers(output);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = SumNumbers(input, output);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private int SumNumbers(List<List<String>> inputStrings, List<List<String>> outputStrings) {

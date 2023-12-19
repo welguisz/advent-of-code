@@ -2,6 +2,7 @@ package com.dwelguisz.year2021;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,12 +25,14 @@ public class SmokeBasin extends AoCDay {
     }
 
     public void solve() {
-        List<String> instructions = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day9/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2021,9,false,0);
         createRows(instructions);
-        int part1 = findAnswer(false);
-        int part2 = findAnswer(true);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = findAnswer(false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = findAnswer(true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public int findAnswer(boolean part2) {
