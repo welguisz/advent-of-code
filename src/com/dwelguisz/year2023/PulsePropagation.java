@@ -31,7 +31,6 @@ public class PulsePropagation extends AoCDay {
         Long highPulses;
         Boolean currentValue;
 
-
         public Module(String name, List<String> receiver, String choice) {
             this.name = name;
             this.receiver = receiver;
@@ -172,9 +171,7 @@ public class PulsePropagation extends AoCDay {
         while (!done) {
             buttonPressOnce(count);
             count++;
-            if (lcmCatch.size() == WATCH.size()) {
-                done = true;
-            }
+            done = lcmCatch.size() == WATCH.size();
         }
         return lcmCatch.stream().mapToLong(a -> a).reduce(1L, (a,b) -> SpecialMath.lcm(a,b));
     }
