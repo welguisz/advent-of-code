@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 public class PulsePropagation extends AoCDay {
 
     Map<String, Module> modules;
-    List<String> WATCH = List.of("pm","dl","vk","ks");
+    List<String> flipFlops;
+    List<String> conjunctions;
+    List<String> WATCH = new ArrayList<>();
     Map<String, Long> COUNT = new HashMap<>();
     Map<String, Long> PREVIOUS = new HashMap<>();
     List<Long> lcmCatch = new ArrayList<>();
@@ -110,11 +112,19 @@ public class PulsePropagation extends AoCDay {
 
     public void parseLines(List<String> lines) {
         modules = new HashMap<>();
+        flipFlops = new ArrayList<>();
+        conjunctions = new ArrayList<>();
+        WATCH = new ArrayList<>();
         for (String line : lines) {
             String split[] = line.split(" -> ");
             List<String> outputs = Arrays.stream(split[1].split(", ")).collect(Collectors.toList());
             String name = split[0];
             if (name.contains("%") || name.contains("&")) {
+                if (name.contains("%")) {
+                    flipFlops.add(name.substring(1));
+                } else {
+                    conjunctions.add(name.substring(1));
+                }
                 name = name.substring(1);
             }
             modules.put(name, new Module(name, outputs, split[0].substring(0,1)));
@@ -130,6 +140,11 @@ public class PulsePropagation extends AoCDay {
             outputs.stream().filter(s -> !modules.containsKey(s)).forEach(s -> modules.put(s, new Module(s, new ArrayList<>(),"-")));
             outputs.stream().forEach(s -> modules.get(s).addInput(n));
         }
+        String importantModule = "rx";
+        while (!conjunctions.contains(importantModule)) {
+            importantModule = modules.get(importantModule).currentInputs.keySet().stream().collect(Collectors.toList()).get(0);
+        }
+        WATCH = modules.get(importantModule).currentInputs.keySet().stream().collect(Collectors.toList());
     }
 
     void buttonPressOnce(Long count) {
