@@ -5,6 +5,7 @@ import com.dwelguisz.year2021.helper.day16.NumberPacket;
 import com.dwelguisz.year2021.helper.day16.OperatorPacket;
 import com.dwelguisz.year2021.helper.day16.Packet;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,17 +15,23 @@ import static java.lang.Long.parseLong;
 public class PacketDecoder extends AoCDay {
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day16/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,16,false,0);
         String hex2bin = convertHexToBin(lines.get(0));
+        timeMarkers[1] = Instant.now().toEpochMilli();
         List<Object> objects = readPacket(hex2bin, 0);
         Packet finalPacket = (Packet) objects.get(1);
         Integer finalPosition = (Integer) objects.get(0);
-        System.out.println(String.format("Total length of Hex String: %d", hex2bin.length()));
-        System.out.println(String.format("Final position: %d", finalPosition));
-        System.out.println(String.format("Final Packet Version Sum: %d", finalPacket.versionSum()));
-        System.out.println(String.format("Final Packet Value: %d", finalPacket.getValue()));
-        System.out.println("\n\nDecoded string:\n");
-        System.out.println(finalPacket);
+        part1Answer = finalPacket.versionSum();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = finalPacket.getValue();
+        timeMarkers[3] = Instant.now().toEpochMilli();
+//        System.out.println(String.format("Total length of Hex String: %d", hex2bin.length()));
+//        System.out.println(String.format("Final position: %d", finalPosition));
+//        System.out.println(String.format("Final Packet Version Sum: %d", finalPacket.versionSum()));
+//        System.out.println(String.format("Final Packet Value: %d", finalPacket.getValue()));
+//        System.out.println("\n\nDecoded string:\n");
+//        System.out.println(finalPacket);
     }
 
     public static List<Long> readNumber(String hex2bin, Integer pos) {
