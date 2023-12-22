@@ -60,7 +60,6 @@ public class StepCounter extends AoCDay {
     }
 
     Stream<Coord2D> nextSpotsPart2(Coord2D loc, Character[][] grid) {
-
         return POSSIBLE_NEXT_STEPS.stream()
                 .map(n -> loc.add(n))
                 .filter(n -> grid[newX(n.x% grid.length, grid.length)][newX(n.y % grid[0].length, grid[0].length)] != '#');
@@ -93,7 +92,7 @@ public class StepCounter extends AoCDay {
                 oddTotals.add(runningSum.get(stepCount%2==(oddOrEven^1)));
             }
             //We need at least 4 points to do a quadratic. 5 will guarantee a zero in createStack
-            if (oddTotals.size() == 5) {
+            if (oddTotals.size() == 3) {
                 break;
             }
         }
