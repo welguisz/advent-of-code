@@ -31,11 +31,25 @@ public class AoC2023Day23 extends AoCDay {
             '^',List.of(DOWN),
             '.', POSSIBLE_NEXT_STEPS,
             '#', List.of());
-    public abstract class WalkingPathStateBase extends SearchStateNode {
-        int hashCode;
 
-        public WalkingPathStateBase(Coord2D location, Coord2D direction, Integer subInfo) {
-            super(location, direction, subInfo);
+    public class WalkingPathState extends SearchStateNode {
+        final Boolean part2;
+        final int hashCode;
+        public WalkingPathState(Coord2D loc, Coord2D direction, Set<Coord2D> previousSteps, Boolean part2) {
+            super(loc,direction,0);
+            this.part2 = part2;
+            this.hashCode = Objects.hash(location, this.direction, previousSteps);
+        }
+        public WalkingPathState(Coord2D loc, Coord2D direction, Set<Coord2D> previousSteps, Coord2D previous, Boolean part2) {
+            super(loc,direction,0);
+            this.part2 = part2;
+            if (previousSteps.isEmpty()) {
+                this.previousSteps = new HashSet<>();
+            } else {
+                this.previousSteps = new HashSet<>(previousSteps);
+            }
+            this.previousSteps.add(previous);
+            this.hashCode = Objects.hash(location, this.direction, this.previousSteps);
         }
 
         @Override
@@ -49,7 +63,7 @@ public class AoC2023Day23 extends AoCDay {
                 return true;
             }
             if (o == null | getClass() != o.getClass()) return false;
-            WalkingPathStateBase other = (WalkingPathStateBase) o;
+            WalkingPathState other = (WalkingPathState) o;
             return (this.location.equals(other.location) && this.direction.equals(other.location)
                     && this.subInfo.equals(other.subInfo));
         }
@@ -62,34 +76,15 @@ public class AoC2023Day23 extends AoCDay {
         public int hashCode() {
             return this.hashCode;
         }
-    }
-
-    public class WalkingPathState extends WalkingPathStateBase {
-        public WalkingPathState(Coord2D loc, Coord2D direction, Set<Coord2D> previousSteps) {
-            super(loc,direction,0);
-            this.hashCode = Objects.hash(location, this.direction, this.previousSteps);
-        }
-        public WalkingPathState(Coord2D loc, Coord2D direction, Set<Coord2D> previousSteps, Coord2D previous) {
-            super(loc,direction,0);
-            if (previousSteps.isEmpty()) {
-                this.previousSteps = new HashSet<>();
-            } else {
-                this.previousSteps = new HashSet<>(previousSteps);
-            }
-            this.previousSteps.add(previous);
-            this.hashCode = Objects.hash(location, this.direction, this.previousSteps);
-        }
-
         @Override
         public Stream<WalkingPathState> getNextNodes(
                 Object[][] grid, BiFunction<SearchStateNode, Coord2D, Boolean> func,
                 Set<SearchStateNode> visited,
                 Map<String, Long> cost
         ) {
-            Integer choices = 0;
             Coord2D current = new Coord2D(location.x, location.y);
-            List<WalkingPathState> nextLocs;
-            return filter.get(grid[current.x][current.y]).stream()
+            List<Coord2D> nextSteps = part2 ? POSSIBLE_NEXT_STEPS : filter.get(grid[current.x][current.y]);
+            return nextSteps.stream()
                     .filter(nxt -> {
                         Coord2D tmp = location.add(nxt);
                         if (inGrid(tmp, grid)) {
@@ -97,7 +92,7 @@ public class AoC2023Day23 extends AoCDay {
                         }
                         return false;
                     })
-                    .map(c -> new WalkingPathState(location.add(c), c, previousSteps, location))
+                    .map(c -> new WalkingPathState(location.add(c), c, previousSteps, location, part2))
                     .filter(s -> !visited.contains(s))
                     .filter(s -> !previousSteps.contains(s.location));
         }
@@ -114,62 +109,19 @@ public class AoC2023Day23 extends AoCDay {
 
     }
 
-    public class WalkingPathState2 extends WalkingPathStateBase {
-        int hashCode;
-
-        public WalkingPathState2(Coord2D loc, Coord2D direction, Set<Coord2D> previousSteps) {
-            super(loc, direction, 0);
-            if (previousSteps.isEmpty()) {
-                this.previousSteps = new HashSet<>();
-            } else {
-                this.previousSteps = new HashSet<>(previousSteps);
-            }
-            this.hashCode = Objects.hash(location, this.direction, this.previousSteps);
-        }
-
-        public WalkingPathState2(Coord2D loc, Coord2D direction, Set<Coord2D> previousSteps, Coord2D previous) {
-            super(loc, direction, 0);
-            if (previousSteps.isEmpty()) {
-                this.previousSteps = new HashSet<>();
-            } else {
-                this.previousSteps = new HashSet<>(previousSteps);
-            }
-            this.previousSteps.add(previous);
-            this.hashCode = Objects.hash(location, this.direction, this.previousSteps);
-        }
-
-        @Override
-        public Stream<WalkingPathState2> getNextNodes(
-                Object[][] grid, BiFunction<SearchStateNode, Coord2D, Boolean> func,
-                Set<SearchStateNode> visited,
-                Map<String, Long> cost
-        ) {
-            return POSSIBLE_NEXT_STEPS.stream()
-                    .filter(nxt -> {
-                        Coord2D tmp = location.add(nxt);
-                        if (inGrid(tmp, grid)) {
-                            return !grid[tmp.x][tmp.y].equals('#');
-                        }
-                        return false;
-                    })
-                    .map(c -> new WalkingPathState2(location.add(c), c, previousSteps, location))
-                    .filter(s -> !visited.contains(s))
-                    .filter(s -> !previousSteps.contains(s.location));
-        }
-    }
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2023, 23, false, 0);
         char[][] grid = convertToCharGrid(lines);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(grid);
+        part1Answer = solutionPart1(grid, false);
         timeMarkers[2] = Instant.now().toEpochMilli();
         System.out.println("Starting Part 2");
         //part2Answer = solutionPart2(grid);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    Long solutionPart1(char[][] grid) {
+    Long solutionPart1(char[][] grid, boolean part2) {
         Character newGrid[][] = new Character[grid.length][grid[0].length];
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {
@@ -178,30 +130,11 @@ public class AoC2023Day23 extends AoCDay {
         }
         Coord2D startingPoint = new Coord2D(0,1);
         Coord2D endingPoint = new Coord2D(grid.length-1,grid[0].length-2);
-        WalkingPathState startingState = new WalkingPathState(startingPoint, STARTING_DIRECTION, new HashSet<>());
+        WalkingPathState startingState = new WalkingPathState(startingPoint, STARTING_DIRECTION, new HashSet<>(), part2);
         return new PathSearch().findLongestPath(startingState,
                 (walkingState) -> walkingState.location.equals(endingPoint),
                 (crucibleState, nextLoc) -> true,
                 newGrid);
 
     }
-
-
-
-    Long solutionPart2(char[][] grid) {
-        Character newGrid[][] = new Character[grid.length][grid[0].length];
-        for (int r = 0; r < grid.length; r++) {
-            for (int c = 0; c < grid[0].length; c++) {
-                newGrid[r][c] = grid[r][c];
-            }
-        }
-        Coord2D startingPoint = new Coord2D(0,1);
-        Coord2D endingPoint = new Coord2D(grid.length-1,grid[0].length-2);
-        WalkingPathState2 startingState = new WalkingPathState2(startingPoint, STARTING_DIRECTION, new HashSet<>());
-        return new PathSearch().findLongestPath(startingState,
-                (walkingState) -> walkingState.location.equals(endingPoint),
-                (crucibleState, nextLoc) -> true,
-                newGrid);
-    }
-
 }
