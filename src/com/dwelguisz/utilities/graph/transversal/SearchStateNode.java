@@ -14,11 +14,13 @@ public abstract class SearchStateNode {
     public Coord2D direction;
     public Integer subInfo;
     public Map<String, Long> cost;
+    public Set<Coord2D> previousSteps;
     public SearchStateNode(Coord2D location, Coord2D direction, Integer subInfo) {
         this.location = location;
         this.direction = direction;
         this.subInfo = subInfo;
         this.cost = new HashMap<>();
+        this.previousSteps = new HashSet<>();
     }
 
     public abstract Stream<? extends SearchStateNode> getNextNodes(
@@ -26,9 +28,19 @@ public abstract class SearchStateNode {
             Set<SearchStateNode> visited,
             Map<String, Long> cost);
 
+    public Stream<? extends SearchStateNode> getBackwardsNodes(
+            Object[][] grid,
+            BiFunction<SearchStateNode, Coord2D, Boolean> func,
+            Map<Coord2D, Long> stepsToEnd,
+            Long maxSteps
+    ) {
+        return Stream.of();
+    }
+
     public boolean inGrid(Object[][] grid, Coord2D loc) {
         Integer r = loc.x;
         Integer c = loc.y;
         return (0 <= r && r < grid.length && 0 <= c && c < grid[0].length);
     }
+
 }

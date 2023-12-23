@@ -117,14 +117,15 @@ public class StepCounter extends AoCDay {
     // 3) -0.5 * f(2) -> f(2). f(2) is now: b+1.5c=-0.5(y-4x)
     // 4) 6*f(2) + f(3) -> f(3). f(3) is now: c= z'
     // 5) -1.5*f(3) + f(2) ->f(2). f(2) is now b=y'
-    // 6)
+    // 6) -1 * f(3) + f(1) -> f(1).
+    // 7) -1 * f(2) + f(2) -> f(1). f(1) is now a=x'
     List<Long> findCoefficients(Long x, Long y, Long z) {
         Double aDouble = Double.valueOf(x);
         Double bDouble = Double.valueOf(y);
         Double cDouble = Double.valueOf(z);
         bDouble += -4*aDouble;
-        cDouble += -9*aDouble;
         bDouble *= -0.5;
+        cDouble += -9*aDouble;
         cDouble += 6*bDouble;
         bDouble += -1.5*cDouble;
         aDouble += -1 * cDouble;

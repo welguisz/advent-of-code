@@ -44,4 +44,37 @@ public class PathSearch {
         return -1L;
     }
 
+    public Long findLongestPath(
+            SearchStateNode initialState,
+            Function<SearchStateNode, Boolean> endCondition,
+            BiFunction<SearchStateNode, Coord2D, Boolean> func,
+            Object[][]grid
+    ) {
+        visited = new HashSet<>();
+        cost = new HashMap<>();
+        PriorityQueue<SearchStateNode> stateQ = new PriorityQueue<>(2000, (a,b) -> b.previousSteps.size() - a.previousSteps.size());
+        cost.put(initialState.toString(), 0L);
+        stateQ.add(initialState);
+        Long maxSteps = 0L;
+        while(!stateQ.isEmpty()) {
+            SearchStateNode currentState = stateQ.poll();
+            if (visited.contains(currentState)) {
+                continue;
+            }
+            //visited.add(currentState);
+            if (endCondition.apply(currentState)) {
+                maxSteps = Long.max(maxSteps, currentState.previousSteps.size());
+                System.out.println("maxSteps: " + maxSteps);
+            }
+            Set<SearchStateNode> nextState = currentState.getNextNodes(grid, func, visited, cost)
+                    .filter(s -> !grid[s.location.x][s.location.y].equals('#'))
+                    .collect(Collectors.toSet());
+
+            stateQ.addAll(nextState);
+            visited.add(currentState);
+        }
+        return maxSteps;
+
+    }
+
 }
