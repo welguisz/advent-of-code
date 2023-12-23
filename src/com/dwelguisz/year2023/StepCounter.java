@@ -102,6 +102,22 @@ public class StepCounter extends AoCDay {
         return jumpValue;
     }
 
+    //Think of this as the following:
+    // f(x) = a*x^2+b*x+c
+    // By have three points, we can create a set of equations. We are using 1,2,and 3 here
+    // f(1) = a+b+c = x
+    // f(2) = 4a+2b+c = y
+    // f(3) = 9a+3b+c = z;
+    // We are going to do manipulate the equations, so we get
+    // a = x'
+    // b = y'
+    // c = z'
+    // 1) -4*f(1) + f(2) -> f(2). This causes f(2) to be -2b-3c = y-4x
+    // 2) -9*f(1) + f(3) -> f(3). This causes f(3) to be -6b-8c = y-9x
+    // 3) -0.5 * f(2) -> f(2). f(2) is now: b+1.5c=-0.5(y-4x)
+    // 4) 6*f(2) + f(3) -> f(3). f(3) is now: c= z'
+    // 5) -1.5*f(3) + f(2) ->f(2). f(2) is now b=y'
+    // 6)
     List<Long> findCoefficients(Long x, Long y, Long z) {
         Double aDouble = Double.valueOf(x);
         Double bDouble = Double.valueOf(y);
