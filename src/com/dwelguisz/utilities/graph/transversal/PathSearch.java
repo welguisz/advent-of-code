@@ -1,9 +1,12 @@
 package com.dwelguisz.utilities.graph.transversal;
 
 import com.dwelguisz.utilities.Coord2D;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -44,7 +47,7 @@ public class PathSearch {
         return -1L;
     }
 
-    public Long findLongestPath(
+    public List<Pair<Coord2D, Long>> findLongestPath(
             SearchStateNode initialState,
             Function<SearchStateNode, Boolean> endCondition,
             BiFunction<SearchStateNode, Coord2D, Boolean> func,
@@ -56,6 +59,7 @@ public class PathSearch {
         cost.put(initialState.toString(), 0L);
         stateQ.add(initialState);
         Long maxSteps = 0L;
+        List<Pair<Coord2D,Long>> importantInfo = new ArrayList<>();
         while(!stateQ.isEmpty()) {
             SearchStateNode currentState = stateQ.poll();
             if (visited.contains(currentState)) {
@@ -63,8 +67,8 @@ public class PathSearch {
             }
             //visited.add(currentState);
             if (endCondition.apply(currentState)) {
-                maxSteps = Long.max(maxSteps, currentState.previousSteps.size());
-                System.out.println("maxSteps: " + maxSteps);
+                importantInfo.add(Pair.of(currentState.location, (long) currentState.previousSteps.size()));
+                continue;
             }
             Set<SearchStateNode> nextState = currentState.getNextNodes(grid, func, visited, cost)
                     .filter(s -> !grid[s.location.x][s.location.y].equals('#'))
@@ -73,8 +77,7 @@ public class PathSearch {
             stateQ.addAll(nextState);
             visited.add(currentState);
         }
-        return maxSteps;
-
+        return importantInfo;
     }
 
 }
