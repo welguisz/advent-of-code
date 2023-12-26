@@ -121,7 +121,6 @@ public class ALongWalk extends AoCDay {
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = solutionPart1(grid, false);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        System.out.println("Starting Part 2");
         part2Answer = solutionPart1(grid, true);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
@@ -211,7 +210,7 @@ public class ALongWalk extends AoCDay {
         while(checkedPoints.size() < importantPoints.size()) {
             Coord2D importantPoint = importantPoints.get(currentPoint);
             if (importantPoint.equals(endingPoint)) {
-                System.out.println("Stop here");
+                //System.out.println("Stop here");
             }
             checkedPoints.add(importantPoint);
             WalkingPathState startingState = new WalkingPathState(importantPoint, STARTING_DIRECTION, new HashSet<>(), part2);
@@ -268,7 +267,7 @@ public class ALongWalk extends AoCDay {
             if (currentNode.node.location.equals(endingPoint)) {
                 maxSteps = Long.max(maxSteps, currentNode.steps);
                 if (!previousMaxSteps.equals(maxSteps)) {
-                    System.out.println("new Max Steps: " + maxSteps);
+                    //System.out.println("new Max Steps: " + maxSteps);
                     previousMaxSteps = maxSteps;
                     List<GraphNode> reverseSteps = new ArrayList<>(currentNode.passedThrough);
                     Collections.reverse(reverseSteps);

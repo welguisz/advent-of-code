@@ -28,14 +28,27 @@ public class AoCDay {
     }
 
     public void run() {
-        solve();
-        System.out.println("---------"+getClass().getName()+"------------");
-        System.out.println(String.format("%20s|%20s |%20s |%20s |","Elapsed Times:","Parsing Time(ms)","Part 1 Time(ms)","Part 2 Time(ms)"));
-        System.out.println(String.format("%20s|%20d |%20d |%20d |","",timeMarkers[1]-timeMarkers[0],timeMarkers[2]-timeMarkers[1],timeMarkers[3]-timeMarkers[2]));
-        System.out.println("Part 1 Answer: " + part1Answer);
-        System.out.println("Part 2 Answer: " + part2Answer);
+        run(true);
     }
 
+    public void run(boolean printStatements) {
+        solve();
+        if (printStatements) {
+            System.out.println("---------" + getClass().getName() + "------------");
+            System.out.println(String.format("%20s|%20s |%20s |%20s |", "Elapsed Times:", "Parsing Time(ms)", "Part 1 Time(ms)", "Part 2 Time(ms)"));
+            System.out.println(String.format("%20s|%20d |%20d |%20d |", "", timeMarkers[1] - timeMarkers[0], timeMarkers[2] - timeMarkers[1], timeMarkers[3] - timeMarkers[2]));
+            System.out.println("Part 1 Answer: " + part1Answer);
+            System.out.println("Part 2 Answer: " + part2Answer);
+        }
+
+    }
+
+    public void printSummary(int i) {
+        String className = getClass().getName();
+        String[] splitNames = className.split("\\.");
+        String name = splitNames[splitNames.length-1];
+        System.out.println(String.format("%4d |%25s |%20d |%20d |%20d |%20d |%20d |",i,name,timeMarkers[1]-timeMarkers[0],timeMarkers[2]-timeMarkers[1],timeMarkers[3]-timeMarkers[2], part1Answer, part2Answer));
+    }
     public InputStream getFileFromResourceStream(Integer year, Integer day, boolean test) {
         return getFileFromResourceStream(year, day, test, 0);
     }

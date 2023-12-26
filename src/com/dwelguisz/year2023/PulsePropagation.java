@@ -159,9 +159,6 @@ public class PulsePropagation extends AoCDay {
         for (int i = 0; i < 1000; i++) {
             buttonPressOnce((long) i);
         }
-        Long highPulses = modules.values().stream().mapToLong(m -> m.highPulses).sum();
-        Long lowPulses = modules.values().stream().mapToLong(m -> m.lowPulses).sum();
-        System.out.println("lowPulses: " + lowPulses + "; highPulses: " + highPulses);
         return modules.values().stream().mapToLong(m -> m.highPulses).sum() * modules.values().stream().mapToLong(m->m.lowPulses).sum();
     }
 
