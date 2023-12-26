@@ -44,4 +44,16 @@ public class Coord3DLong {
         return "["+x+","+y+","+z+"]";
     }
 
+    public static Coord3DLong add(Coord3DLong a, Coord3DLong b) {
+        return new Coord3DLong(a.x + b.x, a.y+b.y, a.z + b.z);
+    }
+
+    public Coord3DLong add(Coord3DLong b) {
+        return add(this, b);
+    }
+    public Coord3DLong multiply(Integer t) {
+        return new Coord3DLong(t*x, t*y, t*z);
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.dwelguisz.year2023;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.base.Matrix;
 import com.dwelguisz.utilities.Coord2D;
 
 import java.time.Instant;
@@ -120,17 +121,18 @@ public class StepCounter extends AoCDay {
     // 6) -1 * f(3) + f(1) -> f(1).
     // 7) -1 * f(2) + f(2) -> f(1). f(1) is now a=x'
     List<Long> findCoefficients(Long x, Long y, Long z) {
-        Double aDouble = Double.valueOf(x);
-        Double bDouble = Double.valueOf(y);
-        Double cDouble = Double.valueOf(z);
-        bDouble += -4*aDouble;
-        bDouble *= -0.5;
-        cDouble += -9*aDouble;
-        cDouble += 6*bDouble;
-        bDouble += -1.5*cDouble;
-        aDouble += -1 * cDouble;
-        aDouble += -1 * bDouble;
-        return List.of(aDouble.longValue(), bDouble.longValue(), cDouble.longValue());
+        Double[][] matrix = new Double[][] {
+                {1.0, 1.0, 1.0, Double.valueOf(x)},
+                {4.0, 2.0, 1.0, Double.valueOf(y)},
+                {9.0, 3.0, 1.0, Double.valueOf(z)}
+        };
+        Matrix temp = new Matrix(matrix);
+        temp.forwardElimination();
+        temp.backSub();
+        return List.of(temp.getValueAtRowColumn(0,3).longValue(),
+                temp.getValueAtRowColumn(1,3).longValue(),
+            temp.getValueAtRowColumn(2,3).longValue()
+        );
     }
 
     Long function(Long a, Long b, Long c, Long x) {
