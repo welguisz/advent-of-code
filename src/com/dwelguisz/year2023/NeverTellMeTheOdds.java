@@ -2,20 +2,16 @@ package com.dwelguisz.year2023;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.base.Matrix;
-import com.dwelguisz.base.SpecialMath;
-import com.dwelguisz.utilities.Coord2D;
 import com.dwelguisz.utilities.Coord3DLong;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class AoC2023Day24 extends AoCDay {
+public class NeverTellMeTheOdds extends AoCDay {
 
     public class HailStone {
         Coord3DLong position;
