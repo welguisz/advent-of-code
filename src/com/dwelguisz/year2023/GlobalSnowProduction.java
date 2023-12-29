@@ -9,7 +9,7 @@ public class GlobalSnowProduction extends AoCYear {
             new MirageMaintenance(), new PipeMaze(), new CosmicExpansion(), new HotSprings(),
             new PointOfIncidence(), new ParabolicReflectorDish(), new LensLibrary(), new TheFloorWillBeLava(),
             new ClumsyCrucible(), new LavaductLagoon(), new APlenty(), new PulsePropagation(),
-            new StepCounter(), new SandSlabs(), new ALongWalk(), new NeverTellMeTheOdds(), new AoC2023Day25()};
+            new StepCounter(), new SandSlabs(), new ALongWalk(), new NeverTellMeTheOdds(), new Snowverland()};
 
     public GlobalSnowProduction(int year) {
         super(year);

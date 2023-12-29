@@ -111,7 +111,6 @@ public class ALongWalk extends AoCDay {
         ) {
             return Stream.of();
         }
-
     }
 
     public void solve() {
@@ -140,7 +139,6 @@ public class ALongWalk extends AoCDay {
                 if (size > 2l) {
                     intersections.add(new Coord2D(r,c));
                 }
-
             }
         }
         return intersections;
@@ -150,24 +148,9 @@ public class ALongWalk extends AoCDay {
         Coord2D location;
         Map<Coord2D, Long> edge;
 
-        Map<Coord2D, Long> maxStepsToEnd;
-
         public GraphNode(Coord2D location) {
             this.location = location;
             this.edge = new HashMap<>();
-            this.maxStepsToEnd = new HashMap<>();
-        }
-
-        public void addMaxStep(Coord2D loc, Long steps, List<GraphNode> walkBack) {
-            GraphNode thisOne = walkBack.remove(0);
-            maxStepsToEnd.put(loc, steps);
-        }
-        public boolean maxStepsKnown() {
-            return edge.keySet().stream().allMatch(e -> maxStepsToEnd.containsKey(e));
-        }
-
-        public Long getMaxSteps() {
-            return maxStepsToEnd.values().stream().mapToLong(i -> i).max().getAsLong();
         }
 
         public void addNode(Coord2D location, Long stepCount) {
@@ -209,9 +192,6 @@ public class ALongWalk extends AoCDay {
         List<Coord2D> checkedPoints = new ArrayList<>();
         while(checkedPoints.size() < importantPoints.size()) {
             Coord2D importantPoint = importantPoints.get(currentPoint);
-            if (importantPoint.equals(endingPoint)) {
-                //System.out.println("Stop here");
-            }
             checkedPoints.add(importantPoint);
             WalkingPathState startingState = new WalkingPathState(importantPoint, STARTING_DIRECTION, new HashSet<>(), part2);
             List<Pair<Coord2D,Long>> edges = new PathSearch().findLongestPath(
@@ -227,64 +207,34 @@ public class ALongWalk extends AoCDay {
         }
     }
 
-    public class WalkTheGraph {
-        GraphNode node;
-        Long steps;
-        Set<GraphNode> visited;
-        List<GraphNode> passedThrough;
-        public WalkTheGraph(GraphNode node, Long steps, Set<GraphNode> visited, List<GraphNode> passedThrough) {
-            this.node = node;
-            this.steps = steps;
-            this.visited = visited;
-            this.passedThrough = passedThrough;
-        }
-    }
-    //TODO: Create a map that will know that if you reach, point X, then the max is N steps, e.g. dynamic programming
     Long solutionPart1(char[][] grid, boolean part2) {
-        Character newGrid[][] = new Character[grid.length][grid[0].length];
-        for (int r = 0; r < grid.length; r++) {
-            for (int c = 0; c < grid[0].length; c++) {
-                newGrid[r][c] = grid[r][c];
-            }
-        }
         buildGraph(grid, part2);
         Coord2D startingPoint = new Coord2D(0,1);
         Coord2D endingPoint = new Coord2D(grid.length-1,grid[0].length-2);
-        Long maxSteps = 0L;
-        Set<GraphNode> visited = new HashSet<>();
-        ArrayDeque<WalkTheGraph> queue = new ArrayDeque<>(2000);
-        queue.add(new WalkTheGraph(
-                graph.get(startingPoint),
-                0L,
-                new HashSet<>(),
-                new ArrayList<>()));
-        Long previousMaxSteps = 0L;
-        while (!queue.isEmpty()) {
-            WalkTheGraph currentNode = queue.pollFirst();
-            if (visited.contains(currentNode)) {
+        return walkTheNodes(startingPoint, endingPoint, new ArrayList<>());
+    }
+
+    public Long walkTheNodes(Coord2D currentPoint, Coord2D endingPoint, List<Coord2D> visited) {
+        if (currentPoint.equals(endingPoint)) {
+            return 0L;
+        }
+        GraphNode currentNode = graph.get(currentPoint);
+        List<Coord2D> newVisited = new ArrayList<>(visited);
+        newVisited.add(currentPoint);
+        List<Long> differentSteps = new ArrayList<>();
+        for (Coord2D point : currentNode.edge.keySet()) {
+            if (newVisited.contains(point)) {
                 continue;
             }
-            if (currentNode.node.location.equals(endingPoint)) {
-                maxSteps = Long.max(maxSteps, currentNode.steps);
-                if (!previousMaxSteps.equals(maxSteps)) {
-                    //System.out.println("new Max Steps: " + maxSteps);
-                    previousMaxSteps = maxSteps;
-                    List<GraphNode> reverseSteps = new ArrayList<>(currentNode.passedThrough);
-                    Collections.reverse(reverseSteps);
-                    currentNode.node.addMaxStep(currentNode.node.location, maxSteps, reverseSteps);
-                }
+            Long distance = walkTheNodes(point, endingPoint, newVisited);
+            if (distance >= 0L) {
+                differentSteps.add(distance + currentNode.edge.get(point));
             }
-            Set<GraphNode> visitedNodes = new HashSet<>(currentNode.visited);
-            List<GraphNode> orderedNodes = new ArrayList<>(currentNode.passedThrough);
-            visitedNodes.add(currentNode.node);
-            orderedNodes.add(currentNode.node);
-            final Long currentSteps = currentNode.steps;
-            queue.addAll(currentNode.node.edge.entrySet().stream()
-                    .map(entry -> new WalkTheGraph(graph.get(entry.getKey()), currentSteps + entry.getValue(), visitedNodes, orderedNodes))
-                            .filter(node -> !visitedNodes.contains(node.node))
-                    .collect(Collectors.toList()));
-
         }
+        if (differentSteps.isEmpty()) {
+            return -1L;
+        }
+        Long maxSteps = differentSteps.stream().mapToLong(l -> l).max().getAsLong();
         return maxSteps;
     }
 }
