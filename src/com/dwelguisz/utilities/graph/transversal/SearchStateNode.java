@@ -15,12 +15,19 @@ public abstract class SearchStateNode {
     public Integer subInfo;
     public Map<String, Long> cost;
     public Set<Coord2D> previousSteps;
+    public Coord2D previousDirection;
     public SearchStateNode(Coord2D location, Coord2D direction, Integer subInfo) {
+        this(location, direction, subInfo, new Coord2D(-1,-1));
+    }
+
+    public SearchStateNode(Coord2D location, Coord2D direction, Integer subInfo, Coord2D previousDirection) {
         this.location = location;
         this.direction = direction;
         this.subInfo = subInfo;
+        this.previousDirection = previousDirection;
         this.cost = new HashMap<>();
         this.previousSteps = new HashSet<>();
+
     }
 
     public abstract Stream<? extends SearchStateNode> getNextNodes(

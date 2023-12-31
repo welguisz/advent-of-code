@@ -7,9 +7,7 @@ import com.dwelguisz.utilities.graph.transversal.SearchStateNode;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -174,6 +172,7 @@ public class ALongWalk extends AoCDay {
     }
 
     Map<Coord2D, GraphNode> graph;
+    Map<Coord2D, Integer> importantPlacesToBitMaskMap;
     public void buildGraph(char[][] grid, boolean part2) {
         Character newGrid[][] = new Character[grid.length][grid[0].length];
         for (int r = 0; r < grid.length; r++) {
@@ -182,12 +181,17 @@ public class ALongWalk extends AoCDay {
             }
         }
         graph = new HashMap<>();
+        knownToEnd = new HashMap<>();
+        importantPlacesToBitMaskMap = new HashMap<>();
         Coord2D startingPoint = new Coord2D(0,1);
         Coord2D endingPoint = new Coord2D(grid.length-1,grid[0].length-2);
         List<Coord2D> importantPoints = new ArrayList<>();
         importantPoints.add(startingPoint);
         importantPoints.addAll(findIntersections(newGrid, part2));
         importantPoints.add(endingPoint);
+        for (int i = 0; i < importantPoints.size(); i++) {
+            importantPlacesToBitMaskMap.put(importantPoints.get(i), i);
+        }
         int currentPoint = 0;
         List<Coord2D> checkedPoints = new ArrayList<>();
         while(checkedPoints.size() < importantPoints.size()) {
@@ -211,18 +215,62 @@ public class ALongWalk extends AoCDay {
         buildGraph(grid, part2);
         Coord2D startingPoint = new Coord2D(0,1);
         Coord2D endingPoint = new Coord2D(grid.length-1,grid[0].length-2);
-        return walkTheNodes(startingPoint, endingPoint, new ArrayList<>());
+        return walkTheNodes(startingPoint, endingPoint, new HashSet<>());
     }
 
-    public Long walkTheNodes(Coord2D currentPoint, Coord2D endingPoint, List<Coord2D> visited) {
+    class WalkState {
+        Coord2D currentPoint;
+        Set<Coord2D> availableOptions;
+        Long visitedPlaces;
+        private int hashCode;
+        public WalkState(Coord2D currentPoint, Set<Coord2D> availableOptions, Set<Coord2D> allIntersections, Set<Coord2D> visitedIntersections) {
+            this.currentPoint = currentPoint;
+            this.availableOptions = availableOptions;
+            this.visitedPlaces = 0L;
+            this.hashCode = Objects.hash(this.currentPoint, this.availableOptions);
+        }
+
+        public void updateVisitedPlace(Long bitMask) {
+            visitedPlaces |= bitMask;
+        }
+
+        @Override
+        public int hashCode() {
+            return this.hashCode;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null | getClass() != o.getClass()) return false;
+            WalkState other = (WalkState) o;
+            return currentPoint.equals(other.currentPoint) && availableOptions.equals(other.availableOptions);
+        }
+
+        @Override
+        public String toString() {
+            return "point: " + currentPoint + "; availableOptions: " + availableOptions.stream().map(v -> v.toString()).collect(Collectors.joining(", "));
+        }
+    }
+    Map<WalkState, Long> knownToEnd;
+    Integer printCount = 0;
+    public Long walkTheNodes(Coord2D currentPoint, Coord2D endingPoint, Set<Coord2D> visited) {
         if (currentPoint.equals(endingPoint)) {
             return 0L;
         }
         GraphNode currentNode = graph.get(currentPoint);
-        List<Coord2D> newVisited = new ArrayList<>(visited);
+        Set<Coord2D> newVisited = new HashSet<>(visited);
         newVisited.add(currentPoint);
         List<Long> differentSteps = new ArrayList<>();
-        for (Coord2D point : currentNode.edge.keySet()) {
+        Set<Coord2D> availableChoices = currentNode.edge.keySet().stream()
+                .filter(node -> !newVisited.contains(node)).collect(Collectors.toSet());
+        WalkState currentState = new WalkState(currentPoint, new HashSet<>(availableChoices), graph.keySet(), visited);
+        if (knownToEnd.containsKey(currentState)) {
+            return knownToEnd.get(currentState);
+        }
+        for (Coord2D point : availableChoices) {
             if (newVisited.contains(point)) {
                 continue;
             }
@@ -235,6 +283,7 @@ public class ALongWalk extends AoCDay {
             return -1L;
         }
         Long maxSteps = differentSteps.stream().mapToLong(l -> l).max().getAsLong();
+        //knownToEnd.put(currentState, maxSteps);
         return maxSteps;
     }
 }
