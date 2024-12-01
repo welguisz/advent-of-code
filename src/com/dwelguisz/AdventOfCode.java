@@ -10,6 +10,7 @@ import com.dwelguisz.year2020.Vacation;
 import com.dwelguisz.year2021.RetrieveTheKeys;
 import com.dwelguisz.year2022.SpecialReindeerFood;
 import com.dwelguisz.year2023.GlobalSnowProduction;
+import com.dwelguisz.year2024.ChiefHistorian;
 
 import static java.lang.Integer.parseInt;
 
@@ -24,7 +25,8 @@ public class AdventOfCode {
         AoCYear aocYears[] = {
                 new WeatherMachine(year), new EasterBunny(year), new NaughtyOrNiceList(year),
                 new TemporalAnomalies(year), new SolarSystem(year), new Vacation(year),
-                new RetrieveTheKeys(year), new SpecialReindeerFood(year), new GlobalSnowProduction(year)
+                new RetrieveTheKeys(year), new SpecialReindeerFood(year), new GlobalSnowProduction(year),
+                new ChiefHistorian(year)
         };
         AoCYear aoCYear = aocYears[year - 2015];
         if (day > 0) {
