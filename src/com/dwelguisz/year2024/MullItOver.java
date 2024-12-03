@@ -25,9 +25,7 @@ public class MullItOver extends AoCDay {
         for (String line : lines) {
             Matcher matcher = pattern.matcher(line);
             while (matcher.find()) {
-                String mult1 = matcher.group("mult1");
-                String mult2 = matcher.group("mult2");
-                sum += Long.parseLong(mult1) * Long.parseLong(mult2);
+                sum += Long.parseLong(matcher.group("mult1")) * Long.parseLong(matcher.group("mult2"));
             }
         }
         return sum;
@@ -40,17 +38,12 @@ public class MullItOver extends AoCDay {
         for (String line : lines) {
             Matcher matcher = pattern.matcher(line);
             while (matcher.find()) {
-                String enabledStr = matcher.group("enabled");
-                String disabledStr = matcher.group("disabled");
-                String mulStr = matcher.group("mull");
-                if (enabledStr != null) {
+                if (matcher.group("enabled") != null) {
                     enabled = true;
-                } else if (disabledStr != null) {
+                } else if (matcher.group("disabled") != null) {
                     enabled = false;
-                } else if (enabled && mulStr != null) {
-                    String mult1 = matcher.group("mult1");
-                    String mult2 = matcher.group("mult2");
-                    sum += Long.parseLong(mult1) * Long.parseLong(mult2);
+                } else if (enabled && matcher.group("mull") != null) {
+                    sum += Long.parseLong(matcher.group("mult1")) * Long.parseLong(matcher.group("mult2"));
                 }
             }
         }
