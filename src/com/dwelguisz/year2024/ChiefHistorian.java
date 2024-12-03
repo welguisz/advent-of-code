@@ -5,7 +5,7 @@ import com.dwelguisz.base.AoCYear;
 
 public class ChiefHistorian extends AoCYear {
 
-    AoCDay AOC_DAYS[] = {new HistorianHysteria(), new RedNosedReports()};
+    AoCDay AOC_DAYS[] = {new HistorianHysteria(), new RedNosedReports(), new MullItOver()};
 
     public ChiefHistorian(int year) {
         super(year);
