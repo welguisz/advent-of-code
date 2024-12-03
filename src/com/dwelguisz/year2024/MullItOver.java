@@ -20,36 +20,37 @@ public class MullItOver extends AoCDay {
     }
 
     long solutionPart1(List<String> lines) {
-        Pattern pattern = Pattern.compile("mul\\(\\d{1,3},\\d{1,3}\\)");
+        Pattern pattern = Pattern.compile("mul\\((?<mult1>\\d{1,3}),(?<mult2>\\d{1,3})\\)");
         long sum = 0;
         for (String line : lines) {
             Matcher matcher = pattern.matcher(line);
             while (matcher.find()) {
-                String[] split = matcher.group(0).split("\\(");
-                String[] split1 = split[1].split("\\)");
-                String[] nums = split1[0].split(",");
-                sum += Long.parseLong(nums[0]) * Long.parseLong(nums[1]);
+                String mult1 = matcher.group("mult1");
+                String mult2 = matcher.group("mult2");
+                sum += Long.parseLong(mult1) * Long.parseLong(mult2);
             }
         }
         return sum;
     }
 
     long solutionPart2(List<String> lines) {
-        Pattern pattern = Pattern.compile("do\\(\\)|mul\\(\\d{1,3},\\d{1,3}\\)|don't\\(\\)");
+        Pattern pattern = Pattern.compile("(?<enabled>do\\(\\))|(?<mull>mul\\()(?<mult1>\\d{1,3}),(?<mult2>\\d{1,3})\\)|(?<disabled>don't\\(\\))");
         boolean enabled = true;
         long sum = 0;
         for (String line : lines) {
             Matcher matcher = pattern.matcher(line);
             while (matcher.find()) {
-                String[] split = matcher.group(0).split("\\(");
-                if (split[0].equals("do")) {
+                String enabledStr = matcher.group("enabled");
+                String disabledStr = matcher.group("disabled");
+                String mulStr = matcher.group("mull");
+                if (enabledStr != null) {
                     enabled = true;
-                } else if (split[0].equals("don't")) {
+                } else if (disabledStr != null) {
                     enabled = false;
-                } else if (enabled && split[0].equals("mul")) {
-                    String[] split1 = split[1].split("\\)");
-                    String[] nums = split1[0].split(",");
-                    sum += Long.parseLong(nums[0]) * Long.parseLong(nums[1]);
+                } else if (enabled && mulStr != null) {
+                    String mult1 = matcher.group("mult1");
+                    String mult2 = matcher.group("mult2");
+                    sum += Long.parseLong(mult1) * Long.parseLong(mult2);
                 }
             }
         }
