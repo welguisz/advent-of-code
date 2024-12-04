@@ -34,21 +34,7 @@ public class CeresSearch extends AoCDay {
     }
 
     List<String> getStuffAround(char[][] grid, int x, int y, int count) {
-        char[][] smallerGrid = new char[2*count+1][2*count+1];
-        for(int i = 0; i < smallerGrid.length; i++) {
-            for(int j = 0; j < smallerGrid[i].length; j++) {
-                smallerGrid[i][j] = 'Q';
-            }
-        }
-        for (int i = -count; i < count+1; i++) {
-            for (int j = -count; j < count+1; j++) {
-                int tempX = x + i;
-                int tempY = y + j;
-                if (tempX >= 0  && tempX < grid.length && tempY >= 0 && tempY < grid[0].length) {
-                    smallerGrid[i+count][j+count] = grid[tempX][tempY];
-                }
-            }
-        }
+        char[][] smallerGrid = createSmallerGrid(grid, x, y, count);
         List<String> result = new ArrayList<>();
         List<Coord2D> deltas = List.of(
                 new Coord2D(-1,-1), new Coord2D(0, -1), new Coord2D(1, -1),
@@ -85,6 +71,25 @@ public class CeresSearch extends AoCDay {
     }
 
     boolean getStuffAroundCross(char[][] grid, int x, int y, int count) {
+        char[][] smallerGrid = createSmallerGrid(grid, x, y, count);
+        List<String> result = new ArrayList<>();
+        List<List<Coord2D>> deltas = List.of(
+                List.of(new Coord2D(-1,-1), new Coord2D(1, 1)),
+                List.of(new Coord2D(-1, 1), new Coord2D(1, -1)));
+        Coord2D center = new Coord2D(1,1);
+        for(List<Coord2D> delta : deltas) {
+            StringBuilder currStr = new StringBuilder();
+            for (Coord2D delta1 : delta) {
+                Coord2D tmp = center.add(delta1);
+                currStr.append(smallerGrid[tmp.x][tmp.y]);
+            }
+            result.add(currStr.toString());
+        }
+        List<String> allowedStrings = List.of("MS", "SM");
+        return allowedStrings.containsAll(result);
+    }
+
+    char[][] createSmallerGrid(char[][] grid, int x, int y, int count) {
         char[][] smallerGrid = new char[2*count+1][2*count+1];
         for(int i = 0; i < smallerGrid.length; i++) {
             for(int j = 0; j < smallerGrid[i].length; j++) {
@@ -100,21 +105,7 @@ public class CeresSearch extends AoCDay {
                 }
             }
         }
-        List<String> result = new ArrayList<>();
-        List<List<Coord2D>> deltas = List.of(
-                List.of(new Coord2D(-1,-1), new Coord2D(0, 0), new Coord2D(1, 1)),
-                List.of(new Coord2D(-1, 1), new Coord2D(0, 0), new Coord2D(1, -1)));
-        Coord2D center = new Coord2D(1,1);
-        for(List<Coord2D> delta : deltas) {
-            StringBuilder currStr = new StringBuilder();
-            for (Coord2D delta1 : delta) {
-                Coord2D tmp = center.add(delta1);
-                currStr.append(smallerGrid[tmp.x][tmp.y]);
-            }
-            result.add(currStr.toString());
-        }
-        List<String> allowedStrings = List.of("MAS", "SAM");
-        return allowedStrings.containsAll(result);
+        return smallerGrid;
     }
 
 
