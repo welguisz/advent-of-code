@@ -37,7 +37,7 @@ public class RedNosedReports extends AoCDay {
     public boolean safePart1(List<Integer> values) {
         List<Integer> diff = new ArrayList<>();
         for (int i = 0; i < values.size() - 1; i++) {
-            diff.add(values.get(i) - values.get(i+1));
+            diff.add(values.get(i+1) - values.get(i));
         }
         if (diff.stream().allMatch(i -> i < 0) || diff.stream().allMatch(i -> i > 0)) {
             return diff.stream().allMatch(i -> Math.abs(i) > 0 && Math.abs(i) < 4);
@@ -48,15 +48,14 @@ public class RedNosedReports extends AoCDay {
     public long solutionPart2(List<List<Integer>> reports) {
         List<List<Integer>> moreCheck = reports.stream().filter(r -> !safePart1(r)).toList();
         long knownGood = reports.size() - moreCheck.size();
-        List<List<Integer>> needsMoreWork = moreCheck.stream().filter(r -> safePart2(r) != elegantSafePart2(r)).toList();
-        long moreKnownGood = needsMoreWork.stream().filter(this::elegantSafePart2).count();
+        long moreKnownGood = moreCheck.stream().filter(this::elegantSafePart2).count();
         return knownGood + moreKnownGood;
     }
 
     public boolean elegantSafePart2(List<Integer> values) {
         List<Integer> diff = new ArrayList<>();
         for (int i = 0; i < values.size() - 1; i++) {
-            diff.add(values.get(i) - values.get(i+1));
+            diff.add(values.get(i+1) - values.get(i));
         }
         Map<Integer, Long> counter = diff.stream().collect(Collectors.groupingBy(key -> key, Collectors.counting()));
         long negativeCount = 0l;
@@ -77,30 +76,43 @@ public class RedNosedReports extends AoCDay {
         if (nonNegativeCount > 1 && nonPositiveCount > 1) {
             return false;
         }
-        Set<Integer> allowedDiffs = (nonNegativeCount > 1) ? POSITIVE_STEPS : NEGATIVE_STEPS;
+        Stack<Integer> stackDiff = new Stack<>();
+        Collections.reverse(diff);
+        diff.forEach(stackDiff::push);
+        boolean usePositiveSteps = nonNegativeCount > 1;
+        Set<Integer> allowedDiffs = usePositiveSteps ? POSITIVE_STEPS : NEGATIVE_STEPS;
         boolean hitOutOfBounds = false;
-        for (int i = 0; i < diff.size(); i++) {
-            if (allowedDiffs.contains(diff.get(i))) {
-                allowedDiffs = (nonNegativeCount > 1) ? POSITIVE_STEPS : NEGATIVE_STEPS;
+        boolean first = true;
+        while (!stackDiff.isEmpty()) {
+            Integer currentNum = stackDiff.pop();
+            if (allowedDiffs.contains(currentNum)) {
+                allowedDiffs = usePositiveSteps ? POSITIVE_STEPS : NEGATIVE_STEPS;
             } else {
                 if (hitOutOfBounds) {
                     return false;
+                }
+                hitOutOfBounds = true;
+                if (!first) {
+                    allowedDiffs = allowedDiffs.stream().map(t -> t - currentNum).collect(Collectors.toSet());
                 } else {
-                    hitOutOfBounds = true;
-                    if (i != 0) {
-                        final Integer delta = diff.get(i) * -1;
-                        Set<Integer> tempSet = (nonNegativeCount > 1) ? POSITIVE_STEPS : NEGATIVE_STEPS;
-                        allowedDiffs = tempSet.stream().map(dif -> dif + delta).collect(Collectors.toSet());
+                    //The first number popped is special.  With this special number, we have to figure out if we
+                    //need to ignore the first value or the second value.
+                    //Git rid of the first value since we don't know if it is good. We are going to create a new
+                    //number.
+                    stackDiff.pop();
+                    //if values[2] - values[1] is in the allowed set, push that since we know it is valid
+                    //else we push values[2] - values[0]. If this is invalid, then we know the report is bad.
+
+                    int diff1 = values.get(2) - values.get(1);
+                    int diff2 = values.get(2) - values.get(0);
+                    if (allowedDiffs.contains(diff1)) {
+                        stackDiff.push(diff1);
                     } else {
-                        Integer tmp = diff.get(0) + diff.get(1);
-                        if (!allowedDiffs.contains(tmp)) {
-                            return false;
-                        } else {
-                            i++;
-                        }
+                        stackDiff.push(diff2);
                     }
                 }
             }
+            first = false;
         }
         return true;
     }
