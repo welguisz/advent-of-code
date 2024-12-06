@@ -31,13 +31,9 @@ public class GuardGallivant extends AoCDay {
 
     Map<Coord2D, Character> createGridHash(char[][] grid) {
         Map<Coord2D, Character> gridHash = new HashMap<>();
-        Coord2D start = new Coord2D(0, 0);
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
                 gridHash.put(new Coord2D(i, j), grid[i][j]);
-                if (grid[i][j] == '^') {
-                    start = new Coord2D(i, j);
-                }
             }
         }
         return gridHash;
