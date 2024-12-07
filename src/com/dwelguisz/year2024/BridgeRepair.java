@@ -67,15 +67,15 @@ public class BridgeRepair extends AoCDay {
     }
 
     boolean validEquationPart2(Long total, List<Long> operands) {
-        List<Long> possibleAnswers = new ArrayList<>();
+        Queue<Long> possibleAnswers = new LinkedList<>();
         possibleAnswers.add(operands.get(0));
         for (int i = 1; i < operands.size(); i++) {
             int currentSize = possibleAnswers.size();
             while (currentSize > 0) {
-                Long temp = possibleAnswers.remove(0);
-                long mulTotal = temp * operands.get(i);
-                long addTotal = temp + operands.get(i);
-                long concatTotal = Long.parseLong(temp + operands.get(i).toString());;
+                Long temp = possibleAnswers.poll();
+                Long mulTotal = temp * operands.get(i);
+                Long addTotal = temp + operands.get(i);
+                Long concatTotal = Long.parseLong(temp + operands.get(i).toString());;
                 if (mulTotal <= total) {
                     possibleAnswers.add(mulTotal);
                 }
