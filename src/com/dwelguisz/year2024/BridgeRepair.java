@@ -15,7 +15,7 @@ public class BridgeRepair extends AoCDay {
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = solutionPart1(equations);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(equations);
+        part2Answer = solutionPart2(equations) + (Long) part1Answer;
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
@@ -44,8 +44,14 @@ public class BridgeRepair extends AoCDay {
             int currentSize = possibleAnswers.size();
             while (currentSize > 0) {
                 long temp = possibleAnswers.remove(0);
-                possibleAnswers.add(temp * operands.get(i));
-                possibleAnswers.add(temp + operands.get(i));
+                long mulTotal = temp * operands.get(i);
+                long addTotal = temp + operands.get(i);
+                if (mulTotal <= total) {
+                    possibleAnswers.add(mulTotal);
+                }
+                if (addTotal <= total) {
+                    possibleAnswers.add(addTotal);
+                }
                 currentSize--;
             }
         }
@@ -54,6 +60,7 @@ public class BridgeRepair extends AoCDay {
 
     long solutionPart2(List<Pair<Long, List<Long>>> equations) {
         return equations.stream()
+                .filter(e -> !validEquationPart1(e.getLeft(), e.getRight()))
                 .filter(e -> validEquationPart2(e.getLeft(), e.getRight()))
                 .map(Pair::getLeft)
                 .mapToLong(l -> l).sum();
