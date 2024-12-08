@@ -41,25 +41,25 @@ public class BridgeRepair extends AoCDay {
         Queue<Long> possibleAnswers = new LinkedList<>();
         possibleAnswers.add(operands.get(0));
         for (int i = 1; i < operands.size(); i++) {
-            int currentSize = possibleAnswers.size();
-            while (currentSize > 0) {
+            Queue<Long> nextAnswers = new LinkedList<>();
+            while (!possibleAnswers.isEmpty()) {
                 long temp = possibleAnswers.poll();
                 long mulTotal = temp * operands.get(i);
                 long addTotal = temp + operands.get(i);
                 if (mulTotal <= total) {
-                    possibleAnswers.add(mulTotal);
+                    nextAnswers.add(mulTotal);
                 }
                 if (addTotal <= total) {
-                    possibleAnswers.add(addTotal);
+                    nextAnswers.add(addTotal);
                 }
                 if (part2) {
                     Long concatTotal = Long.parseLong(temp + operands.get(i).toString());;
                     if (concatTotal <= total) {
-                        possibleAnswers.add(concatTotal);
+                        nextAnswers.add(concatTotal);
                     }
                 }
-                currentSize--;
             }
+            possibleAnswers = nextAnswers;
         }
         return possibleAnswers.contains(total);
     }
@@ -70,15 +70,15 @@ public class BridgeRepair extends AoCDay {
         operands.forEach(operand -> stackOperands.push(operand));
         possibleAnswers.add(total);
         while (stackOperands.size() > 1 && !possibleAnswers.isEmpty()) {
-            int currentSize = possibleAnswers.size();
             long operand = stackOperands.pop();
-            while (currentSize > 0) {
+            Queue<Long> nextAnswers = new LinkedList<>();
+            while (!possibleAnswers.isEmpty()) {
                 long temp = possibleAnswers.poll();
                 if (temp - operand >= 0) {
-                    possibleAnswers.add(temp - operand);
+                    nextAnswers.add(temp - operand);
                 }
                 if (temp % operand == 0) {
-                    possibleAnswers.add(temp / operand);
+                    nextAnswers.add(temp / operand);
                 }
                 if (part2) {
                     int operandLength = String.valueOf(operand).length();
@@ -87,12 +87,12 @@ public class BridgeRepair extends AoCDay {
                         String firstPart = tempStr.substring(0, tempStr.length() - operandLength);
                         String secondPart = tempStr.substring(tempStr.length() - operandLength);
                         if (secondPart.equals(String.valueOf(operand)) && !firstPart.isEmpty()) {
-                            possibleAnswers.add(Long.parseLong(firstPart));
+                            nextAnswers.add(Long.parseLong(firstPart));
                         }
                     }
                 }
-                currentSize--;
             }
+            possibleAnswers = nextAnswers;
         }
         return possibleAnswers.contains(stackOperands.pop());
     }
