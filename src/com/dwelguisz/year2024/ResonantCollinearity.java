@@ -36,30 +36,27 @@ public class ResonantCollinearity extends AoCDay {
     }
 
     Set<Coord2D> addAntiNodes(Coord2D antennaA, Coord2D antennaB, List<Integer> possibleXs, List<Integer> possibleYs, boolean part2) {
-        Set<Coord2D> antiNodes = new HashSet<>();
+        if (antennaA.equals(antennaB)) {
+            return Set.of();
+        }
         Coord2D diff = antennaA.add(antennaB.multiply(-1));
         if (part2) {
-            if (antennaA.equals(antennaB)) {
-                return Set.of();
-            }
+            Set<Coord2D> antiNodes = new HashSet<>();
             Coord2D nextAntinode = antennaA.add(diff);
             antiNodes.add(antennaB);
             while (possibleXs.contains(nextAntinode.x) && possibleYs.contains(nextAntinode.y)) {
                 antiNodes.add(nextAntinode);
                 nextAntinode = nextAntinode.add(diff);
             }
+            return antiNodes;
         }
         else {
-            if (antennaA.equals(antennaB)) {
-                return Set.of();
-            }
             Coord2D antinode = antennaA.add(diff);
             if (possibleXs.contains(antinode.x) && possibleYs.contains(antinode.y)) {
                 return Set.of(antinode);
             }
             return Set.of();
         }
-        return antiNodes;
     }
 
     Set<Pair<Coord2D, Coord2D>> createPairs(List<Coord2D> coords) {
