@@ -10,7 +10,7 @@ import java.util.stream.LongStream;
 public class DiskFragmenter extends AoCDay {
     Map<Long, Long> diskG;
     Map<Long, Pair<Long, Long>> filesG;
-    Map<Long, PriorityQueue<Long>> freeSpace;
+    List<PriorityQueue<Long>> freeSpace;
     Long fileId;
 
     public void solve() {
@@ -28,15 +28,15 @@ public class DiskFragmenter extends AoCDay {
     void createPartitions(String[] diskmap) {
         diskG = new HashMap<>();
         filesG = new HashMap<>();
-        freeSpace = new HashMap<>();
+        freeSpace = new ArrayList<>();
         for (long i = 0; i < 10; i++) {
-            freeSpace.put(i, new PriorityQueue<>(500, (b,a) -> Math.toIntExact(b - a)));
+            freeSpace.add(new PriorityQueue<>(500, (b,a) -> Math.toIntExact(b - a)));
         }
         Long diskLoc = 0L;
         fileId = 0L;
         boolean usedSpace = true;
         for (String digit : diskmap) {
-            Long length = Long.parseLong(digit);
+            long length = Long.parseLong(digit);
             if (usedSpace) {
                 filesG.put(fileId, Pair.of(diskLoc, length));
                 for (int i = 0; i < length; i++) {
@@ -45,9 +45,8 @@ public class DiskFragmenter extends AoCDay {
                 fileId++;
             } else {
                 if (length > 0L) {
-                    PriorityQueue<Long> tmp = freeSpace.get(length);
+                    PriorityQueue<Long> tmp = freeSpace.get(Math.toIntExact(length));
                     tmp.add(diskLoc);
-                    freeSpace.put(length, tmp);
                 }
             }
             usedSpace ^= true;
@@ -74,7 +73,7 @@ public class DiskFragmenter extends AoCDay {
                 .reduce(0L, Long::sum);
     }
 
-    long solutionPart2(Map<Long, Long> disk, Map<Long, Pair<Long, Long>> files, Map<Long, PriorityQueue<Long>> freeSpace) {
+    long solutionPart2(Map<Long, Long> disk, Map<Long, Pair<Long, Long>> files, List<PriorityQueue<Long>> freeSpace) {
         List<Long> filesToCompact = new ArrayList<>(LongStream.range(0, fileId).boxed().toList());
         Collections.reverse(filesToCompact);
         int lcv = 0;
@@ -82,9 +81,9 @@ public class DiskFragmenter extends AoCDay {
             Long fileIdCompact = filesToCompact.get(lcv);
             Pair<Long, Long> fileInfo = files.get(fileIdCompact);
             Long fileSize = fileInfo.getRight();
-            long sizeToUse = -1;
+            int sizeToUse = -1;
             long smallestLoc = Long.MAX_VALUE;
-            for (long i = fileSize; i < 10; i++) {
+            for (int i = Math.toIntExact(fileSize); i < 10; i++) {
                 PriorityQueue<Long> tmp = freeSpace.get(i);
                 if (!tmp.isEmpty()) {
                     Long nextLoc = tmp.peek();
@@ -96,9 +95,9 @@ public class DiskFragmenter extends AoCDay {
             }
             if (sizeToUse > -1) {
                 PriorityQueue<Long> tmp = freeSpace.get(sizeToUse);
-                final Long insertPosition = tmp.peek();
-                final Long fileLoc = fileInfo.getLeft();
-                Long remainingSpace = sizeToUse - fileSize;
+                final long insertPosition = tmp.peek();
+                final long fileLoc = fileInfo.getLeft();
+                int remainingSpace = sizeToUse - Math.toIntExact(fileSize);
                 if (fileLoc < insertPosition) {
                     lcv++;
                     continue;
@@ -107,7 +106,6 @@ public class DiskFragmenter extends AoCDay {
                 if (remainingSpace > 0) {
                     PriorityQueue<Long> tmp2 = freeSpace.get(remainingSpace);
                     tmp2.add(insertPosition + fileSize);
-                    freeSpace.put(remainingSpace, tmp2);
                 }
                 LongStream.range(0, files.get(fileIdCompact).getRight()).forEach(i -> {
                     disk.remove(fileLoc + i);
