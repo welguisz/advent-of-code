@@ -73,8 +73,4 @@ public class DiskFragmenter extends AoCDay {
         }
         return disk.entrySet().stream().map(e -> e.getKey() * e.getValue()).reduce(0l, Long::sum);
     }
-
-    long solutionPart2(List<String> lines) {
-        return 0l;
-    }
 }
