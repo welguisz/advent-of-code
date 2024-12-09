@@ -9,7 +9,7 @@ import java.util.stream.LongStream;
 
 public class DiskFragmenter extends AoCDay {
     Map<Long, Long> diskG;
-    Map<Long, Pair<Long, Long>> filesG;
+    Stack<Pair<Long, Long>> filesG;
     List<PriorityQueue<Long>> freeSpace;
     Long fileId;
 
@@ -27,7 +27,7 @@ public class DiskFragmenter extends AoCDay {
 
     void createPartitions(String[] diskmap) {
         diskG = new HashMap<>();
-        filesG = new HashMap<>();
+        filesG = new Stack<>();
         freeSpace = new ArrayList<>();
         for (long i = 0; i < 10; i++) {
             freeSpace.add(new PriorityQueue<>(500, (b,a) -> Math.toIntExact(b - a)));
@@ -38,7 +38,7 @@ public class DiskFragmenter extends AoCDay {
         for (String digit : diskmap) {
             long length = Long.parseLong(digit);
             if (usedSpace) {
-                filesG.put(fileId, Pair.of(diskLoc, length));
+                filesG.push(Pair.of(diskLoc, length));
                 for (int i = 0; i < length; i++) {
                     diskG.put(diskLoc + i, fileId);
                 }
@@ -73,13 +73,13 @@ public class DiskFragmenter extends AoCDay {
                 .reduce(0L, Long::sum);
     }
 
-    long solutionPart2(Map<Long, Long> disk, Map<Long, Pair<Long, Long>> files, List<PriorityQueue<Long>> freeSpace) {
+    long solutionPart2(Map<Long, Long> disk, Stack<Pair<Long, Long>> files, List<PriorityQueue<Long>> freeSpace) {
         List<Long> filesToCompact = new ArrayList<>(LongStream.range(0, fileId).boxed().toList());
         Collections.reverse(filesToCompact);
         int lcv = 0;
-        while (lcv < filesToCompact.size()) {
+        while (!files.isEmpty()) {
             Long fileIdCompact = filesToCompact.get(lcv);
-            Pair<Long, Long> fileInfo = files.get(fileIdCompact);
+            Pair<Long, Long> fileInfo = files.pop();
             Long fileSize = fileInfo.getRight();
             int sizeToUse = -1;
             long smallestLoc = Long.MAX_VALUE;
@@ -107,7 +107,7 @@ public class DiskFragmenter extends AoCDay {
                     PriorityQueue<Long> tmp2 = freeSpace.get(remainingSpace);
                     tmp2.add(insertPosition + fileSize);
                 }
-                LongStream.range(0, files.get(fileIdCompact).getRight()).forEach(i -> {
+                LongStream.range(0, fileInfo.getRight()).forEach(i -> {
                     disk.remove(fileLoc + i);
                     disk.put(insertPosition + i, fileIdCompact);
                 });
