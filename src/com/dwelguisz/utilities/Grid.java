@@ -36,10 +36,28 @@ public class Grid {
         return grid;
     }
 
+    public static Map<Coord2D, Integer> createIntegerGridMap(List<String> lines) {
+        Map<Coord2D, Integer> grid = new HashMap<>();
+        for (int i = 0; i < lines.size(); i++) {
+            for (int j = 0; j < lines.get(i).length(); j++) {
+                grid.put(new Coord2D(i, j), Integer.parseInt(""+lines.get(i).charAt(j)));
+            }
+        }
+        return grid;
+    }
+
+
     public static Coord2D getStartingPoint(Map<Coord2D, Character> grid, char startingSymbol) {
         return grid.entrySet().stream()
                 .filter(entry -> entry.getValue() == startingSymbol)
                 .findFirst().get().getKey();
+    }
+
+    public static List<Coord2D> getStartingPoints (Map<Coord2D, Integer> grid, Integer startingValue) {
+        return grid.entrySet().stream()
+                .filter(entry -> entry.getValue() == startingValue)
+                .map(entry -> entry.getKey())
+                .toList();
     }
 
 }
