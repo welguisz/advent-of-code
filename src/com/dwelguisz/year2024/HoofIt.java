@@ -61,8 +61,7 @@ public class HoofIt extends AoCDay {
             Integer currentlevel = grid.get(currentPoint);
             List<Coord2D> tmp = nextLocs.stream()
                     .map(nextLoc -> nextLoc.add(currentPoint))
-                    .filter(loc -> grid.containsKey(loc))
-                    .filter(loc -> grid.get(loc) == currentlevel+1)
+                    .filter(loc -> grid.getOrDefault(loc, -1000) == currentlevel+1)
                     .toList();
             if (tmp.stream().anyMatch(loc -> loc.equals(endingPoint))) {
                 return 1;
@@ -85,8 +84,7 @@ public class HoofIt extends AoCDay {
             Integer currentlevel = grid.get(currentPoint);
             List<Coord2D> tmp = nextLocs.stream()
                     .map(nextLoc -> nextLoc.add(currentPoint))
-                    .filter(loc -> grid.containsKey(loc))
-                    .filter(loc -> grid.get(loc) == currentlevel+1)
+                    .filter(loc -> grid.getOrDefault(loc, -1000) == currentlevel+1)
                     .toList();
             if (currentlevel == 8) {
                 found += tmp.size();
