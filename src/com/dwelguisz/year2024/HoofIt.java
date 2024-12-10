@@ -5,6 +5,7 @@ import com.dwelguisz.utilities.Coord2D;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.dwelguisz.utilities.Grid.createIntegerGridMap;
 import static com.dwelguisz.utilities.Grid.getStartingPoints;
@@ -23,20 +24,17 @@ public class HoofIt extends AoCDay {
         List<String> lines = readResoruceFile(2024, 10, false, 0);
         Map<Coord2D, Integer> grid = createIntegerGridMap(lines);
         List<Coord2D> startingPoints = getStartingPoints(grid, 0);
-        List<Coord2D> endingPoints = getStartingPoints(grid, 9);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(grid, startingPoints, endingPoints);
+        part1Answer = solutionPart1(grid, startingPoints);
         timeMarkers[2] = Instant.now().toEpochMilli();
         part2Answer = solutionPart2(grid, startingPoints);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    long solutionPart1(Map<Coord2D, Integer> grid, List<Coord2D> startingPoints, List<Coord2D> endingPoints) {
+    long solutionPart1(Map<Coord2D, Integer> grid, List<Coord2D> startingPoints) {
         long ans = 0;
         for (Coord2D startingPoint : startingPoints) {
-            for (Coord2D endingPoint : endingPoints) {
-                ans += findPath(grid, startingPoint, endingPoint);
-            }
+            ans += findPath(grid, startingPoint);
         }
         return ans;
     }
@@ -51,34 +49,11 @@ public class HoofIt extends AoCDay {
 
     long findPath(
             Map<Coord2D, Integer> grid,
-            Coord2D startingPoint,
-            Coord2D endingPoint
+            Coord2D startingPoint
     ) {
         Queue<Coord2D> states = new LinkedList<>();
         states.add(startingPoint);
-        while (!states.isEmpty()) {
-            Coord2D currentPoint = states.poll();
-            Integer currentlevel = grid.get(currentPoint);
-            List<Coord2D> tmp = nextLocs.stream()
-                    .map(nextLoc -> nextLoc.add(currentPoint))
-                    .filter(loc -> grid.getOrDefault(loc, -1000) == currentlevel+1)
-                    .toList();
-            if (tmp.stream().anyMatch(loc -> loc.equals(endingPoint))) {
-                return 1;
-            } else if (currentlevel != 8) {
-                states.addAll(tmp);
-            }
-        }
-        return 0;
-    }
-
-    long findRatingsPath(
-            Map<Coord2D, Integer> grid,
-            Coord2D startingLocation
-    ) {
-        Queue<Coord2D> states = new LinkedList<>();
-        states.add(startingLocation);
-        long found = 0;
+        Set<Coord2D> foundEndPoints = new HashSet<>();
         while (!states.isEmpty()) {
             Coord2D currentPoint = states.poll();
             Integer currentlevel = grid.get(currentPoint);
@@ -87,11 +62,38 @@ public class HoofIt extends AoCDay {
                     .filter(loc -> grid.getOrDefault(loc, -1000) == currentlevel+1)
                     .toList();
             if (currentlevel == 8) {
-                found += tmp.size();
+                foundEndPoints.addAll(tmp.stream()
+                        .filter(loc -> grid.getOrDefault(loc, -1000) == 9)
+                        .collect(Collectors.toSet()));
+            } else  {
+                states.addAll(tmp);
+            }
+        }
+        return foundEndPoints.size();
+    }
+
+    long findRatingsPath(
+            Map<Coord2D, Integer> grid,
+            Coord2D startingLocation
+    ) {
+        Queue<Coord2D> states = new LinkedList<>();
+        states.add(startingLocation);
+        List<Coord2D> endPoints = new ArrayList<>();
+        while (!states.isEmpty()) {
+            Coord2D currentPoint = states.poll();
+            Integer currentlevel = grid.get(currentPoint);
+            List<Coord2D> tmp = nextLocs.stream()
+                    .map(nextLoc -> nextLoc.add(currentPoint))
+                    .filter(loc -> grid.getOrDefault(loc, -1000) == currentlevel+1)
+                    .toList();
+            if (currentlevel == 8) {
+                endPoints.addAll(tmp.stream()
+                        .filter(loc -> grid.getOrDefault(loc, -1000) == 9)
+                        .toList());
             } else {
                 states.addAll(tmp);
             }
         }
-        return found;
+        return endPoints.size();
     }
 }
