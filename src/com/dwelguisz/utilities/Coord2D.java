@@ -87,4 +87,12 @@ public class Coord2D {
         return angle < 0 ? angle+360 : angle;
     }
 
+    public long determinant(Coord2D other, long offsetX, long offsetY) {
+        return x*(other.y+offsetY) - y*(other.x+offsetX);
+    }
+
+    public long determinant(long offsetX, long offsetY, Coord2D other) {
+        return (x+offsetX)*other.y - (y+offsetY)*other.x;
+    }
+
 }

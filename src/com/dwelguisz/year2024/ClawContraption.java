@@ -21,23 +21,23 @@ public class ClawContraption extends AoCDay {
         }
 
         public long cost(long offset) {
-            long denominator = buttonA.x * buttonB.y - buttonA.y * buttonB.x;
+            long denominator = buttonA.determinant(buttonB, 0, 0);
             long px = prize.x + offset;
             long py = prize.y + offset;
-            if (denominator == 0) {
-                return 0l;
+            if (denominator == 0L) {
+                return 0L;
             }
-            if (((px * buttonB.y - py * buttonB.x) % denominator) != 0) {
-                return 0l;
+            long determinantB = prize.determinant(offset, offset, buttonB);
+            if ((determinantB % denominator) != 0) {
+                return 0L;
             }
-            long buttonAPresses = (px * buttonB.y - py * buttonB.x) / denominator;
+            long buttonAPresses = determinantB / denominator;
             if (((py - buttonA.y * buttonAPresses) % buttonB.y) != 0) {
-                return 0l;
+                return 0L;
             }
             long buttonBPresses = (py - buttonA.y * buttonAPresses) / buttonB.y;
             return buttonAPresses * 3 + buttonBPresses;
         }
-
     }
 
     public void solve() {
