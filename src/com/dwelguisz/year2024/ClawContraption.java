@@ -22,8 +22,6 @@ public class ClawContraption extends AoCDay {
 
         public long cost(long offset) {
             long denominator = buttonA.determinant(buttonB, 0, 0);
-            long px = prize.x + offset;
-            long py = prize.y + offset;
             if (denominator == 0L) {
                 return 0L;
             }
@@ -32,10 +30,10 @@ public class ClawContraption extends AoCDay {
                 return 0L;
             }
             long buttonAPresses = determinantB / denominator;
-            if (((py - buttonA.y * buttonAPresses) % buttonB.y) != 0) {
+            if ((((prize.y+offset) - buttonA.y * buttonAPresses) % buttonB.y) != 0) {
                 return 0L;
             }
-            long buttonBPresses = (py - buttonA.y * buttonAPresses) / buttonB.y;
+            long buttonBPresses = ((prize.y+offset) - buttonA.y * buttonAPresses) / buttonB.y;
             return buttonAPresses * 3 + buttonBPresses;
         }
     }
