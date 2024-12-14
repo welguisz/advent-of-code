@@ -57,6 +57,8 @@ public class RestroomRedoubt extends AoCDay {
     Coord2D findPositionAtTime(Pair<Coord2D, Coord2D> robot, int gridX, int gridY, int turn) {
         int x = robot.getLeft().x + robot.getRight().x*turn;
         int y = robot.getLeft().y + robot.getRight().y*turn;
+        //This does (x % gridX). I think Java does something weird with negative numbers.
+        //so make sure that the robots are on the grid by teleporting the robot
         while (x < 0) {
             x += gridX;
         }
