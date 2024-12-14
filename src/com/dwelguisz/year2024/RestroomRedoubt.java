@@ -3,7 +3,6 @@ package com.dwelguisz.year2024;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
 import org.apache.commons.lang3.tuple.Pair;
-import org.checkerframework.checker.units.qual.C;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class AoC2024Day14 extends AoCDay {
+public class RestroomRedoubt extends AoCDay {
 
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
