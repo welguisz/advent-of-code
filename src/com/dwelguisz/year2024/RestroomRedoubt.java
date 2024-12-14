@@ -107,7 +107,26 @@ public class RestroomRedoubt extends AoCDay {
                     .collect(Collectors.toList());
             neighbors = countNeighbors(positions, gridX, gridY);
         }
+        printGrid(robots, gridX, gridY, time);
         return time;
+    }
+
+    void printGrid(List<Pair<Coord2D, Coord2D>> robots, int gridX, int gridY, int time) {
+        List<Coord2D> positions = robots.stream()
+                .map(r -> findPositionAtTime(r, gridX, gridY, time))
+                .collect(Collectors.toList());
+        for (int x = 0; x < gridX; x++) {
+            StringBuffer buffer = new StringBuffer();
+            for (int y = 0; y < gridY; y++) {
+                if (positions.contains(new Coord2D(x, y))) {
+                    buffer.append("#");
+                } else {
+                    buffer.append(".");
+                }
+            }
+            System.out.println(buffer.toString());
+        }
+
     }
 
 }
