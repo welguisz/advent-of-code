@@ -55,22 +55,8 @@ public class RestroomRedoubt extends AoCDay {
     }
 
     Coord2D findPositionAtTime(Pair<Coord2D, Coord2D> robot, int gridX, int gridY, int turn) {
-        int x = robot.getLeft().x + robot.getRight().x*turn;
-        int y = robot.getLeft().y + robot.getRight().y*turn;
-        //This does (x % gridX). I think Java does something weird with negative numbers.
-        //so make sure that the robots are on the grid by teleporting the robot
-        while (x < 0) {
-            x += gridX;
-        }
-        while (y < 0) {
-            y += gridY;
-        }
-        while (y >= gridY) {
-            y -= gridY;
-        }
-        while (x >= gridX) {
-            x -= gridX;
-        }
+        int x = (((robot.getLeft().x + robot.getRight().x*turn) % gridX) + gridX) % gridX;
+        int y = (((robot.getLeft().y + robot.getRight().y*turn) % gridY) + gridY) % gridY;
         return new Coord2D(x, y);
     }
 
@@ -83,29 +69,39 @@ public class RestroomRedoubt extends AoCDay {
         return quads.values().stream().reduce(1L, (a, b) -> a * b);
     }
 
-    long countNeighbors(List<Coord2D> positions, int gridX, int gridY) {
-        long neighbors = 0;
-        Set<Coord2D> neighborSet = new HashSet<>(positions);
-        for (int x = 0; x < gridX; x++) {
-            for (int y = 0; y < gridY; y++) {
-                if (neighborSet.contains(new Coord2D(x, y)) && neighborSet.contains(new Coord2D(x + 1, y))) {
-                    neighbors++;
-                }
-            }
-        }
-        return neighbors;
+    List<Coord2D> NEIGHBORS = List.of(new Coord2D(-1, -1), new Coord2D(0, -1), new Coord2D(1, -1),
+            new Coord2D(-1, 0), new Coord2D(1, 0),
+            new Coord2D(-1, 1), new Coord2D(0, 1), new Coord2D(1, 1));
+
+    long countNeighbors(Set<Coord2D> positions, Coord2D test) {
+        return NEIGHBORS.stream()
+                .map(n -> n.add(test))
+                .filter(positions::contains)
+                .count();
+    }
+
+    long calculateOrder(List<Coord2D> positions) {
+        Set<Coord2D> pos = new HashSet<>(positions);
+        Map<Long, Long> neighborCount = pos.stream().map(n -> countNeighbors(pos, n))
+                .collect(Collectors.groupingBy(m -> m, Collectors.counting()));
+        return neighborCount.entrySet().stream()
+                .map(e -> e.getKey() * e.getValue())
+                .reduce(0L, Long::sum);
     }
 
     long solutionPart2(List<Pair<Coord2D, Coord2D>> robots, int gridX, int gridY) {
         int time = 0;
-        long neighbors = 0;
-        while (neighbors < 200) {
-            time++;
-            final int tf = time;
+        long orderMax = Long.MIN_VALUE;
+        for (int i = 0; i < gridX * gridY; i++) {
+            final int tf = i;
             List<Coord2D> positions = robots.stream()
                     .map(r -> findPositionAtTime(r, gridX, gridY, tf))
                     .collect(Collectors.toList());
-            neighbors = countNeighbors(positions, gridX, gridY);
+            long order = calculateOrder(positions);
+            if (order > orderMax) {
+                orderMax = order;
+                time = i;
+            }
         }
         printGrid(robots, gridX, gridY, time);
         return time;
@@ -118,7 +114,7 @@ public class RestroomRedoubt extends AoCDay {
         for (int x = 0; x < gridX; x++) {
             StringBuffer buffer = new StringBuffer();
             for (int y = 0; y < gridY; y++) {
-                if (positions.contains(new Coord2D(x, y))) {
+                if (positions.contains(new Coord2D(y, x))) {
                     buffer.append("#");
                 } else {
                     buffer.append(".");
