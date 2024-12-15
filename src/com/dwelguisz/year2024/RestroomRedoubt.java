@@ -112,7 +112,7 @@ public class RestroomRedoubt extends AoCDay {
                 .map(r -> findPositionAtTime(r, gridX, gridY, time))
                 .collect(Collectors.toList());
         for (int x = 0; x < gridX; x++) {
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             for (int y = 0; y < gridY; y++) {
                 if (positions.contains(new Coord2D(y, x))) {
                     buffer.append("#");
