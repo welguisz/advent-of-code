@@ -9,7 +9,8 @@ public class ChiefHistorian extends AoCYear {
             new HistorianHysteria(), new RedNosedReports(), new MullItOver(), new CeresSearch(),
             new PrintQueue(), new GuardGallivant(), new BridgeRepair(), new ResonantCollinearity(),
             new DiskFragmenter(), new HoofIt(), new PlutonianPebbles(), new GardenGroups(),
-            new ClawContraption(), new RestroomRedoubt(), new WarehouseWoes()
+            new ClawContraption(), new RestroomRedoubt(), new WarehouseWoes(),
+            new AoC2024Day16()
     };
 
     public ChiefHistorian(int year) {
