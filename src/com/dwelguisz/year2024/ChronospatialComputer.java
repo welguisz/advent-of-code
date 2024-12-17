@@ -87,26 +87,17 @@ public class ChronospatialComputer extends AoCDay {
     List<Long> findPossibleNumbers(List<Long> possibleValues, int shiftAmount, String expected, int substringStart) {
         List<Long> nextValues = new ArrayList<>();
         for (Long possibleValue : possibleValues) {
-            for (long h = 0; h < 8; h++) {
-                for (long i = 0; i < 8; i++) {
-                    for (long j = 0; j < 8; j++) {
-                        for (long k = 0; k < 8; k++) {
-                            registerA = possibleValue;
-                            registerA += (k << (shiftAmount + 9));
-                            registerA += (j << (shiftAmount + 6));
-                            registerA += (i << (shiftAmount + 3));
-                            registerA += (h << (shiftAmount + 0));
-                            long temp = registerA;
-                            registerB = 0L;
-                            registerC = 0L;
-                            instructionPointer = 0;
-                            List<Long> values = runProgram();
-                            String t = values.stream().map(s -> "" + s).collect(Collectors.joining(","));
-                            if (t.length() > 27 && expected.substring(substringStart).equals(t.substring(substringStart))) {
-                                nextValues.add(temp);
-                            }
-                        }
-                    }
+            for (long k = 0; k < 8; k++) {
+                registerA = possibleValue;
+                registerA += k << shiftAmount;
+                long temp = registerA;
+                registerB = 0L;
+                registerC = 0L;
+                instructionPointer = 0;
+                List<Long> values = runProgram();
+                String t = values.stream().map(s -> "" + s).collect(Collectors.joining(","));
+                if (t.length() > 27 && expected.substring(substringStart).equals(t.substring(substringStart))) {
+                    nextValues.add(temp);
                 }
             }
         }
@@ -116,10 +107,10 @@ public class ChronospatialComputer extends AoCDay {
     long solutionPart2(String expected) {
         List<Long> possible_values = new ArrayList<>();
         possible_values.add(0L);
-        for (int i = 0; i < 4; i++) {
-            possible_values = findPossibleNumbers(possible_values, (3-i)*12, expected, 32-(8*(i+1)));
+        for (int i = 0; i < 16; i++) {
+            possible_values = findPossibleNumbers(possible_values, (15-i)*3, expected, 32-(2*(i+1)));
+            System.out.println("After iteration " + (i+1)+ ", possible_values contains " + possible_values);
         }
-        System.out.println("possible_values = " + possible_values);
         return possible_values.stream().mapToLong(l -> l).min().getAsLong();
     }
 
