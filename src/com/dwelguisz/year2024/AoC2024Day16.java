@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -58,8 +59,6 @@ public class AoC2024Day16 extends AoCDay {
         @Getter
         Integer steps;
         @Getter
-        Set<ReindeerPathState> bestSeats;
-        @Getter
         List<ReindeerPathState> path;
         private int hashCode;
 
@@ -67,15 +66,14 @@ public class AoC2024Day16 extends AoCDay {
             this(location, direction, 0, 0);
         }
         public ReindeerPathState(Coord2D location, Coord2D direction, Integer turns, Integer steps) {
-            this(location, direction, turns, steps, new HashSet<>(), new ArrayList<>());
+            this(location, direction, turns, steps, new ArrayList<>());
         }
 
-        public ReindeerPathState(Coord2D location, Coord2D direction, Integer turns, Integer steps, Set<ReindeerPathState> bestSeats, List<ReindeerPathState> path) {
+        public ReindeerPathState(Coord2D location, Coord2D direction, Integer turns, Integer steps, List<ReindeerPathState> path) {
             this.location = location;
             this.direction = direction;
             this.turns = turns;
             this.steps = steps;
-            this.bestSeats = bestSeats;
             this.path = path;
             this.hashCode = Objects.hash(location, direction, turns, steps);
         }
@@ -99,16 +97,14 @@ public class AoC2024Day16 extends AoCDay {
         }
 
         List<ReindeerPathState> getNextState(Map<Coord2D, Character> grid) {
-            Set<ReindeerPathState> t = new HashSet<>(bestSeats);
-            t.add(this);
             List<ReindeerPathState> ps = new ArrayList<>(path);
             ps.add(this);
             return possibleTurns.get(direction).stream()
                     .map(n -> {
                         if (n.equals(direction)) {
-                            return new ReindeerPathState(location.add(n), direction, turns, steps+1, t, ps);
+                            return new ReindeerPathState(location.add(n), direction, turns, steps+1, ps);
                         } else {
-                            return new ReindeerPathState(location, n, turns+1, steps, t, ps);
+                            return new ReindeerPathState(location, n, turns+1, steps, ps);
                         }
                     })
                     .filter(s -> grid.get(s.getLocation()) != '#')
@@ -116,23 +112,21 @@ public class AoC2024Day16 extends AoCDay {
         }
 
         List<ReindeerPathState> getNextStatePart2(
-                ReindeerPathState bestState,
+                Map<Pair<Coord2D, Coord2D>, Integer> bestCosts,
                 Map<Coord2D, Character> grid) {
-            Set<ReindeerPathState> t = new HashSet<>(bestSeats);
-            t.add(this);
             List<ReindeerPathState> ps = new ArrayList<>(path);
             ps.add(this);
             return possibleTurns.get(direction).stream()
                     .map(n -> {
                         if (n.equals(direction)) {
 
-                            return new ReindeerPathState(location.add(n), direction, turns, steps+1, t, ps);
+                            return new ReindeerPathState(location.add(n), direction, turns, steps+1, ps);
                         } else {
-                            return new ReindeerPathState(location, n, turns+1, steps, t, ps);
+                            return new ReindeerPathState(location, n, turns+1, steps, ps);
                         }
                     })
-                    .filter(p -> p.possibleBestSeat(bestState))
                     .filter(p -> grid.get(p.getLocation()) != '#')
+                    .filter(p -> (p.getScore() + 1) > bestCosts.get(Pair.of(p.getLocation(), p.getDirection())))
                     .toList();
 
         }
@@ -143,10 +137,6 @@ public class AoC2024Day16 extends AoCDay {
 
         public boolean possibleBestSeat(ReindeerPathState bestPath) {
             return (steps <= bestPath.getSteps()) && (turns <= bestPath.getTurns());
-        }
-
-        public boolean addBestSeats(Set<ReindeerPathState> newSeats) {
-            return bestSeats.addAll(newSeats);
         }
     }
 
@@ -159,16 +149,12 @@ public class AoC2024Day16 extends AoCDay {
                 .filter(e -> e.getValue() == 'E')
                 .map(e -> e.getKey())
                 .toList().get(0);
-        ReindeerPathState currentState = new ReindeerPathState(startingPoint, new Coord2D(0,1), 0, 0, new HashSet<>(), new ArrayList<>());
+        ReindeerPathState currentState = new ReindeerPathState(startingPoint, new Coord2D(0,1), 0, 0, new ArrayList<>());
         PriorityQueue<ReindeerPathState> queue = new PriorityQueue<>(200, Comparator.comparingInt(ReindeerPathState::getScore));
         queue.add(currentState);
         while (!queue.isEmpty()) {
             ReindeerPathState current = queue.poll();
             Coord2D location = current.getLocation();
-            Coord2D direction = current.getDirection();
-            if (grid.get(location) == '#') {
-                continue;
-            }
             if (location.equals(endingPoint)) {
                 bestPath = current;
                 return current.getScore();
@@ -189,25 +175,20 @@ public class AoC2024Day16 extends AoCDay {
                 .toList().get(0);
         ReindeerPathState currentState = new ReindeerPathState(startingPoint, new Coord2D(0,1));
         PriorityQueue<ReindeerPathState> queue = new PriorityQueue<>(200, Comparator.comparingInt(ReindeerPathState::getScore));
+        Map<Pair<Coord2D, Coord2D>, Integer> bestCosts = new HashMap<>();
         queue.add(currentState);
         List<ReindeerPathState> bestSeats = new ArrayList<>();
-        Set<Pair<Coord2D, Coord2D>> visited = new HashSet<>();
+        //Set<Pair<Coord2D, Coord2D>> visited = new HashSet<>();
         while (!queue.isEmpty()) {
             ReindeerPathState current = queue.poll();
             Coord2D location = current.getLocation();
-            Coord2D direction = current.getDirection();
-            if (grid.get(location) == '#') {
-                continue;
-            }
             System.out.println("Current Location:" + current);
-            if (bestPath.getPath().contains(current)) {
-                bestPath.addBestSeats(current.getBestSeats());
-            }
-            if (visited.contains(Pair.of(location, direction))) {
+            if (location.equals(endingPoint)) {
+                bestSeats.addAll(current.getPath());
+                bestSeats.add(current);
                 continue;
             }
-            visited.add(Pair.of(current.getLocation(), current.getDirection()));
-            queue.addAll(current.getNextStatePart2(bestPath, grid));
+            queue.addAll(current.getNextStatePart2(bestCosts, grid));
         }
         Set<Coord2D> onPath = bestSeats.stream().map(ReindeerPathState::getLocation).collect(Collectors.toSet());
         printGrid(grid, onPath);
