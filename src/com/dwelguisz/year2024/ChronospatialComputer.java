@@ -84,99 +84,43 @@ public class ChronospatialComputer extends AoCDay {
         return values.stream().map(v -> ""+v).collect(Collectors.joining(","));
     }
 
-    long solutionPart2(String expected) {
-        System.out.println("instructionSize = " + instructions.size());
-        long tempValue = Long.MAX_VALUE;
-        List<Long> most_significant_half = new ArrayList<>();
-        for (long h = 0; h < 8; h++) {
-            for (long i = 0; i < 8; i++) {
-                for (long j = 0; j < 8; j++) {
-                    for (long k = 0; k < 8; k++) {
-                        for (long l = 0; l < 8; l++) {
-                            for (long m = 0; m < 8; m++) {
-                                for (long n = 0; n < 8; n++) {
-                                    for (long o = 0; o < 8; o++) {
-                                        List<Long> ints = List.of(h,i, j, k, l, m, n, o);
-                                        registerA += (long) (o << 45);
-                                        registerA += (long) (n << 42);
-                                        registerA += (long) (m << 39);
-                                        registerA += (long) (l << 36);
-                                        registerA += (long) (k << 33);
-                                        registerA += (long) (j << 30);
-                                        registerA += (long) (i << 27);
-                                        registerA += (long) (h << 24);
-                                        long temp = registerA;
-                                        registerB = 0L;
-                                        registerC = 0L;
-                                        instructionPointer = 0;
-                                        List<Long> values = runProgram();
-                                        String t = values.stream().map(s -> "" + s).collect(Collectors.joining(","));
-                                        if (t.length() > 27 && expected.substring(16).equals(t.substring(16))) {
-                                            most_significant_half = ints;
-                                            System.out.println(ints.stream().map(el -> "" + el).collect(Collectors.joining(",")) + "; temp: " + temp + "; output: " + t);
-                                            break;
-                                        }
+    List<Long> findPossibleNumbers(List<Long> possibleValues, int shiftAmount, String expected, int substringStart) {
+        List<Long> nextValues = new ArrayList<>();
+        for (Long possibleValue : possibleValues) {
+            for (long h = 0; h < 8; h++) {
+                for (long i = 0; i < 8; i++) {
+                    for (long j = 0; j < 8; j++) {
+                        for (long k = 0; k < 8; k++) {
+                            registerA = possibleValue;
+                            registerA += (k << (shiftAmount + 9));
+                            registerA += (j << (shiftAmount + 6));
+                            registerA += (i << (shiftAmount + 3));
+                            registerA += (h << (shiftAmount + 0));
+                            long temp = registerA;
+                            registerB = 0L;
+                            registerC = 0L;
+                            instructionPointer = 0;
+                            List<Long> values = runProgram();
+                            String t = values.stream().map(s -> "" + s).collect(Collectors.joining(","));
+                            if (t.length() > 27 && expected.substring(substringStart).equals(t.substring(substringStart))) {
+                                nextValues.add(temp);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return nextValues;
+    }
 
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+    long solutionPart2(String expected) {
+        List<Long> possible_values = new ArrayList<>();
+        possible_values.add(0L);
+        for (int i = 0; i < 4; i++) {
+            possible_values = findPossibleNumbers(possible_values, (3-i)*12, expected, 32-(8*(i+1)));
         }
-        long start = 0l;
-        long leftShift = 45;
-        List<Long> abc = new ArrayList<>(most_significant_half);
-        Collections.reverse(abc);
-        for (Long value : abc) {
-            start += value << leftShift;
-            leftShift -= 3;
-        }
-        //long start = (1L<<45) + (3L<<39) + (5L<<36) + (5L<<33) + (1L << 30) + (7 << 27) + (4 << 24);
-        System.out.println("start value (part2): " + start);
-        for (long h = 0; h < 8; h++) {
-            for (long i = 0; i < 8; i++) {
-                for (long j = 0; j < 8; j++) {
-                    for (long k = 0; k < 8; k++) {
-                        for (long l = 0; l < 8; l++) {
-                            for (long m = 0; m < 8; m++) {
-                                for (long n = 0; n < 8; n++) {
-                                    for (long o = 0; o < 8; o++) {
-                                        List<Long> ints = List.of(h,i, j, k, l, m, n, o);
-                                        registerA = start;
-                                        registerA += (long) (o << 21);
-                                        registerA += (long) (n << 18);
-                                        registerA += (long) (m << 15);
-                                        registerA += (long) (l << 12);
-                                        registerA += (long) (k << 9);
-                                        registerA += (long) (j << 6);
-                                        registerA += (long) (i << 3);
-                                        registerA += h;
-                                        long temp = registerA;
-                                        registerB = 0L;
-                                        registerC = 0L;
-                                        instructionPointer = 0;
-                                        List<Long> values = runProgram();
-                                        String t = values.stream().map(s -> "" + s).collect(Collectors.joining(","));
-                                        if (t.length() > 27 && expected.substring(4).equals(t.substring(4))) {
-                                            System.out.println(ints.stream().map(el -> "" + el).collect(Collectors.joining(",")) + "; temp: " + temp + "; output: " + t);
-                                        }
-                                        if (expected.equals(t)) {
-                                            if (temp < tempValue) {
-                                                System.out.println("temp Value: " + temp);
-                                                tempValue = temp;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return tempValue;
+        System.out.println("possible_values = " + possible_values);
+        return possible_values.stream().mapToLong(l -> l).min().getAsLong();
     }
 
 }
