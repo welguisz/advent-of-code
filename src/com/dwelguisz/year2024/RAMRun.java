@@ -23,17 +23,10 @@ public class RAMRun extends AoCDay {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2024, 18, false, 0);
         List<Coord2D> coords = parseLines(lines);
-        Map<Coord2D, Character> grid = new HashMap<>();
-        for (int y = 0; y < 71; y++) {
-            for (int x = 0; x < 71; x++) {
-                grid.put(new Coord2D(x,y), '.');
-            }
-        }
-        coords.subList(0, 1024).forEach(coord -> grid.put(coord, '#'));
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(grid);
+        part1Answer = solutionPart1(coords.subList(0,1024));
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(coords, grid);
+        part2Answer = solutionPart2(coords);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
@@ -81,18 +74,23 @@ public class RAMRun extends AoCDay {
             return length == other.length && location.equals(other.location);
         }
 
-        List<RamState> nextStatesPart1(Map<Coord2D, Character> ram, Set<Coord2D> visited) {
+        boolean onGrid(RamState state) {
+            Coord2D location = state.location;
+            return (location.x >= 0) && (location.x < 71) && (location.y >= 0) && (location.y < 71);
+        }
+
+        List<RamState> nextStatesPart1(List<Coord2D> blocks, Set<Coord2D> visited) {
             return DELTA.stream().map(d -> new RamState(length+1, location.add(d)))
-                    .filter(l -> ram.containsKey(l.getLocation()))
-                    .filter(l -> ram.get(l.getLocation()) != '#')
+                    .filter(l -> !blocks.contains(l.getLocation()))
                     .filter(l -> !visited.contains(l.getLocation()))
+                    .filter(this::onGrid)
                     .toList();
         }
     }
 
     List<Coord2D> DELTA = List.of(new Coord2D(0,1), new Coord2D(0,-1), new Coord2D(1,0), new Coord2D(-1,0));
 
-    long solutionPart1(Map<Coord2D, Character> grid) {
+    long solutionPart1(List<Coord2D> badBlocks) {
         Coord2D startingPoint = new Coord2D(0,0);
         Coord2D endingPoint = new Coord2D(70,70);
         RamState start = new RamState(0, startingPoint);
@@ -108,26 +106,25 @@ public class RAMRun extends AoCDay {
                 continue;
             }
             visited.add(current.getLocation());
-            List<RamState> nextStates = current.nextStatesPart1(grid, visited);
+            List<RamState> nextStates = current.nextStatesPart1(badBlocks, visited);
             queue.addAll(nextStates);
         }
         return 0L;
     }
 
-    String solutionPart2(List<Coord2D> coords, Map<Coord2D, Character> grid) {
-        List<Coord2D> searchSpace = coords.subList(1024, coords.size());
-        while (searchSpace.size() > 1) {
-            int halfWayThere = searchSpace.size() / 2;
-            List<Coord2D> tmp = searchSpace.subList(0, halfWayThere);
-            tmp.forEach(c -> grid.put(c, '#'));
-            long turns = solutionPart1(grid);
+    String solutionPart2(List<Coord2D> coords) {
+        Integer min = 1024;
+        Integer max = coords.size();
+        while ((max-min) > 1) {
+            int halfWayThere = (min + max) / 2;
+            List<Coord2D> badblocks = coords.subList(0, halfWayThere);
+            long turns = solutionPart1(badblocks);
             if (turns != 0L) {
-                searchSpace = searchSpace.subList(halfWayThere, searchSpace.size());
+                min = halfWayThere;
             } else {
-                tmp.forEach(c -> grid.put(c, '.'));
-                searchSpace = tmp;
+                max = halfWayThere;
             }
         }
-        return searchSpace.get(0).toString();
+        return coords.get(min).toString();
     }
 }
