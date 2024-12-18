@@ -115,15 +115,19 @@ public class RAMRun extends AoCDay {
     }
 
     String solutionPart2(List<Coord2D> coords, Map<Coord2D, Character> grid) {
-        long turns = solutionPart1(grid);
-        int currentIndex = 1024;
-        while (turns != 0L) {
-            grid.put(coords.get(currentIndex), '#');
-            turns = solutionPart1(grid);
+        List<Coord2D> searchSpace = coords.subList(1024, coords.size());
+        while (searchSpace.size() > 1) {
+            int halfWayThere = searchSpace.size() / 2;
+            List<Coord2D> tmp = searchSpace.subList(0, halfWayThere);
+            tmp.forEach(c -> grid.put(c, '#'));
+            long turns = solutionPart1(grid);
             if (turns != 0L) {
-                currentIndex++;
+                searchSpace = searchSpace.subList(halfWayThere, searchSpace.size());
+            } else {
+                tmp.forEach(c -> grid.put(c, '.'));
+                searchSpace = tmp;
             }
         }
-        return coords.get(currentIndex).toString();
+        return searchSpace.get(0).toString();
     }
 }
