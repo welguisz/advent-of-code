@@ -6,7 +6,6 @@ import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -20,13 +19,13 @@ import java.util.stream.Collectors;
 
 import static com.dwelguisz.utilities.Grid.createCharGridMap;
 
-public class AoC2024Day16 extends AoCDay {
+public class ReindeerMaze extends AoCDay {
 
     ReindeerPathState bestPath;
 
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
-        List<String> lines = readResoruceFile(2024, 16, true, 0);
+        List<String> lines = readResoruceFile(2024, 16, false, 0);
         Map<Coord2D, Character> grid = createCharGridMap(lines);
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = solutionPart1(grid);
@@ -40,13 +39,6 @@ public class AoC2024Day16 extends AoCDay {
             new Coord2D(0,-1), List.of(new Coord2D(-1,0), new Coord2D(1, 0), new Coord2D(0, -1)),
             new Coord2D(1, 0), List.of(new Coord2D(0, -1), new Coord2D(1, 0), new Coord2D(0, 1)),
             new Coord2D(-1, 0), List.of(new Coord2D(0, -1), new Coord2D(-1, 0), new Coord2D(0, 1))
-    );
-
-    Map<Coord2D, List<Coord2D>> reversePossibleTurns = Map.of(
-            new Coord2D(0,1), List.of(new Coord2D(-1,0), new Coord2D(1, 0), new Coord2D(0, -1)),
-            new Coord2D(0,-1), List.of(new Coord2D(-1,0), new Coord2D(1, 0), new Coord2D(0, 1)),
-            new Coord2D(1, 0), List.of(new Coord2D(0, -1), new Coord2D(-1, 0), new Coord2D(0, 1)),
-            new Coord2D(-1, 0), List.of(new Coord2D(0, -1), new Coord2D(1, 0), new Coord2D(0, 1))
     );
 
     public class ReindeerPathState {
@@ -112,11 +104,12 @@ public class AoC2024Day16 extends AoCDay {
         }
 
         List<ReindeerPathState> getNextStatePart2(
-                Map<Pair<Coord2D, Coord2D>, Integer> bestCosts,
-                Map<Coord2D, Character> grid) {
+                Map<Coord2D, Character> grid,
+                ReindeerPathState bestPath
+                ) {
             List<ReindeerPathState> ps = new ArrayList<>(path);
             ps.add(this);
-            return possibleTurns.get(direction).stream()
+            List<ReindeerPathState> nextSteps = possibleTurns.get(direction).stream()
                     .map(n -> {
                         if (n.equals(direction)) {
 
@@ -126,9 +119,9 @@ public class AoC2024Day16 extends AoCDay {
                         }
                     })
                     .filter(p -> grid.get(p.getLocation()) != '#')
-                    .filter(p -> (p.getScore() + 1) > bestCosts.get(Pair.of(p.getLocation(), p.getDirection())))
+                    .filter(p -> possibleBestSeat(bestPath))
                     .toList();
-
+            return nextSteps;
         }
 
         public Integer getScore() {
@@ -151,10 +144,16 @@ public class AoC2024Day16 extends AoCDay {
                 .toList().get(0);
         ReindeerPathState currentState = new ReindeerPathState(startingPoint, new Coord2D(0,1), 0, 0, new ArrayList<>());
         PriorityQueue<ReindeerPathState> queue = new PriorityQueue<>(200, Comparator.comparingInt(ReindeerPathState::getScore));
+        Set<Pair<Coord2D, Coord2D>> visited = new HashSet<>();
         queue.add(currentState);
         while (!queue.isEmpty()) {
             ReindeerPathState current = queue.poll();
             Coord2D location = current.getLocation();
+            Coord2D direction = current.getDirection();
+            if (visited.contains(Pair.of(current.getLocation(), direction))) {
+                continue;
+            }
+            visited.add(Pair.of(location, direction));
             if (location.equals(endingPoint)) {
                 bestPath = current;
                 return current.getScore();
@@ -178,20 +177,27 @@ public class AoC2024Day16 extends AoCDay {
         Map<Pair<Coord2D, Coord2D>, Integer> bestCosts = new HashMap<>();
         queue.add(currentState);
         List<ReindeerPathState> bestSeats = new ArrayList<>();
-        //Set<Pair<Coord2D, Coord2D>> visited = new HashSet<>();
+        Integer bestEndCost = Integer.MIN_VALUE;
         while (!queue.isEmpty()) {
             ReindeerPathState current = queue.poll();
             Coord2D location = current.getLocation();
-            System.out.println("Current Location:" + current);
             if (location.equals(endingPoint)) {
                 bestSeats.addAll(current.getPath());
                 bestSeats.add(current);
+                bestEndCost = current.getScore();
                 continue;
             }
-            queue.addAll(current.getNextStatePart2(bestCosts, grid));
+            List<ReindeerPathState> nextSteps = current.getNextStatePart2(grid, bestPath);
+            if ((bestEndCost == Integer.MIN_VALUE)  || current.getScore() < bestEndCost) {
+                for(ReindeerPathState next : nextSteps) {
+                    if (bestCosts.getOrDefault(Pair.of(next.getLocation(), next.getDirection()), next.getScore() + 1) >= next.getScore()) {
+                        bestCosts.put(Pair.of(next.getLocation(), next.getDirection()), next.getScore());
+                        queue.add(next);
+                    }
+                }
+            }
         }
         Set<Coord2D> onPath = bestSeats.stream().map(ReindeerPathState::getLocation).collect(Collectors.toSet());
-        printGrid(grid, onPath);
         return onPath.size();
     }
 
