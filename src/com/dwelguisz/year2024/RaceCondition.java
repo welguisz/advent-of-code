@@ -64,6 +64,8 @@ public class RaceCondition extends AoCDay {
         List<Pair<Coord2D, Coord2D>> checks = new ArrayList<>();
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < length; j++) {
+                //There is a bug here but doesn't matter in the long run because we are looking for jumps greater than 100
+                // Bug would be a path of ***(012) , so it could go from 0 to 2 since the manhattan distance is 2
                 if (path.get(j).manhattanDistance(path.get(i)) == jump) {
                     checks.add(Pair.of(path.get(i), path.get(j)));
                 }
