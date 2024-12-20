@@ -10,7 +10,8 @@ public class ChiefHistorian extends AoCYear {
             new PrintQueue(), new GuardGallivant(), new BridgeRepair(), new ResonantCollinearity(),
             new DiskFragmenter(), new HoofIt(), new PlutonianPebbles(), new GardenGroups(),
             new ClawContraption(), new RestroomRedoubt(), new WarehouseWoes(),
-            new ReindeerMaze(), new ChronospatialComputer(), new RAMRun(), new LinenLayout()
+            new ReindeerMaze(), new ChronospatialComputer(), new RAMRun(), new LinenLayout(),
+            new RaceCondition()
     };
 
     public ChiefHistorian(int year) {
