@@ -24,9 +24,9 @@ public class RaceCondition extends AoCDay {
         Map<Coord2D, Character> grid = createCharGridMap(lines);
         List<Coord2D> quickestPath = findQuickestPath(grid);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(quickestPath);
+        part1Answer = bothSolutions(quickestPath, 2);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(quickestPath);
+        part2Answer = bothSolutions(quickestPath, 20);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
@@ -59,29 +59,14 @@ public class RaceCondition extends AoCDay {
     }
     List<Coord2D> NEIGHBORS = List.of(new Coord2D(-1, 0), new Coord2D(1, 0), new Coord2D(0, -1), new Coord2D(0, 1));
 
-    List<Pair<Coord2D, Coord2D>> possibleCheats (List<Coord2D> path, int jump) {
-        int length = path.size();
-        List<Pair<Coord2D, Coord2D>> checks = new ArrayList<>();
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
-                //There is a bug here but doesn't matter in the long run because we are looking for jumps greater than 100
-                // Bug would be a path of ***(012) , so it could go from 0 to 2 since the manhattan distance is 2
-                if (path.get(j).manhattanDistance(path.get(i)) == jump) {
-                    checks.add(Pair.of(path.get(i), path.get(j)));
-                }
-            }
-        }
-        return checks;
-    }
-
-    List<Pair<Integer, Integer>> possibleCheatsPart2 (List<Coord2D> path, int jump) {
+    List<Pair<Integer, Integer>> possibleCheats(List<Coord2D> path, int jump) {
         int length = path.size();
         List<Pair<Integer, Integer>> checks = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
+            for (int j = i+2; j < length; j++) {
                 Integer md = path.get(j).manhattanDistance(path.get(i));
                 if (md <= jump) {
-                    checks.add(Pair.of(i-j,md));
+                    checks.add(Pair.of(j-i,md));
                 }
             }
         }
@@ -112,23 +97,10 @@ public class RaceCondition extends AoCDay {
         return List.of();
     }
 
-    long solutionPart1(final List<Coord2D> quickestPath) {
+    long bothSolutions(final List<Coord2D> quickestPath, int jump) {
         final List<Coord2D> quickP = new ArrayList<>(quickestPath);
-        List<Pair<Coord2D, Coord2D>> cheatPoints = possibleCheats(quickP, 2);
+        List<Pair<Integer, Integer>> cheatPoints = possibleCheats(quickP, jump);
         Map<Integer, Long> savings = cheatPoints.stream()
-                .map(p -> quickP.indexOf(p.getLeft()) - quickP.indexOf(p.getRight()))
-                .filter(l -> l > 0)
-                .map(l -> l - 2)
-                .filter(l -> l >= 100)
-                .collect(Collectors.groupingBy(k -> k, Collectors.counting()));
-        return savings.values().stream().reduce(0L, Long::sum);
-    }
-
-    long solutionPart2(final List<Coord2D> quickestPath) {
-        final List<Coord2D> quickP = new ArrayList<>(quickestPath);
-        List<Pair<Integer, Integer>> cheatPoints = possibleCheatsPart2(quickP, 20);
-        Map<Integer, Long> savings = cheatPoints.stream()
-                .filter(p -> p.getLeft() > 0)
                 .map(p -> p.getLeft() - p.getRight())
                 .filter(l -> l >= 100)
                 .collect(Collectors.groupingBy(k -> k, Collectors.counting()));
