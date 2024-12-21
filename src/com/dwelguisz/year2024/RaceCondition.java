@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.dwelguisz.utilities.Grid.createCharGridMap;
 
@@ -63,7 +64,7 @@ public class RaceCondition extends AoCDay {
         int length = path.size();
         List<Pair<Integer, Integer>> checks = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            for (int j = i+2; j < length; j++) {
+            for (int j = i+102; j < length; j++) {
                 Integer md = path.get(j).manhattanDistance(path.get(i));
                 if (md <= jump) {
                     checks.add(Pair.of(j-i,md));
@@ -97,13 +98,10 @@ public class RaceCondition extends AoCDay {
         return List.of();
     }
 
-    long bothSolutions(final List<Coord2D> quickestPath, int jump) {
-        final List<Coord2D> quickP = new ArrayList<>(quickestPath);
-        List<Pair<Integer, Integer>> cheatPoints = possibleCheats(quickP, jump);
-        Map<Integer, Long> savings = cheatPoints.stream()
+    long bothSolutions(final List<Coord2D> path, final int jump) {
+        return possibleCheats(path, jump).stream()
                 .map(p -> p.getLeft() - p.getRight())
                 .filter(l -> l >= 100)
-                .collect(Collectors.groupingBy(k -> k, Collectors.counting()));
-        return savings.values().stream().reduce(0L, Long::sum);
+                .count();
     }
 }
