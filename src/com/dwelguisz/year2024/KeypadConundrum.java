@@ -4,6 +4,7 @@ import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
 import com.google.common.collect.Collections2;
 import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class KeypadConundrum extends AoCDay {
@@ -59,28 +61,25 @@ public class KeypadConundrum extends AoCDay {
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    Collection<List<String>> findPermutationOfMoves(Coord2D startingPoint, Coord2D endingPoint) {
+    Collection<List<Character>> findPermutationOfMoves(Coord2D startingPoint, Coord2D endingPoint) {
         Coord2D diff = endingPoint.add(startingPoint.multiply(-1));
         char horizontalPress = diff.y < 0 ? '<' : '>';
         char verticalPress = diff.x < 0 ? '^' : 'v';
         int length = Math.abs(diff.y);
-        StringBuffer horizontal = new StringBuffer();
+        List<Character> path = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            horizontal.append(horizontalPress);
+            path.add(horizontalPress);
         }
         length = Math.abs(diff.x);
-        StringBuffer vertical = new StringBuffer();
         for (int i = 0; i < length; i++) {
-            vertical.append(verticalPress);
+            path.add(verticalPress);
         }
-        StringBuffer finalPath = new StringBuffer();
-        finalPath.append(vertical);
-        finalPath.append(horizontal);
-        return Collections2.permutations(Arrays.stream(finalPath.toString().split("")).toList());
+        return Collections2.permutations(path);
     }
 
     List<String> path(Coord2D startingPoint, Coord2D endingPoint, Coord2D avoid){
-        Collection<List<String>> permutations = findPermutationOfMoves(startingPoint, endingPoint);
+        Collection<List<Character>> permutationsT = findPermutationOfMoves(startingPoint, endingPoint);
+        List<List<String>> permutations = permutationsT.stream().map(l -> l.stream().map(m -> ""+m).toList()).toList();
         Set<List<String>> items = new HashSet<>(permutations);
         List<String> validPath = new ArrayList<>();
         for(List<String> item : items) {
@@ -114,17 +113,11 @@ public class KeypadConundrum extends AoCDay {
         return validPath;
     }
 
-    @EqualsAndHashCode
+    @Value
     class MemoKey {
         String sequence;
         Integer depth;
         Integer limit;
-
-        public MemoKey(String sequence, Integer depth, Integer limit) {
-            this.sequence = sequence;
-            this.depth = depth;
-            this.limit = limit;
-        }
     }
 
     Map<MemoKey, Long> robotLevelDP = new HashMap<>();
