@@ -160,7 +160,6 @@ public class KeypadConundrum extends AoCDay {
     }
 
     long solutionPart1(List<String> lines, int numberOfDirectionalRobots) {
-        robotLevelDP = new HashMap<>();
         return lines.stream()
                 .map(line -> Long.parseLong(line.split("A")[0]) * calculateLength(0, numberOfDirectionalRobots, line))
                 .reduce(0L, Long::sum);
