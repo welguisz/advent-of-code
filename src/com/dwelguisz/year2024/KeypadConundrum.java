@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 public class KeypadConundrum extends AoCDay {
@@ -44,11 +43,11 @@ public class KeypadConundrum extends AoCDay {
         directionalKeypad.put('>', new Coord2D(1, 2));
     }
 
-    Map<String, Coord2D> DIRECTIONS = Map.of(
-            "^", new Coord2D(-1,0),
-            "v", new Coord2D(1, 0),
-            "<", new Coord2D(0, -1),
-            ">", new Coord2D(0, 1)
+    Map<Character, Coord2D> DIRECTIONS = Map.of(
+            '^', new Coord2D(-1,0),
+            'v', new Coord2D(1, 0),
+            '<', new Coord2D(0, -1),
+            '>', new Coord2D(0, 1)
     );
 
     public void solve() {
@@ -77,22 +76,18 @@ public class KeypadConundrum extends AoCDay {
         return Collections2.permutations(path);
     }
 
-    List<String> path(Coord2D startingPoint, Coord2D endingPoint, Coord2D avoid){
-        Collection<List<Character>> permutationsT = findPermutationOfMoves(startingPoint, endingPoint);
-        List<List<String>> permutations = permutationsT.stream().map(l -> l.stream().map(m -> ""+m).toList()).toList();
-        Set<List<String>> items = new HashSet<>(permutations);
-        List<String> validPath = new ArrayList<>();
-        for(List<String> item : items) {
+    List<List<Character>> path(Coord2D startingPoint, Coord2D endingPoint, Coord2D avoid){
+        Collection<List<Character>> permutations = findPermutationOfMoves(startingPoint, endingPoint);
+        Set<List<Character>> items = new HashSet<>(permutations);
+        List<List<Character>> validPath = new ArrayList<>();
+        for(List<Character> item : items) {
             if (item.isEmpty()) {
                 continue;
             }
             List<Coord2D> checkPath = new ArrayList<>();
             checkPath.add(startingPoint);
             boolean valid = true;
-            for (String c : item) {
-                if (c.isEmpty()) {
-                    continue;
-                }
+            for (Character c : item) {
                 Coord2D nextPos = checkPath.get(checkPath.size() - 1).add(DIRECTIONS.get(c));
                 if(nextPos.equals(avoid)) {
                     valid = false;
@@ -101,28 +96,27 @@ public class KeypadConundrum extends AoCDay {
                 checkPath.add(nextPos);
             }
             if(valid) {
-                StringBuffer buffer = new StringBuffer();
-                item.forEach(c -> buffer.append(c));
-                buffer.append("A");
-                validPath.add(buffer.toString());
+                List<Character> buffer = new ArrayList<>(item);
+                buffer.add('A');
+                validPath.add(buffer);
             }
         }
         if (validPath.isEmpty()) {
-            return List.of("A");
+            return List.of(List.of('A'));
         }
         return validPath;
     }
 
     @Value
     class MemoKey {
-        String sequence;
+        List<Character> sequence;
         Integer depth;
         Integer limit;
     }
 
     Map<MemoKey, Long> robotLevelDP = new HashMap<>();
 
-    Long calculateLength(int robotLevel, int maxRobotLevel, String input) {
+    Long calculateLength(int robotLevel, int maxRobotLevel, List<Character> input) {
         MemoKey key = new MemoKey(input, robotLevel, maxRobotLevel);
         if (robotLevelDP.containsKey(key)) {
             return robotLevelDP.get(key);
@@ -131,20 +125,20 @@ public class KeypadConundrum extends AoCDay {
         Coord2D avoid = (robotLevel == 0) ? new Coord2D(3, 0) : new Coord2D(0,0);
         long totalLength = 0;
 
-        for (char c : input.toCharArray()) {
+        for (char c : input) {
             Coord2D nextPos = (robotLevel == 0) ? numericKeypad.get(c) : directionalKeypad.get(c);
-            List<String> moves = path(current, nextPos, avoid);
+            List<List<Character>> moves = path(current, nextPos, avoid);
             if (robotLevel >= maxRobotLevel) {
-                totalLength += moves.stream().map(String::length).min(Integer::compare).get();
+                totalLength += moves.stream().mapToLong(List::size).min().getAsLong();
             } else {
                 Long minMoves = Long.MAX_VALUE;
-                for (String m : moves) {
+                for (List<Character> m : moves) {
                     Long len = calculateLength(robotLevel + 1, maxRobotLevel, m);
                     if (len < minMoves) {
                         minMoves = len;
                     }
                 }
-                totalLength += (minMoves == Long.MAX_VALUE) ? moves.stream().map(String::length).min(Integer::compare).get() : minMoves;
+                totalLength += (minMoves == Long.MAX_VALUE) ? moves.stream().mapToLong(List::size).min().getAsLong() : minMoves;
             }
             current = nextPos;
         }
@@ -154,7 +148,7 @@ public class KeypadConundrum extends AoCDay {
 
     long solutionPart1(List<String> lines, int numberOfDirectionalRobots) {
         return lines.stream()
-                .map(line -> Long.parseLong(line.split("A")[0]) * calculateLength(0, numberOfDirectionalRobots, line))
+                .map(line -> Long.parseLong(line.split("A")[0]) * calculateLength(0, numberOfDirectionalRobots, Arrays.stream(line.split("")).map(s -> s.charAt(0)).toList()))
                 .reduce(0L, Long::sum);
     }
 }
