@@ -22,9 +22,9 @@ public class LANParty extends AoCDay {
         List<String> lines = readResoruceFile(2024, 23, false, 0);
         createNetworks(lines);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(lines);
+        part1Answer = solutionPart1();
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(lines);
+        part2Answer = solutionPart2();
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
@@ -44,7 +44,7 @@ public class LANParty extends AoCDay {
         }
     }
 
-    long solutionPart1(List<String> lines) {
+    long solutionPart1() {
         return possibleLAN.stream().filter(lans -> lans.stream().anyMatch(l -> l.startsWith("t"))).count();
     }
 
@@ -70,7 +70,7 @@ public class LANParty extends AoCDay {
         return newClique;
     }
 
-    String solutionPart2(List<String> lines) {
+    String solutionPart2() {
         Set<String> reviewedNode = new HashSet<>();
         List<String> largestClique = new ArrayList<>();
         for (List<String> grouping : possibleLAN) {
