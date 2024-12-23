@@ -5,11 +5,15 @@ import com.dwelguisz.utilities.Coord2D;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MonkeyMarket extends AoCDay {
 
@@ -46,23 +50,24 @@ public class MonkeyMarket extends AoCDay {
     long solutionPart2(List<Integer> startingSecrets) {
         Map<List<Integer>, Integer> total = new HashMap<>();
         for (Integer secret : startingSecrets) {
-            List<Coord2D> pattern = new ArrayList<>();
             int last = secret % 10;
             int x = secret;
+            Deque<Coord2D> queue = new LinkedList<>();
+            Set<List<Integer>> seen = new HashSet<>();
             for (int i = 0; i < 2000; i++) {
                 x = oneEvolution(x);
                 int temp = x % 10;
-                pattern.add(new Coord2D(temp - last, temp));
-                last = temp;
-            }
-            Set<List<Integer>> seen = new HashSet<>();
-            for (int i = 0; i < pattern.size()-4; i++) {
-                List<Integer> pat = pattern.subList(i, i+4).stream().map(m -> m.x).toList();
-                if (!seen.contains(pat)) {
-                    Integer value = pattern.get(i+3).y;
-                    seen.add(pat);
-                    total.merge(pat, value, Integer::sum);
+                queue.add(new Coord2D(temp - last, temp));
+                if (queue.size() == 4) {
+                    List<Integer> pat = queue.stream().map(m -> m.x).toList();
+                    if (!seen.contains(pat)) {
+                        Integer value = queue.peekLast().y;
+                        seen.add(pat);
+                        total.merge(pat, value, Integer::sum);
+                    }
+                    queue.poll();
                 }
+                last = temp;
             }
         }
         return total.values().stream().mapToLong(l -> l).max().getAsLong();
