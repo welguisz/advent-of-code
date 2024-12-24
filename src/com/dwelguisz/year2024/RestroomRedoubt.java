@@ -103,7 +103,7 @@ public class RestroomRedoubt extends AoCDay {
                 time = i;
             }
         }
-        printGrid(robots, gridX, gridY, time);
+        //printGrid(robots, gridX, gridY, time);
         return time;
     }
 

@@ -180,13 +180,13 @@ public class AoC2024Day24 extends AoCDay {
             List<Pair<Pair<String, String>,Integer>> interestingPairs = new LinkedList<>();
             for (List<String> check : combinations) {
                 swapOutputs(graph, check.get(0), check.get(1));
-                System.out.println("Swapping " + check.get(0) + " to " + check.get(1));
+                //System.out.println("Swapping " + check.get(0) + " to " + check.get(1));
                 if (check.get(0).equals("z06") && check.get(1).equals("qws")) {
-                    System.out.println("Stop here");
+                    //System.out.println("Stop here");
                 }
                 long currentAnswer = solutionPart1(new HashMap<>(values), new HashMap<>(graph));
                 if (currentAnswer == -1) {
-                    System.out.println(" --- Failed. Got into a loop");
+                    //System.out.println(" --- Failed. Got into a loop");
                     swapOutputs(graph, check.get(0), check.get(1));
                     continue;
                 }

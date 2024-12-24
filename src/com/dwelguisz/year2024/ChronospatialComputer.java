@@ -108,7 +108,7 @@ public class ChronospatialComputer extends AoCDay {
         possible_values.add(0L);
         for (int i = 0; i < 16; i++) {
             possible_values = findPossibleNumbers(possible_values, (15-i)*3, expected, 32-(2*(i+1)));
-            System.out.println("After iteration " + (i+1)+ ", possible_values contains " + possible_values);
+            //System.out.println("After iteration " + (i+1)+ ", possible_values contains " + possible_values);
         }
         return possible_values.stream().mapToLong(l -> l).min().getAsLong();
     }
