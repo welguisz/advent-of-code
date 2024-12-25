@@ -12,7 +12,7 @@ public class ChiefHistorian extends AoCYear {
             new ClawContraption(), new RestroomRedoubt(), new WarehouseWoes(),
             new ReindeerMaze(), new ChronospatialComputer(), new RAMRun(), new LinenLayout(),
             new RaceCondition(), new KeypadConundrum(), new MonkeyMarket(),
-            new LANParty(), new AoC2024Day24(), new AoC2024Day25()
+            new LANParty(), new AoC2024Day24(), new CodeChronicle()
     };
 
     public ChiefHistorian(int year) {

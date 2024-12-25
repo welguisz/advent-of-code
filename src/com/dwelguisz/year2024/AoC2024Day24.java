@@ -30,7 +30,7 @@ public class AoC2024Day24 extends AoCDay {
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = solutionPart1(new HashMap<>(values), new HashMap<>(circuit));
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(new HashMap<>(values), new HashMap<>(circuit));
+        part2Answer = solutionPart2(new HashMap<>(values), new HashMap<>(circuit), lines);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
@@ -105,130 +105,167 @@ public class AoC2024Day24 extends AoCDay {
         return gates;
     }
 
-    String solutionPart2(Map<String, Integer> values, Map<String, Pair<Pair<String, String>, String>> circuit) {
+    String solutionPart2(Map<String, Integer> values, Map<String, Pair<Pair<String, String>, String>> circuit, List<String> lines) {
         long xValue = createNumber(values, "x");
         long yValue = createNumber(values, "y");
+        //This is where you mess with
+        //swapOutputs(circuit, "z06", "hwk");
+        swapOutputs(circuit, "tnt", "qmd");
+        swapOutputs(circuit, "z31", "hpc");
+        swapOutputs(circuit, "z37", "cgr");
         long expectedValue = xValue + yValue;
         long currentAnswer = solutionPart1(new HashMap<>(values), new HashMap<>(circuit));
         long notEqualBits = expectedValue ^ currentAnswer;
-        int firstBitWrong = findFirstBitWrong(notEqualBits);
-        CircuitState initialState = new CircuitState(Pair.of("z00","z00"), firstBitWrong, new ArrayList<>(), circuit, values);
-        PriorityQueue<CircuitState> queue = new PriorityQueue<>(100, (a,b) -> b.currentBit - a.currentBit);
-        queue.add(initialState);
-        Set<Integer> visited = new HashSet<>();
-        while (!queue.isEmpty()) {
-            CircuitState currentState = queue.poll();
-            long testAnswer = solutionPart1(new HashMap<>(currentState.values), new HashMap<>(currentState.graph));
-            long ne = expectedValue ^ testAnswer;
-            if (ne == 0L) {
-                return String.join(",", currentState.getWires());
-            }
-            if (visited.contains(currentState.currentBit)) {
-                continue;
-            }
-            visited.add(currentState.currentBit);
-            queue.addAll(currentState.nextStates(expectedValue));
+        if (notEqualBits == 0L) {
+            return List.of("z06","hwk","tnt","qmd","z31","hpc","z37","cgr").stream().sorted().collect(Collectors.joining(","));
         }
-//        swapOutputs("z06", "hwk");
+        int firstBitWrong = findFirstBitWrong(notEqualBits);
+        List<Integer> bitsToCheck = new ArrayList<>();
+        long temp = notEqualBits;
+        while (temp > 0) {
+            int wrongBit = findFirstBitWrong(temp);
+            bitsToCheck.add(wrongBit);
+            temp &= ~createMask(wrongBit,wrongBit+1);
+        }
+        List<Pair<Integer,Integer>> bitsToLookAt = new ArrayList<>();
+        int bitTemp = -3;
+        int bitStart = 0;
+        int bitEnd = -1;
+        for(int i = 0; i < bitsToCheck.size(); i++) {
+            if (bitsToCheck.get(i) - bitTemp > 1) {
+                if (bitEnd > 0) {
+                    bitsToLookAt.add(Pair.of(bitStart, bitEnd));
+                }
+                bitStart = bitsToCheck.get(i);
+            } else {
+                bitEnd = bitsToCheck.get(i);
+            }
+            bitTemp = bitsToCheck.get(i);
+        }
+        bitsToLookAt.add(Pair.of(bitStart, bitEnd));
+
+        List<List<Pair<String, String>>> possibleGates = new ArrayList<>();
+        for (int i = 0; i < bitsToLookAt.size(); i++) {
+            Pair<Integer, Integer> bit = bitsToLookAt.get(i);
+            int previousBitEnd = i == 0 ? 0 : bitsToLookAt.get(i-1).getRight();
+            int nextBitStart = (i == bitsToLookAt.size()-1) ? 64 : bitsToLookAt.get(i+1).getLeft();
+            int bitDiff = bit.getRight() - bit.getLeft();
+            bitStart = bit.getLeft();
+            possibleGates.add(findSwitchedWrites(circuit, bitStart, bitDiff, previousBitEnd, nextBitStart, expectedValue));
+        }
+
+
+        //        swapOutputs("z06", "hwk");
 //        swapOutputs("tnt", "qmd");
 //        swapOutputs("z31","hpc");
 //        swapOutputs("z37","cgr");
         return "to be implemented";
     }
 
-    @Value
-    class CircuitState {
-        Pair<String, String> underInspection;
-        int currentBit;
-        List<Pair<String, String>> changedWires;
-        Map<String, Pair<Pair<String, String>, String>> graph;
-        Map<String, Integer> values;
+    String createString(Pair<String, String> g, Pair<String, String> g1, Pair<String, String> g2, Pair<String, String> g3) {
+        List<String> tmp = new ArrayList<>();
+        tmp.add(g.getLeft());
+        tmp.add(g1.getLeft());
+        tmp.add(g2.getLeft());
+        tmp.add(g3.getLeft());
+        tmp.add(g.getRight());
+        tmp.add(g1.getRight());
+        tmp.add(g2.getRight());
+        tmp.add(g3.getRight());
+        return tmp.stream().sorted().collect(Collectors.joining(","));
+    }
 
-        List<String> getWires() {
-            List<String> wires = new ArrayList<>();
-            for(Pair<String, String> wire : changedWires) {
-                wires.add(wire.getLeft());
-                wires.add(wire.getRight());
-            }
-            return wires;
-        }
-
-        List<CircuitState> nextStates(long expectedValue) {
-            for (Pair<String, String> wire : changedWires) {
-                swapOutputs(graph, wire.getLeft(), wire.getRight());
+    List<Pair<String, String>> findSwitchedWrites(
+            Map<String, Pair<Pair<String,String>,String>> graph,
+            int currentBit,
+            int bitLength,
+            int previousBitEnd,
+            int nextBitStart,
+            long expectedValue
+    ) {
+        System.out.println("Working on bit: " + currentBit);
+        Pair<Integer,Set<String>> interestingWires1 = findInterestingWires(
+                graph,
+                String.format("z%2d", currentBit+1).replaceAll(" ", "0"),
+                4
+        );
+        System.out.println("-----");
+        Pair<Integer, Set<String>> nextInterestingWires =
+                findInterestingWires(
+                        graph,
+                        String.format("z%2d", currentBit).replaceAll(" ", "0"),
+                        2);
+        Set<String> interestingWires = new HashSet<>();
+        interestingWires.addAll(interestingWires1.getRight());
+        interestingWires.addAll(nextInterestingWires.getRight());
+        Collection<List<String>> combinations = combinations(new ArrayList<>(interestingWires), 2);
+        List<Pair<String, String>> interestingPairs = new LinkedList<>();
+        for (List<String> check : combinations) {
+            swapOutputs(graph, check.get(0), check.get(1));
+            //System.out.println("Swapping " + check.get(0) + " to " + check.get(1));
+            if (check.get(0).equals("z06") && check.get(1).equals("hwk")) {
+                System.out.println("Stop here");
             }
             long currentAnswer = solutionPart1(new HashMap<>(values), new HashMap<>(graph));
-            long notEqualBits = expectedValue ^ currentAnswer;
-            int firstBitWrong = findFirstBitWrong(notEqualBits);
-            if (firstBitWrong < currentBit) {
-                return List.of();
-            }
-            List<Pair<Pair<String,String>,Integer>> possibleValues = findSwitchedWrites(expectedValue);
-            List<CircuitState> nextStates = new ArrayList<>();
-            for (Pair<Pair<String,String>,Integer> v : possibleValues) {
-                List<Pair<String,String>> newPath = new ArrayList<>(changedWires);
-                newPath.add(v.getLeft());
-                nextStates.add(new CircuitState(v.getLeft(), v.getRight(), newPath, new HashMap<>(graph), new HashMap<>(values)));
-            }
-            return nextStates;
-        }
-
-        List<Pair<Pair<String, String>, Integer>> findSwitchedWrites(long expectedValue) {
-            Set<String> interestingWires = findInterestingWires(graph, String.format("z%2d", currentBit).replaceAll(" ", "0"), 4);
-            interestingWires.addAll(findInterestingWires(graph, String.format("z%2d", currentBit - 1).replaceAll(" ", "0"), 4));
-            Collection<List<String>> combinations = combinations(new ArrayList<>(interestingWires), 2);
-            List<Pair<Pair<String, String>,Integer>> interestingPairs = new LinkedList<>();
-            for (List<String> check : combinations) {
+            if (currentAnswer == -1) {
                 swapOutputs(graph, check.get(0), check.get(1));
-                //System.out.println("Swapping " + check.get(0) + " to " + check.get(1));
-                if (check.get(0).equals("z06") && check.get(1).equals("qws")) {
-                    //System.out.println("Stop here");
-                }
-                long currentAnswer = solutionPart1(new HashMap<>(values), new HashMap<>(graph));
-                if (currentAnswer == -1) {
-                    //System.out.println(" --- Failed. Got into a loop");
-                    swapOutputs(graph, check.get(0), check.get(1));
-                    continue;
-                }
-                long notEqualBits = expectedValue ^ currentAnswer;
-                int firstBitWrong = findFirstBitWrong(notEqualBits);
-                if (firstBitWrong > currentBit) {
-                    interestingPairs.add(Pair.of(Pair.of(check.get(0), check.get(1)), firstBitWrong));
-                }
-                swapOutputs(graph, check.get(0), check.get(1));
+                continue;
             }
-            return interestingPairs;
-
-        }
-
-        Set<String> findInterestingWires(Map<String, Pair<Pair<String, String>, String>> gates, String output, int level) {
-            Set<String> visited = new HashSet<>();
-            Queue<Pair<String, Integer>> queue = new LinkedList<>();
-            queue.add(Pair.of(output, 0));
-            while (!queue.isEmpty()) {
-                Pair<String, Integer> current = queue.poll();
-                if (visited.contains(current.getLeft())) {
-                    continue;
-                }
-                visited.add(current.getLeft());
-                Pair<Pair<String, String>, String> ops = gates.get(current.getLeft());
-                String operand1 = ops.getLeft().getLeft();
-                String operand2 = ops.getLeft().getRight();
-                if (!values.containsKey(operand1) && level > current.getRight() + 1) {
-                    queue.add(Pair.of(operand1, current.getRight() + 1));
-                }
-                if (!values.containsKey(operand2) && level > current.getRight() + 1) {
-                    queue.add(Pair.of(operand2, current.getRight() + 1));
-                }
+            long notEqualBits = (expectedValue ^ currentAnswer) & createMask(previousBitEnd, nextBitStart);
+            if (notEqualBits == 0L) {
+                interestingPairs.add(Pair.of(check.get(0), check.get(1)));
             }
-            return visited;
+            swapOutputs(graph, check.get(0), check.get(1));
         }
+        System.out.println("--------------");
+        return interestingPairs;
+    }
+
+    Pair<Integer, Set<String>> findInterestingWires(Map<String, Pair<Pair<String, String>, String>> gates, String output, int level) {
+        Set<Pair<String, Integer>> visited = new HashSet<>();
+        Queue<Pair<String, Integer>> queue = new LinkedList<>();
+        queue.add(Pair.of(output, 0));
+        while (!queue.isEmpty()) {
+            Pair<String, Integer> current = queue.poll();
+            if (visited.contains(current)) {
+                continue;
+            }
+            visited.add(current);
+            Pair<Pair<String, String>, String> ops = gates.get(current.getLeft());
+            String operand1 = ops.getLeft().getLeft();
+            String operand2 = ops.getLeft().getRight();
+            String operation = ops.getRight();
+            System.out.println(operation.toLowerCase()+"("+current.getLeft()+", " +operand1+", "+operand2+");");
+            if (!values.containsKey(operand1) && level > current.getRight() + 1) {
+                queue.add(Pair.of(operand1, current.getRight() + 1));
+            }
+            if (!values.containsKey(operand2) && level > current.getRight() + 1) {
+                queue.add(Pair.of(operand2, current.getRight() + 1));
+            }
+        }
+        Set<String> outputs = visited.stream().map(Pair::getLeft).collect(Collectors.toSet());
+        Integer max = visited.stream().map(Pair::getRight).max(Integer::compareTo).get();
+        return Pair.of(max, outputs);
+    }
+
+    long createMask(int start, int end) {
+        Long temp = 0L;
+        for (int i = 0; i < start; i++) {
+            temp &= ~(1L << i);
+        }
+        for (int i = start; i < end; i++) {
+            temp |= 1L << i;
+        }
+        for (int i = end; i < 64; i++) {
+            temp &= ~(1L << i);
+        }
+        return temp;
     }
 
     int findFirstBitWrong(long x) {
         for (int i = 0; i < 64; i++) {
-            int tmp = (int) (x & (1L << i));
-            if (tmp != 0) {
+            long tmp = (x & (1L << i));
+            if (tmp != 0L) {
                 return i;
             }
         }
