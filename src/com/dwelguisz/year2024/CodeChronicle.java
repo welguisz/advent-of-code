@@ -71,13 +71,9 @@ public class CodeChronicle extends AoCDay {
     }
 
     long solutionPart1() {
-        long answer = 0;
-        for (Map<Coord2D,Character> key : keys) {
-            for(Map<Coord2D,Character> lock : locks) {
-                answer += keyFits(key, lock) ? 1 : 0;
-            }
-        }
-        return answer;
+        return keys.stream().map(
+                k -> locks.stream().filter(l -> keyFits(k,l)).count()
+                ).reduce(0L, Long::sum);
     }
 
     String solutionPart2() {
