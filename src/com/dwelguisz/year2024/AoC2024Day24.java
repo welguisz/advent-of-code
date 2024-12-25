@@ -108,10 +108,91 @@ public class AoC2024Day24 extends AoCDay {
     String solutionPart2(Map<String, Integer> values, Map<String, Pair<Pair<String, String>, String>> circuit, List<String> lines) {
         long xValue = createNumber(values, "x");
         long yValue = createNumber(values, "y");
-        //This is where you mess with
-        //swapOutputs(circuit, "z06", "hwk");
+        //This is where you mess with different items.  For example, my first issue was with a bit. When I inspected it, it was:
+        //and(z06,y06,x06).
+        //Next, I looked at z07 network and that network looked like:
+        //xor(z07, jqn, grj);
+        //xor(jqn, x07, y07);
+        //or(grj, spj, hwk);
+        //and(spj, swj, rjv);
+        //xor(hwk, swj, rjv);
+        //or(swj, tcn, jsd);
+        //xor(rjv, y06, x06);
+        //------
+        //z06 needs to come from a xor gate, so by process of elimination, we can ignore:
+        // * rjv -> because it does not have a carry
+        // * jqn -> inputs are x07 and y07, so it can't be this.
+        // * z07 -> can't be this because it is an output and tracing back z07, we can see its input is x07,y07,and the
+        //          ripple carry.
+        //Let's check hwk. Now we have:
+        //xor(z06, swj, rjv)
+        //and(hwk, x06, y06)
+        // Let's trace the new z06.
+        //xor(z06, swj, rjv); --> brings it together, so this works for z06
+        //or(swj, tcn, jsd);  --> swj is a carry
+        //xor(rjv, y06, x06);  --> this is the half-adder porition for z06
+        // Let's trace the new z07
+        //xor(z07, jqn, grj); //full adder here
+        //xor(jqn, x07, y07); //half adder here
+        //or(grj, spj, hwk);  //Carry logic here
+        //and(hwk, x06, y06)  //carry bit for 6th bit
+        //and(spj, swj, rjv); //full carry here
+        //or(swj, tcn, jsd);
+        //xor(rjv, y06, x06);
+        swapOutputs(circuit, "z06", "hwk");
+        //Working on bit: 25
+        //xor(z26, khj, mbh);
+        //or(khj, qmd, vhp);
+        //xor(mbh, y26, x26);
+        //xor(qmd, y25, x25);
+        //and(vhp, tnt, nbs);
+        //and(tnt, y25, x25);
+        //or(nbs, ptr, spw);
+        //-----
+        //xor(z25, nbs, tnt);
+        //or(nbs, ptr, spw);
+        //and(tnt, y25, x25);
+        //Again same thing here, the carry bit is in the adder logic. So we need to
+        //swap `tnt` with either `qmd`, or `mbh`. Eliminate `mbh` because that logic
+        //is for `z26`. So, let's go with 'qmd'
         swapOutputs(circuit, "tnt", "qmd");
+        //Working on bit: 31
+        //xor(z32, hpc, qrw);
+        //xor(hpc, vkh, dtq);
+        //xor(qrw, y32, x32);
+        //xor(vkh, y31, x31);
+        //or(dtq, rtq, kcn);
+        //and(rtq, y30, x30);
+        //and(kcn, rmb, rpt);
+        //-----
+        //or(z31, mjr, hgw);
+        //and(mjr, dtq, vkh);
+        //and(hgw, y31, x31);
+        //or gate outputting to z31. We need to use an xor gate.  So options:
+        // z32, hpc, qrw, xvh
+        // Can't use z32 since that will mess up the next bit.
+        // Can't use qrw since that is using x32 and y32.
+        // Can't use vkh since that is good logic for z31.
+        // So it has to be hpc.
         swapOutputs(circuit, "z31", "hpc");
+        //Working on bit: 37
+        //xor(z38, fsp, hbm);
+        //xor(fsp, y38, x38);
+        //or(hbm, vbq, cgr);
+        //and(vbq, y37, x37);
+        //xor(cgr, gqc, vqv);
+        //or(gqc, ksr, jvs);
+        //xor(vqv, x37, y37);
+        //-----
+        //and(z37, gqc, vqv);
+        //or(gqc, ksr, jvs);
+        //xor(vqv, x37, y37);
+        //We are anding and we are supposed to be xor. So again, let's look for xor gates:
+        //So possible values: vqv, cgr, fsp,z38
+        //Can't be vqv because that is coming into our logic for the carry.
+        //Can't be fsp since that is using bit38 logic
+        //Can't be z38 since that is the output for bit38,
+        //So it has to be cgr
         swapOutputs(circuit, "z37", "cgr");
         long expectedValue = xValue + yValue;
         long currentAnswer = solutionPart1(new HashMap<>(values), new HashMap<>(circuit));
