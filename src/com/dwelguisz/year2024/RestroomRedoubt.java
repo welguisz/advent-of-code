@@ -1,6 +1,7 @@
 package com.dwelguisz.year2024;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.base.ChineseRemainderTheorem;
 import com.dwelguisz.utilities.Coord2D;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -73,16 +74,27 @@ public class RestroomRedoubt extends AoCDay {
             new Coord2D(-1, 0), new Coord2D(1, 0),
             new Coord2D(-1, 1), new Coord2D(0, 1), new Coord2D(1, 1));
 
-    long countNeighbors(Set<Coord2D> positions, Coord2D test) {
-        return NEIGHBORS.stream()
+    List<Coord2D> X_AXIS_ORDER = List.of(new Coord2D(-1,0), new Coord2D(1,0));
+    List<Coord2D> Y_AXIS_ORDER = List.of(new Coord2D(0,-1), new Coord2D(0,1));
+
+    long countNeighbors(Set<Coord2D> positions, Coord2D test, int order) {
+        List<Coord2D> neighbors;
+        if (order == 0) {
+            neighbors = NEIGHBORS;
+        } else if (order == 1) {
+            neighbors = X_AXIS_ORDER;
+        } else {
+            neighbors = Y_AXIS_ORDER;
+        }
+        return neighbors.stream()
                 .map(n -> n.add(test))
                 .filter(positions::contains)
                 .count();
     }
 
-    long calculateOrder(List<Coord2D> positions) {
+    long calculateOrder(List<Coord2D> positions, final int order) {
         Set<Coord2D> pos = new HashSet<>(positions);
-        Map<Long, Long> neighborCount = pos.stream().map(n -> countNeighbors(pos, n))
+        Map<Long, Long> neighborCount = pos.stream().map(n -> countNeighbors(pos, n, order))
                 .collect(Collectors.groupingBy(m -> m, Collectors.counting()));
         return neighborCount.entrySet().stream()
                 .map(e -> e.getKey() * e.getValue())
@@ -90,21 +102,35 @@ public class RestroomRedoubt extends AoCDay {
     }
 
     long solutionPart2(List<Pair<Coord2D, Coord2D>> robots, int gridX, int gridY) {
-        int time = 0;
         long orderMax = Long.MIN_VALUE;
-        for (int i = 0; i < gridX * gridY; i++) {
+        int timeX = 0;
+        int timeY = 0;
+        for (int i = 0; i< gridX; i++) {
             final int tf = i;
             List<Coord2D> positions = robots.stream()
                     .map(r -> findPositionAtTime(r, gridX, gridY, tf))
                     .collect(Collectors.toList());
-            long order = calculateOrder(positions);
+            long order = calculateOrder(positions, 2);
             if (order > orderMax) {
                 orderMax = order;
-                time = i;
+                timeX = i;
             }
         }
-        //printGrid(robots, gridX, gridY, time);
-        return time;
+        orderMax = Long.MIN_VALUE;
+        for (int i = 0; i< gridY; i++) {
+            final int tf = i;
+            List<Coord2D> positions = robots.stream()
+                    .map(r -> findPositionAtTime(r, gridX, gridY, tf))
+                    .collect(Collectors.toList());
+            long order = calculateOrder(positions, 1);
+            if (order > orderMax) {
+                orderMax = order;
+                timeY = i;
+            }
+        }
+        Long[] divisors = new Long[]{(long) gridX, (long) gridY};
+        Long[] remainders = new Long[]{(long) timeX, (long) timeY};
+        return ChineseRemainderTheorem.chineseRemainder(divisors, remainders);
     }
 
     void printGrid(List<Pair<Coord2D, Coord2D>> robots, int gridX, int gridY, int time) {
