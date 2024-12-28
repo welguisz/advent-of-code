@@ -18,28 +18,33 @@ public class GuardGallivant extends AoCDay {
         Map<Coord2D, Character> gridHash = createCharGridMap(lines);
         Coord2D startingPoint = getStartingPoint(gridHash, '^');
         timeMarkers[1] = Instant.now().toEpochMilli();
-        Set<Coord2D> visited = solutionPart1(gridHash, startingPoint);
-        part1Answer = visited.size();
+        List<Pair<Coord2D, Integer>> visited = solutionPart1(gridHash, startingPoint);
+        part1Answer = visited.stream().map(Pair::getLeft).distinct().count();
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(gridHash, startingPoint, visited);
+        part2Answer = solutionPart2(gridHash, visited);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    Set<Coord2D> guardPath(Map<Coord2D, Character> grid, Coord2D startingPoint) {
+    List<Pair<Coord2D,Integer>> guardPath(Map<Coord2D, Character> grid, Pair<Coord2D, Integer> startingInfo) {
+        return guardPath(grid, startingInfo.getLeft(), startingInfo.getRight());
+    }
+
+    List<Pair<Coord2D,Integer>> guardPath(Map<Coord2D, Character> grid, Coord2D startingPoint, int startingDirection) {
         Set<Coord2D> visited = new HashSet<>();
-        int dirIndex = 0;
+        int dirIndex = startingDirection;
         Coord2D curr = startingPoint;
         Set<Pair<Coord2D, Coord2D>> memory = new HashSet<>();
-        boolean loop = true;
+        List<Pair<Coord2D,Integer>> visitedOrder = new ArrayList<>();
         while (!memory.contains(Pair.of(curr, DIRECTIONS.get(dirIndex)))) {
             memory.add(Pair.of(curr, DIRECTIONS.get(dirIndex)));
             visited.add(curr);
+            visitedOrder.add(Pair.of(curr, dirIndex));
             Coord2D next = curr.add(DIRECTIONS.get(dirIndex));
             if (memory.contains(Pair.of(next, DIRECTIONS.get(dirIndex)))) {
                 break;
             }
             if (!grid.containsKey(next)) {
-                return visited;
+                return visitedOrder;
             } else {
                 if (grid.get(next) == '#') {
                     dirIndex = (dirIndex + 1) % 4;
@@ -48,22 +53,25 @@ public class GuardGallivant extends AoCDay {
                 }
             }
         }
-        return new HashSet<>();
+        return new ArrayList<>();
     }
 
-    Set<Coord2D> solutionPart1(Map<Coord2D, Character> gridHash, Coord2D start) {
-        return guardPath(gridHash, start);
+    List<Pair<Coord2D,Integer>> solutionPart1(Map<Coord2D, Character> gridHash, Coord2D start) {
+        return guardPath(gridHash, start, 0);
     }
 
-    long solutionPart2(Map<Coord2D, Character> gridHash, Coord2D start, Set<Coord2D> visited) {
-        long createLoop = 0l;
-        for (Coord2D obstacle : visited) {
-            if (obstacle.equals(start)) {
+    long solutionPart2(Map<Coord2D, Character> gridHash, List<Pair<Coord2D,Integer>> visited) {
+        long createLoop = 0L;
+        Set<Coord2D> alreadyVisited = new HashSet<>();
+        for (int i = 0; i < visited.size()-1; i++) {
+            Pair<Coord2D, Integer> nextStop = visited.get(i+1);
+            Coord2D obstacle = nextStop.getLeft();
+            if (alreadyVisited.contains(obstacle)) {
                 continue;
             }
+            alreadyVisited.add(obstacle);
             gridHash.put(obstacle, '#');
-            Set<Coord2D> path = guardPath(gridHash, start);
-            if (path.isEmpty()) {
+            if (guardPath(gridHash, visited.get(i)).isEmpty()) {
                 createLoop++;
             }
             gridHash.put(obstacle, '.');
