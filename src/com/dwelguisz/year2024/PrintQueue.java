@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PrintQueue extends AoCDay {
     public void solve() {
@@ -81,6 +83,18 @@ public class PrintQueue extends AoCDay {
         return true;
     }
 
+    boolean validManual(List<Coord2D> pageOrder, Map<Integer, Integer> manual) {
+        for(Coord2D coord : pageOrder) {
+            if (manual.containsKey(coord.x) && manual.containsKey(coord.y)) {
+                if (manual.get(coord.x) > manual.get(coord.y)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
     long solutionPart2(List<Coord2D> pageOrder, List<List<Integer>> safetyManuals) {
         long sum = 0l;
         for(List<Integer> safety : safetyManuals) {
@@ -94,21 +108,22 @@ public class PrintQueue extends AoCDay {
     }
 
     List<Integer> fixSafetyManual(List<Coord2D> pageOrder, List<Integer> badManual) {
-        List<Integer> manual = new ArrayList<>(badManual);
-        while (!validManual(pageOrder, manual)) {
+        Map<Integer,Integer> placements = badManual.stream().collect(Collectors.toMap(k -> k, badManual::indexOf));
+        while (!validManual(pageOrder, placements)) {
             for (Coord2D coord : pageOrder) {
-                if (new HashSet<>(manual).containsAll(List.of(coord.x, coord.y))) {
-                    int leftPos = manual.indexOf(coord.x);
-                    int rightPos = manual.indexOf(coord.y);
+                if (placements.containsKey(coord.x) && placements.containsKey(coord.y)) {
+                    int leftPos = placements.get(coord.x);
+                    int rightPos = placements.get(coord.y);
                     if (leftPos > rightPos) {
-                        int tmp = manual.remove(leftPos);
-                        manual.add(leftPos - 1, manual.remove(rightPos));
-                        manual.add(rightPos, tmp);
+                        placements.put(coord.x, rightPos);
+                        placements.put(coord.y, leftPos);
                     }
                 }
             }
         }
-        return manual;
+        Integer[] fixedManual = new Integer[placements.size()];
+        placements.forEach((key, value) -> fixedManual[value] = key);
+        return Arrays.stream(fixedManual).toList();
     }
 
 }
