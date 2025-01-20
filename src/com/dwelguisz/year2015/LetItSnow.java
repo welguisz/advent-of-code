@@ -2,10 +2,33 @@ package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LetItSnow extends AoCDay {
     public void solve() {
-        Long part1 = solutionPart1(2981,3075);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2015,25,false,0);
+        List<Integer> numbers = parseLine(instructions.get(0));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(numbers.get(0), numbers.get(1));
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
+    }
+
+    List<Integer> parseLine(String line) {
+        List<Integer> numbers = new ArrayList<>();
+        Pattern pattern = Pattern.compile("row (?<row>\\d+), column (?<column>\\d+)");
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            numbers.add(Integer.parseInt(matcher.group("row")));
+            numbers.add(Integer.parseInt(matcher.group("column")));
+        }
+        return numbers;
     }
 
     public Long solutionPart1(Integer targetRow, Integer targetCol) {
@@ -29,4 +52,9 @@ public class LetItSnow extends AoCDay {
         }
         return currentNumber;
     }
+
+    String solutionPart2() {
+        return "Press link to complete.";
+    }
+
 }
