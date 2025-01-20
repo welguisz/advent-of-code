@@ -93,7 +93,7 @@ public class ProbablyAFireHazard extends AoCDay {
                 map.put(point, value);
             }
         }
-        return map.entrySet().stream().filter(e -> e.getValue()).count();
+        return map.entrySet().stream().filter(Map.Entry::getValue).count();
     }
 
     Integer solutionPart2(List<Instruction> instructions) {
@@ -114,6 +114,6 @@ public class ProbablyAFireHazard extends AoCDay {
                 map.put(point, value);
             }
         }
-        return map.entrySet().stream().mapToInt(e -> e.getValue()).sum();
+        return map.values().stream().mapToInt(integer -> integer).sum();
     }
 }

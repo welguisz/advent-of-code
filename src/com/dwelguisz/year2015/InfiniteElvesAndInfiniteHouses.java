@@ -2,12 +2,19 @@ package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
+import java.util.List;
+
 public class InfiniteElvesAndInfiniteHouses extends AoCDay {
     public void solve() {
-        Integer part1 = solutionPart1(29000000);
-        Integer part2 = solutionPart2(29000000);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2015,20,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        int num = Integer.parseInt(instructions.get(0));
+        part1Answer = solutionPart1(num);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(num);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1(Integer minimumPresent) {

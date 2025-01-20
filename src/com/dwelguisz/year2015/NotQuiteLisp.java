@@ -18,10 +18,10 @@ public class NotQuiteLisp extends AoCDay {
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    static Integer solutionPart2(String input) {
-        Integer level = 0;
-        Integer position = 0;
-        List<Integer> inputChrs = input.chars().boxed().collect(Collectors.toList());
+    int solutionPart2(String input) {
+        int level = 0;
+        int position = 0;
+        List<Integer> inputChrs = input.chars().boxed().toList();
         while (level != -1) {
             Integer chr = inputChrs.get(position);
             level += (chr == '(') ? 1 : -1;
@@ -30,8 +30,8 @@ public class NotQuiteLisp extends AoCDay {
         return position;
     }
 
-    static Long solutionPart1(String input) {
-        Long openParentheses = input.chars().filter(s -> s == '(').count();
+    long solutionPart1(String input) {
+        long openParentheses = input.chars().filter(s -> s == '(').count();
         return (2*openParentheses) - input.length();
     }
 }

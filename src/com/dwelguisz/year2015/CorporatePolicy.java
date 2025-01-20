@@ -16,9 +16,9 @@ public class CorporatePolicy extends AoCDay {
 
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
-        String oldPassword = "cqjxjnds";
+        List<String> instructions = readResoruceFile(2015,11,false,0);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(oldPassword);
+        part1Answer = solutionPart1(instructions.get(0));
         timeMarkers[2] = Instant.now().toEpochMilli();
         part2Answer = solutionPart1((String) part1Answer);
         timeMarkers[3] = Instant.now().toEpochMilli();

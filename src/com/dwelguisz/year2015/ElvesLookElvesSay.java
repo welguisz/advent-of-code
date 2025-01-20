@@ -4,14 +4,16 @@ package com.dwelguisz.year2015;
 import com.dwelguisz.base.AoCDay;
 
 import java.time.Instant;
+import java.util.List;
 
 public class ElvesLookElvesSay extends AoCDay {
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2015,10,false,0);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = part1("1113222113", 40);
+        part1Answer = part1(instructions.get(0), 40);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = part1("1113222113", 50);
+        part2Answer = part1(instructions.get(0), 50);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 

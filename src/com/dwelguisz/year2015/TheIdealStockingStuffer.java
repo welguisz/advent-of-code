@@ -11,10 +11,11 @@ import java.security.*;
 public class TheIdealStockingStuffer extends AoCDay {
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> instructions = readResoruceFile(2015,4,false,0);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1("iwrupvqb");
+        part1Answer = solutionPart1(instructions.get(0));
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2("iwrupvqb");
+        part2Answer = solutionPart2(instructions.get(0));
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 

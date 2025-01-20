@@ -2,6 +2,7 @@ package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,18 +117,20 @@ public class WizardSimulator20XX extends AoCDay {
     List<Spell> spells;
 
     public void solve(){
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2015,21,false,0);
         setupItems();
-        Integer part1 = solutionPart1(false);
-        Integer part2 = solutionPart1(true);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart1(true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1(Boolean hardMode) {
         Player player1 = new Player("me", 50,0,0,500,0);
         Player boss = new Player("boss",55,8,0,0,0);
         List<Integer> results = doesPlayer1Win(player1, boss, hardMode);
-        System.out.println("Number of wins: " + results.size());
         return results.stream().min(Integer::compareTo).get();
     }
 
