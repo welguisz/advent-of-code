@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +19,13 @@ public class OneTimePad extends AoCDay {
     public static String TEST_SALT = "abc";
 
     public void solve() {
-        Integer part1 = solutionPart1(MY_SALT, false);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = solutionPart1(MY_SALT, true);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,14,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines.get(0), false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart1(lines.get(0), true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String createHash(String input, Boolean stretched) {

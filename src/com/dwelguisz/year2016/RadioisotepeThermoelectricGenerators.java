@@ -250,7 +250,8 @@ public class RadioisotepeThermoelectricGenerators extends AoCDay {
 
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day11/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,7,false,0);
         List<List<String>> testfloors = new ArrayList<>();
         List<String> floor1 = new ArrayList<>();
         List<String> floor2 = new ArrayList<>();
@@ -270,13 +271,16 @@ public class RadioisotepeThermoelectricGenerators extends AoCDay {
         testfloors.add(floor2);
         testfloors.add(floor3);
         testfloors.add(floor4);
-        Integer part1 = solutionPart1(lines, new ArrayList<>(), true, testfloors);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines, new ArrayList<>(), true, testfloors);
+        timeMarkers[2] = Instant.now().toEpochMilli();
         List <String> extraItems = new ArrayList<>();
         extraItems.add("EG");
         extraItems.add("EM");
         extraItems.add("DG");
         extraItems.add("DM");
+        part2Answer = solutionPart1(lines, extraItems, true, testfloors);
+        timeMarkers[3] = Instant.now().toEpochMilli();
         //Integer part2 = solutionPart1(lines, extraItems);
         //System.out.println(String.format("Part 2 Answer: %d",part2));
     }

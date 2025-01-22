@@ -2,20 +2,19 @@ package com.dwelguisz.year2016;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class InternetProtocolVersion7 extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day07/input.txt");
-        System.out.println(String.format("aba[bab]xyz returns %b",supportsSSL("aba[bab]xyz")));
-        System.out.println(String.format("xyx[xyx]xyx returns %b",supportsSSL("xyx[xyx]xyx")));
-        System.out.println(String.format("aaa[kek]eke returns %b",supportsSSL("aaa[kek]eke")));
-        System.out.println(String.format("zazbz[bzb]cdb returns %b",supportsSSL("zazbz[bzb]cdb")));
-        Integer part1 = solutionPart1(lines);
-        Integer part2 = solutionPart2(lines);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,7,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1(List<String> lines) {

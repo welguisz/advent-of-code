@@ -2,21 +2,24 @@ package com.dwelguisz.year2016;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.List;
 
 public class TwoFactorAuthentication extends AoCDay {
     Boolean[][] screen;
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day08/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,8,false,0);
         loadScreen(lines);
-        Integer part1 = solutionPart1();
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        String part2 = printScreen();
-        System.out.println(String.format("Part 2 Answer: \n%s", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = printScreen();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String printScreen() {
-        StringBuffer tmp = new StringBuffer();
+        StringBuffer tmp = new StringBuffer("\n");
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 50; j++) {
                 if (screen[i][j]) {

@@ -3,7 +3,9 @@ package com.dwelguisz.year2016;
 import com.dwelguisz.base.AoCDay;
 
 import java.math.BigInteger;
+import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DragonChecksum extends AoCDay {
@@ -12,10 +14,13 @@ public class DragonChecksum extends AoCDay {
     public static Integer SECOND_LENGTH = 35651584;
 
     public void solve() {
-        String part1 = solutionPart1(MY_INPUT, MY_LENGTH);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        String part2 = solutionPart2(MY_INPUT, SECOND_LENGTH);
-        System.out.println(String.format("Part 2 Answer: %s",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,16,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines.get(0), MY_LENGTH);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines.get(0), SECOND_LENGTH);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String solutionPart1(String input, Integer length) {
@@ -140,7 +145,6 @@ public class DragonChecksum extends AoCDay {
         Integer currentPos = 0;
         Integer newStrLoc = 0;
         String tmp = "";
-        Integer count = 0;
         while (currentPos < length) {
             String splice = "";
             String possibleChar = newStr.substring(newStrLoc, newStrLoc+1);
@@ -191,10 +195,6 @@ public class DragonChecksum extends AoCDay {
                 }
             }
             tmp = tmp.concat(map.get(splice));
-            count++;
-            if (count % 100 == 0) {
-                System.out.println("Current count: " + count);
-            }
             currentPos += 16;
         }
         return tmp;

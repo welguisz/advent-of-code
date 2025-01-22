@@ -3,6 +3,7 @@ package com.dwelguisz.year2016;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,11 +16,13 @@ public class SecurityThroughObscurity extends AoCDay {
 
     public void solve() {
         validRooms = new ArrayList<>();
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2016/day04/input.txt");
-        Long part1 = solutionPart1(lines);
-        Integer part2 = solutionPart2();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,4,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Long solutionPart1(List<String> lines) {

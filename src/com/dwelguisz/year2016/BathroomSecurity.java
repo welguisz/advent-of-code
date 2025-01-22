@@ -2,6 +2,7 @@ package com.dwelguisz.year2016;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,8 @@ public class BathroomSecurity extends AoCDay {
     Map<String, String> allowedNextRight;
     Map<String, String> allowedNextLeft;
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2016/day02/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,2,false,0);
         allowedNextDown = new HashMap<>();
         allowedNextUp = new HashMap<>();
         allowedNextRight = new HashMap<>();
@@ -50,10 +52,11 @@ public class BathroomSecurity extends AoCDay {
         allowedNextLeft.put("6","5");
         allowedNextLeft.put("4","3");
         allowedNextLeft.put("3","2");
-        String part1 = solutionPart1(lines);
-        String part2 = solutionPart2(lines);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        System.out.println(String.format("Part 1 Answer: %s",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String solutionPart1(List<String> lines) {

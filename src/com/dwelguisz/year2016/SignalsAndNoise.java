@@ -2,6 +2,7 @@ package com.dwelguisz.year2016;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,12 +10,14 @@ import java.util.Map;
 
 public class SignalsAndNoise extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day06/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,6,false,0);
         List<HashMap<Character, Integer>> frequencyMap = createFrequencyMap(lines);
-        String part1 = solutionPart1(frequencyMap);
-        String part2 = solutionPart2(frequencyMap);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        System.out.println(String.format("Part 2 Answer: %s",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(frequencyMap);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(frequencyMap);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public List<HashMap<Character,Integer>> createFrequencyMap(List<String> lines) {
