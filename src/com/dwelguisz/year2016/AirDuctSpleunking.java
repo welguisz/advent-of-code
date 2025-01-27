@@ -4,6 +4,7 @@ import com.dwelguisz.base.AoCDay;
 import com.google.common.collect.Collections2;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -103,13 +104,15 @@ public class AirDuctSpleunking extends AoCDay {
 
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day24/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,24,false,0);
         createMap(lines);
         findShortestPathBetweenNumbers();
-        Integer part1 = solutionPart1();
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        Integer part2 = solutionPart2();
-        System.out.println(String.format("Part 1 Answer: %d", part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1() {

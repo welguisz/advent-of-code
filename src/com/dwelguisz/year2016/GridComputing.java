@@ -3,6 +3,7 @@ package com.dwelguisz.year2016;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -44,12 +45,14 @@ public class GridComputing extends AoCDay {
     List<Pair<Node,Node>> allowedNodes;
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day22/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,22,false,0);
         createNodes(lines);
-        Integer part1 = solutionPart1();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = solutionPart2();
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
         //215 wrong -- too high
     }
 

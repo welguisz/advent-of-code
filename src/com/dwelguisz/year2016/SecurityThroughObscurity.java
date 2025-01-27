@@ -87,9 +87,6 @@ public class SecurityThroughObscurity extends AoCDay {
             String encryptedName = validRoom.getRight();
             Integer shiftNum = sectorId % 26;
             String decryptedName = deCrypt(encryptedName, shiftNum);
-            if (doesNotContainEasterWords(decryptedName, easterWords)) {
-                System.out.println(sectorId + ": " + decryptedName);
-            }
         }
         return validRooms.get(0).getLeft();
     }

@@ -89,7 +89,6 @@ public class DragonChecksum extends AoCDay {
         }
         String reverseString = createNewInformation(input).substring(18);
         // Now we want to create a map that takes a string of length 8 and returns 1 character
-        System.out.println("Done creating the string");
         Map<String, String> checkSumMap = new HashMap<>();
         for (int i = 0; i < 4; i++) {
             String tmpStr = String.format("%2s", Integer.toBinaryString(i)).replace(' ', '0');

@@ -3,6 +3,7 @@ package com.dwelguisz.year2016;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,12 +12,14 @@ public class FirewallRules extends AoCDay {
     List<Pair<Long,Long>> blackListedIPs;
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day20/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,20,false,0);
         createBlacklistIPs(lines);
-        Long part1 = findSmallestIP();
-        Integer part2 = findNumberOfIPs();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = findSmallestIP();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = findNumberOfIPs();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Long findSmallestIP() {

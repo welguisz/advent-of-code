@@ -2,6 +2,7 @@ package com.dwelguisz.year2016;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,12 +12,13 @@ import java.util.stream.Collectors;
 
 public class SafeCracking extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day23/input.txt");
-        //Integer part1 = solutionPart1(lines, 7);
-        Integer part1 = quickPart1(7);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = quickPart1(12);
-        System.out.println(String.format("Part 1 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,23,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = quickPart1(7);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = quickPart1(12);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer quickPart1(Integer startingValue) {

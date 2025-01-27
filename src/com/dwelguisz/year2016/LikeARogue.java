@@ -2,23 +2,26 @@ package com.dwelguisz.year2016;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LikeARogue extends AoCDay {
-    public static String MY_INPUT_ROW = ".^^^.^.^^^.^.......^^.^^^^.^^^^..^^^^^.^.^^^..^^.^.^^..^.^..^^...^.^^.^^^...^^.^.^^^..^^^^.....^....";
     public static Integer PART1_ROW = 40;
     public static String SAFE_TILE = ".";
     public static String TRAP_TILE = "^";
     public static List<String> TRAP_TILES = List.of("^^.",".^^","^..","..^");
 
     public void solve() {
-        Integer part1 = solutionPart1(MY_INPUT_ROW, PART1_ROW);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = solutionPart1(MY_INPUT_ROW, PART1_ROW * 10000);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,18,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines.get(0), PART1_ROW);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart1(lines.get(0), PART1_ROW * 10000);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
     public Integer solutionPart1(String startRow, Integer numberOfRows) {
         String currentRow = startRow;

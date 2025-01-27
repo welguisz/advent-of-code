@@ -2,6 +2,7 @@ package com.dwelguisz.year2016;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +10,14 @@ public class AnElephantNamedJoseph extends AoCDay {
     public static Integer TEST_ELVES = 5;
     public static Integer MY_ELVES = 3012210;
     public void solve() {
-        Integer part1 = solutionPart1(MY_ELVES);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = solutionPart2(MY_ELVES,10000);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,19,false,0);
+        Integer elves = Integer.parseInt(lines.get(0));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(elves);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(elves, 10000);
+        timeMarkers[3] = Instant.now().toEpochMilli();
         //31682 -- too low
 
         // 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20.. Elf 1 selects. Elf 11 removed (1,20)

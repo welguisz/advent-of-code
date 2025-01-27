@@ -3,6 +3,7 @@ package com.dwelguisz.year2016;
 import com.dwelguisz.base.AoCDay;
 import com.google.common.collect.Collections2;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -10,11 +11,13 @@ import java.util.stream.Collectors;
 
 public class ScrambledLettersAndHash extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day21/input.txt");
-        String part1 = scrambledLetters("abcdefgh", lines);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        String part2 = findUnscrambledPassword("fbgdceah", lines);
-        System.out.println(String.format("Part 2 Answer: %s",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,21,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = scrambledLetters("abcdefgh", lines);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = findUnscrambledPassword("fbgdceah", lines);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String findUnscrambledPassword(String goalString, List<String> lines) {

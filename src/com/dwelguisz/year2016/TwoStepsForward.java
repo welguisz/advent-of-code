@@ -6,6 +6,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -112,10 +113,13 @@ public class TwoStepsForward extends AoCDay {
     public static String TEST_STRING2 ="ulqzkmiv"; //830
     public static String BASE_STRING = "pgflpeqp";
     public void solve() {
-        String part1 = solutionPart1(BASE_STRING,3,3,4,4);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        Integer part2 = solutionPart2(BASE_STRING, 3,3,4,4);
-        System.out.println(String.format("Part 1 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,17,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines.get(0), 3, 3, 4, 4);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines.get(0), 3, 3, 4, 4);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String solutionPart1(String baseStr, Integer targetX, Integer targetY, Integer sizeX, Integer sizeY) {

@@ -2,6 +2,7 @@ package com.dwelguisz.year2016;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,17 +10,20 @@ import java.util.Map;
 
 public class ClockSignal extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2016/day25/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2016,25,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+
         Integer value = -1;
         Boolean found = false;
         while (!found) {
-            if (value % 1000 == 0) {
-                System.out.println("Trying value: " + value);
-            }
             value++;
             found = solutionPart1(lines, value);
         }
-        System.out.println(String.format("Part 1 Answer: %d",value));
+        part1Answer = value;
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = "Click the link to finish";
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public static List<Integer> CLOCK_VALUES = List.of(0,1);
