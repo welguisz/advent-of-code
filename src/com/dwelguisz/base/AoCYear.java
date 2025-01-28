@@ -12,9 +12,10 @@ public class AoCYear {
 
     public void runAllDays() {
         Long startTime = Instant.now().toEpochMilli();
-        System.out.println(String.format("%4s|%25s |%20s |%20s |%20s |%20s |%20s |",
+        System.out.println(String.format("|%4s|%25s |%20s |%20s |%20s |%20s |%20s |",
                 "Day #", "Puzzle name", "Parsing Time","Part 1 Time(ms)", "Part 2 Time(ms)",
                 "Part 1 Answer", "Part 2 Answer"));
+        System.out.println("|:-----:|:---|---:|---:|---:|---:|---:|");
 
         for (int i = 1; i <= 25; i++) {
             runOneDay(i, false);

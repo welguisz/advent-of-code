@@ -47,7 +47,7 @@ public class AoCDay {
         String className = getClass().getName();
         String[] splitNames = className.split("\\.");
         String name = splitNames[splitNames.length-1];
-        System.out.println(String.format("%4d |%25s |%20d |%20d |%20d |%20s |%20s |",i,name,timeMarkers[1]-timeMarkers[0],timeMarkers[2]-timeMarkers[1],timeMarkers[3]-timeMarkers[2], part1Answer.toString(), part2Answer.toString()));
+        System.out.println(String.format("|%4d |%25s |%20d |%20d |%20d |%20s |%20s |",i,name,timeMarkers[1]-timeMarkers[0],timeMarkers[2]-timeMarkers[1],timeMarkers[3]-timeMarkers[2], part1Answer.toString(), part2Answer.toString()));
     }
     public InputStream getFileFromResourceStream(Integer year, Integer day, boolean test) {
         return getFileFromResourceStream(year, day, test, 0);

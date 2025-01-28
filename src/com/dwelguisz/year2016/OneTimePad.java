@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class OneTimePad extends AoCDay {
     public static String MY_SALT = "jlmsuwbz";
@@ -26,7 +27,7 @@ public class OneTimePad extends AoCDay {
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = solutionPart1(lines.get(0), false);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        //part2Answer = solutionPart1(lines.get(0), true);
+        part2Answer = solutionPart1(lines.get(0), true);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
@@ -46,36 +47,60 @@ public class OneTimePad extends AoCDay {
     }
 
     public Integer solutionPart1(String input, Boolean stretched) {
-        Integer currentNumber = 0;
-        Integer knownSize = 0;
-        String[] hashes = new String[40000];
-        for (Integer i = 0; i < 40000; i++) {
-            String str = input.concat(i.toString());
-            hashes[i] = createHash(str, stretched);
+        Map<Integer, Character> ThreeInARow = new HashMap<>();
+        Map<Integer, Character> FiveInARow = new HashMap<>();
+        int hashNumber = 0;
+        for (;hashNumber < 10000; hashNumber++) {
+            String hash = createHash(input+hashNumber,stretched);
+            Pair<Boolean, Character> check3 = anyCharactersInRowTheSame(hash, 3);
+            Pair<Boolean, Character> check5 = anyCharactersInRowTheSame(hash, 5);
+            if (check3.getLeft()) {
+                ThreeInARow.put(hashNumber, check3.getRight());
+            }
+            if (check5.getLeft()) {
+                FiveInARow.put(hashNumber, check5.getRight());
+            }
         }
-        while (knownSize < 64) {
-            Pair<Boolean, String> possibleCheck = anyCharactersInRowTheSame(hashes[currentNumber], 3);
-            if(possibleCheck.getKey()) {
-                for (Integer i = currentNumber+1; i <= currentNumber + 1000; i++) {
-                    Pair<Boolean, String> has5CharsInARow = anyCharactersInRowTheSame(hashes[i], 5);
-                    if (has5CharsInARow.getLeft()) {
-                        if (possibleCheck.getRight().equals(has5CharsInARow.getRight())) {
-                            knownSize++;
-                            break;
-                        }
+        int currentNumber = 0;
+        int leftToFind = 64;
+        while (leftToFind > 0) {
+            if (currentNumber + 1000 >= hashNumber) {
+                int nextEnd = hashNumber + 10000;
+                if (leftToFind < 16 && leftToFind >= 6) {
+                    nextEnd = hashNumber + 1000;
+                } else if (leftToFind < 6) {
+                    nextEnd = currentNumber + 1001;
+                }
+                for(;hashNumber < nextEnd; hashNumber++) {
+                    String hash = createHash(input+hashNumber,stretched);
+                    Pair<Boolean, Character> check3 = anyCharactersInRowTheSame(hash, 3);
+                    Pair<Boolean, Character> check5 = anyCharactersInRowTheSame(hash, 5);
+                    if (check3.getLeft()) {
+                        ThreeInARow.put(hashNumber, check3.getRight());
                     }
+                    if (check5.getLeft()) {
+                        FiveInARow.put(hashNumber, check5.getRight());
+                    }
+                }
+            }
+            if (ThreeInARow.containsKey(currentNumber)) {
+                final int cn = currentNumber;
+                if (IntStream.range(currentNumber+1, currentNumber+1000).boxed()
+                        .filter(num -> FiveInARow.containsKey(num))
+                        .anyMatch(num -> ThreeInARow.get(cn) == FiveInARow.get(num))) {
+                    leftToFind--;
                 }
             }
             currentNumber++;
         }
         return currentNumber-1;
     }
-    public Pair<Boolean, String> anyCharactersInRowTheSame(String code, Integer length) {
+    public Pair<Boolean, Character> anyCharactersInRowTheSame(String code, Integer length) {
         Pattern pattern = Pattern.compile("(.)\\1{" + (length-1) + "}");
         Matcher matcher = pattern.matcher(code);
         if (matcher.find()) {
-            return Pair.of(true, matcher.group().substring(0,1));
+            return Pair.of(true, matcher.group().charAt(0));
         }
-        return Pair.of(false, "q");
+        return Pair.of(false, 'q');
     }
 }
