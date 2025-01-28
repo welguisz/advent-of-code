@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class OneTimePad extends AoCDay {
@@ -24,12 +26,12 @@ public class OneTimePad extends AoCDay {
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = solutionPart1(lines.get(0), false);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart1(lines.get(0), true);
+        //part2Answer = solutionPart1(lines.get(0), true);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String createHash(String input, Boolean stretched) {
-        Integer numberOfHashes = stretched ? 2016 : 1;
+        Integer numberOfHashes = stretched ? 2016 : 0;
         String tmpStr = input;
         for (int i = 0; i <= numberOfHashes; i++) {
             try {
@@ -46,8 +48,8 @@ public class OneTimePad extends AoCDay {
     public Integer solutionPart1(String input, Boolean stretched) {
         Integer currentNumber = 0;
         Integer knownSize = 0;
-        String[] hashes = new String[100000];
-        for (Integer i = 0; i < 100000; i++) {
+        String[] hashes = new String[40000];
+        for (Integer i = 0; i < 40000; i++) {
             String str = input.concat(i.toString());
             hashes[i] = createHash(str, stretched);
         }
@@ -69,20 +71,11 @@ public class OneTimePad extends AoCDay {
         return currentNumber-1;
     }
     public Pair<Boolean, String> anyCharactersInRowTheSame(String code, Integer length) {
-        Integer inARow = 0;
-        String currentCheck = "q";
-        String[] chrs = code.split("");
-        for(int i = 0; i < chrs.length; i++) {
-            if (!currentCheck.equalsIgnoreCase(chrs[i])) {
-                inARow = 1;
-                currentCheck = chrs[i];
-            } else {
-                inARow++;
-                if (inARow == length) {
-                    return Pair.of(true, currentCheck);
-                }
-            }
+        Pattern pattern = Pattern.compile("(.)\\1{" + (length-1) + "}");
+        Matcher matcher = pattern.matcher(code);
+        if (matcher.find()) {
+            return Pair.of(true, matcher.group().substring(0,1));
         }
-        return Pair.of(false, currentCheck);
+        return Pair.of(false, "q");
     }
 }
