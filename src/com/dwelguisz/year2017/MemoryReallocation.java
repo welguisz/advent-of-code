@@ -3,6 +3,7 @@ package com.dwelguisz.year2017;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,11 +12,17 @@ import java.util.stream.Collectors;
 public class MemoryReallocation extends AoCDay {
     public void solve() {
         //Integer block[] = {0,2,7,0};
-        Integer block[] = {14,0,15,12,11,11,3,5,1,6,8,4,9,1,8,4};
+        //Integer block[] = {14,0,15,12,11,11,3,5,1,6,8,4,9,1,8,4};
 
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,6,false,0);
+        Integer block[] = Arrays.stream(lines.get(0).split("\\s+")).map(Integer::parseInt).toList().toArray(new Integer[0]);
+        timeMarkers[1] = Instant.now().toEpochMilli();
         Pair<Integer, Integer> solution = solutionPart1(block);
-        System.out.println(String.format("Part 1 Answer: %d",solution.getLeft()));
-        System.out.println(String.format("Part 1 Answer: %d",solution.getRight()));
+        part1Answer = solution.getLeft();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solution.getRight();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Pair<Integer,Integer> solutionPart1(Integer[] block) {

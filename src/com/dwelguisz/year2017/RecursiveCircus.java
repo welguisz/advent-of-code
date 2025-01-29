@@ -3,6 +3,7 @@ package com.dwelguisz.year2017;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2017.helper.CircusNode;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,12 +12,14 @@ import java.util.stream.Collectors;
 
 public class RecursiveCircus extends AoCDay {
     public void solve(){
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2017/day07/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,7,false,0);
         Map<String,CircusNode> orderedNodes = createCircusNode(lines);
-        String part1 = solutionPart1(orderedNodes);
-        Integer part2 = solutionPart2(orderedNodes, part1);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(orderedNodes);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(orderedNodes, part1Answer.toString());
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String solutionPart1(Map<String, CircusNode> orderedNodes) {

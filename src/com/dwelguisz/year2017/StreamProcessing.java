@@ -3,17 +3,20 @@ package com.dwelguisz.year2017;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Stack;
 
 public class StreamProcessing extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2017/day09/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,9,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
         Pair<Long, Long> answer = solutionPart1(lines);
-        Long part1 = answer.getLeft();
-        Long part2 = answer.getRight();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        part1Answer = answer.getLeft();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = answer.getRight();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Pair<Long,Long> solutionPart1(List<String> lines) {

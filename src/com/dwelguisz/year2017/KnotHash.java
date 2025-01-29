@@ -2,6 +2,7 @@ package com.dwelguisz.year2017;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,15 +13,18 @@ public class KnotHash extends AoCDay {
     public static Integer HASH_LENGTH = 256;
 
     public void solve() {
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,10,false,0);
         Map<Integer, Integer> maps = new HashMap<>();
         for (int i = 0; i < HASH_LENGTH; i++) {
             maps.put(i,i);
         }
-        List<Integer> commands = Arrays.stream(input.split(",")).map(Integer::parseInt).collect(Collectors.toList());
-        Integer part1 = solutionPart1(maps, commands);
-        String part2 = solutionPart2(input);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %s",part2.toLowerCase()));
+        List<Integer> commands = Arrays.stream(lines.get(0).split(",")).map(Integer::parseInt).collect(Collectors.toList());
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(maps, commands);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines.get(0));
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1(Map<Integer, Integer> map, List<Integer> commands) {
@@ -74,7 +78,7 @@ public class KnotHash extends AoCDay {
             sb.append(convertSparseToDense(sixteenDigits));
         }
 
-        return sb.toString();
+        return sb.toString().toLowerCase();
     }
 
     public String convertSparseToDense(List<Integer> sixteenDigits) {

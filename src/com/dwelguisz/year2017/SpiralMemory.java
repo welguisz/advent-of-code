@@ -3,14 +3,19 @@ package com.dwelguisz.year2017;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.*;
 
 public class SpiralMemory extends AoCDay {
     public void solve(){
-        double part1 = solutionPart1(347991);
-        Integer part2 = solutionPart2(347991);
-        System.out.println(String.format("Part 1 Answer: %f",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,3,false,0);
+        Integer value = Integer.parseInt(lines.get(0));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(value);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(value);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public double solutionPart1(Integer value) {
