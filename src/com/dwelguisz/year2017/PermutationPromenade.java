@@ -4,17 +4,19 @@ import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.sql.Array;
+import java.time.Instant;
 import java.util.*;
 
 public class PermutationPromenade extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2017/day16/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,16,false,0);
         String[] commands = lines.get(0).split(",");
-        String part1 = solutionPart1(16,commands);
-        String part2 = solutionPart2(16,commands,1000000000L);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        System.out.println(String.format("Part 2 Answer: %s",part2));
-
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(16, commands);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(16,commands,1000000000L);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String solutionPart1(int length, String[] commands) {

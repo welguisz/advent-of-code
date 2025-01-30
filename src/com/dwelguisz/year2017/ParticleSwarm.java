@@ -2,6 +2,7 @@ package com.dwelguisz.year2017;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -60,12 +61,15 @@ public class ParticleSwarm extends AoCDay {
     }
     
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2017/day20/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,20,false,0);
         List<Particle> particles = createInitialParticles(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(particles);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(particles);
+        timeMarkers[3] = Instant.now().toEpochMilli();
         Integer part1 = solutionPart1(particles);
-        System.out.println(String.format("Part 1 Answer: %s", part1));
-        Integer part2 = solutionPart2(particles);
-        System.out.println(String.format("Part 2 Answer: %s", part2));
     }
 
     public Integer solutionPart1(List<Particle> initialParticles) {

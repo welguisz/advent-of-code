@@ -3,18 +3,22 @@ package com.dwelguisz.year2017;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
 public class ASeriesOfTubes extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2017/day19/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,19,false,0);
         Character[][] grid = createGrid(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
         Pair<String, Integer> answers = solutionPart1(grid, lines.get(0).indexOf('|'));
-        System.out.println(String.format("Part 1 Answer: %s", answers.getLeft()));
-        System.out.println(String.format("Part 2 Answer: %s", answers.getRight()));
-
+        part1Answer = answers.getLeft();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = answers.getRight();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Character[][] createGrid(List<String> lines) {

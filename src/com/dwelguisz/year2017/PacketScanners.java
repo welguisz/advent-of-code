@@ -2,6 +2,7 @@ package com.dwelguisz.year2017;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,13 +13,14 @@ public class PacketScanners extends AoCDay {
     Map<Integer, Integer> scanners;
     Integer largestDepth = -1;
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2017/day13/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,13,false,0);
         createScanners(lines);
-        Integer part1 = solutionPart1();
-        Integer part2 = solutionPart2();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1() {

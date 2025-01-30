@@ -2,18 +2,39 @@ package com.dwelguisz.year2017;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DuelingGenerators extends AoCDay {
 
     public void solve() {
-        Long part1 = solutionPart1(516,190, 40000000L);
-        Long part2 = solutionPart2(516,190,5000000L);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,15,false,0);
+        List<Integer> startingValues = parseLines(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(startingValues.get(0), startingValues.get(1), 40000000L);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(startingValues.get(0), startingValues.get(1), 5000000L);
+        timeMarkers[3] = Instant.now().toEpochMilli();
+    }
+
+    List<Integer> parseLines(List<String> lines) {
+        Pattern pattern = Pattern.compile("\\d+");
+        List<Integer> values = new ArrayList<>();
+        for(String line : lines) {
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                values.add(Integer.parseInt(matcher.group(0)));
+            }
+        }
+        return values;
     }
 
     public Long solutionPart1(int generatorAStart, int generatorBStart, Long runCount) {

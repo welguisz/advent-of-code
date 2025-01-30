@@ -2,15 +2,20 @@ package com.dwelguisz.year2017;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SpinLock extends AoCDay {
     public void solve() {
-        Integer part1 = solutionPart1(382, 2017);
-        Integer part2 = solutionPart2(382, 50000000);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,17,false,0);
+        Integer stepCount = Integer.parseInt(lines.get(0));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(stepCount, 2017);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(stepCount, 50000000);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1(Integer stepCount, Integer length) {
