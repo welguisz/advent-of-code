@@ -54,9 +54,6 @@ public class PermutationPromenade extends AoCDay {
                 intCharMap = pair.getLeft();
                 charIntMap = pair.getRight();
             }
-            if (danceCount % 10000 == 0) {
-                System.out.println(String.format("Dance moves left: %d", danceCount));
-            }
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < length; i++) {
                 sb.append(intCharMap.get(i));

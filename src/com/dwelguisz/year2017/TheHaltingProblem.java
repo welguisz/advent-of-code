@@ -2,7 +2,9 @@ package com.dwelguisz.year2017;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TheHaltingProblem extends AoCDay {
@@ -21,8 +23,13 @@ public class TheHaltingProblem extends AoCDay {
     }
 
     public void solve() {
-        Long part1 = solutionPart1();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2017,25,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = "Click the link to finish";
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Long solutionPart1() {

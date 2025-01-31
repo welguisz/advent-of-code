@@ -32,7 +32,6 @@ public class CircusNode {
 
     public Boolean isBalanced() {
         List<Integer> childrenSums = getChildrenSums();
-        System.out.println("Node " + this.name + ".childrenSums: " + childrenSums.stream().map(String::valueOf).collect(Collectors.joining(",")));
         for(int i = 0; i < childrenSums.size() - 1; i++) {
             if (!childrenSums.get(i).equals(childrenSums.get(i+1))) {
                 return false;
