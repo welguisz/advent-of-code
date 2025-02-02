@@ -3,6 +3,7 @@ package com.dwelguisz.year2018;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,13 +56,15 @@ public class MemoryManeuver extends AoCDay {
     }
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day08/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,8,false,0);
         List<Integer> numbers = Arrays.stream(lines.get(0).split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+        timeMarkers[1] = Instant.now().toEpochMilli();
         Node headNode = createNodes(numbers);
-        Integer part1 = headNode.getMetadataSum();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = headNode.getValue();
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        part1Answer = headNode.getMetadataSum();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = headNode.getValue();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Node createNodes(List<Integer> numbers) {

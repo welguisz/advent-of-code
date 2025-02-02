@@ -3,19 +3,38 @@ package com.dwelguisz.year2018;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MarbleMania extends AoCDay {
     public void solve() {
-        Long part1 = solutionPart1(71170, 411);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Long part2 = solutionPart1(7117000, 411);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,9,false,0);
+        List<Integer> values = parseLine(lines.get(0));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(values.get(1), values.get(0));
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart1(values.get(1) * 100, values.get(0));
+        timeMarkers[3] = Instant.now().toEpochMilli();
+    }
+
+
+    List<Integer> parseLine(String line) {
+        Pattern pattern = Pattern.compile("(?<playerSize>\\d+) players; last marble is worth (?<lastMarblePoint>\\d+) points");
+        Matcher matcher = pattern.matcher(line);
+        List<Integer> values = new ArrayList<>();
+        if (matcher.find()) {
+            values.add(Integer.parseInt(matcher.group("playerSize")));
+            values.add(Integer.parseInt(matcher.group("lastMarblePoint")));
+        }
+        return values;
     }
 
     class CircleDeque<T> extends ArrayDeque<T> {

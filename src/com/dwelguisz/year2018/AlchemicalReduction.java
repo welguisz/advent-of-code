@@ -2,17 +2,19 @@ package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Stack;
 
 public class AlchemicalReduction extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day05/input.txt");
-        Integer part1 = solutionPart1(lines.get(0));
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = solutionPart2(lines.get(0));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,5,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines.get(0));
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines.get(0));
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1(String line) {

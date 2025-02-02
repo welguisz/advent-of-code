@@ -3,8 +3,10 @@ package com.dwelguisz.year2018;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,9 +44,13 @@ public class TheStarsAlign extends AoCDay {
     }
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day10/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,10,false,0);
         List<Star> stars = createStars(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
         solutionPart1(stars);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public void solutionPart1(List<Star> stars) {
@@ -65,9 +71,8 @@ public class TheStarsAlign extends AoCDay {
             maxX = stars.stream().mapToInt(s -> s.x).max().getAsInt();
             done = (maxY - minY < 10) || (maxX - minX < 60);
         }
-        System.out.println("Solution Part 1:");
         printStars(stars, minX, maxX, minY, maxY);
-        System.out.println("Solution Part 2: " + iteration);
+        part2Answer = iteration;
     }
 
     void printStars(List<Star> stars, Integer minX, Integer maxX, Integer minY, Integer maxY) {
@@ -84,12 +89,14 @@ public class TheStarsAlign extends AoCDay {
             Integer y = (s.y - minY);
             grid[x][y] = "#";
         }
+        StringBuilder sb = new StringBuilder("\n");
         for (int y = 0; y < diffY; y++) {
             for (int x = 0; x < diffX; x++) {
-                System.out.print(grid[x][y]);
+                sb.append(grid[x][y]);
             }
-            System.out.println();
+            sb.append("\n");
         }
+        part1Answer = sb.toString();
     }
 
     public List<Star> createStars(List<String> lines) {

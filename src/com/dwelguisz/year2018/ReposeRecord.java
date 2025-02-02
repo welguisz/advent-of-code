@@ -3,6 +3,7 @@ package com.dwelguisz.year2018;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,8 @@ public class ReposeRecord extends AoCDay {
     public Map<Integer, Integer> numberOfDaysBefore;
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2018/day04/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,4,false,0);
         numberOfDaysBefore = new HashMap<>();
         numberOfDaysBefore.put(1,0);
         numberOfDaysBefore.put(2,31);
@@ -27,11 +29,11 @@ public class ReposeRecord extends AoCDay {
         PriorityQueue<Pair<Integer,String>> queue = createPQ(lines);
         List<Pair<Integer,String>> orderedList = createOrderedList(queue);
         Map<Integer, List<Integer>> reposeRecord = createReposeRecord(orderedList);
-        Long part1 = solutionPart1(reposeRecord);
-        Long part2 = solutionPart2(reposeRecord);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(reposeRecord);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(reposeRecord);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Long solutionPart1(Map<Integer, List<Integer>> reposeRecord) {

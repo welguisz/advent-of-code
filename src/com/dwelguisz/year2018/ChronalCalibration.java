@@ -2,42 +2,42 @@ package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ChronalCalibration extends AoCDay {
     public void solve(){
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2018/day01/input.txt");
-        Long part1 = solutionPart1(lines);
-        Long part2 = solutionPart2(lines);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,1,false,0);
+        List<Long> values = parseLines(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(values);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(values);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    public Long solutionPart1(List<String> lines) {
-        Long current = 0L;
-        for (String line : lines) {
-            if (line.substring(0,1).equals("-")) {
-                current -= Integer.parseInt(line.substring(1));
-            } else {
-                current += Integer.parseInt(line.substring(1));
-            }
-        }
-        return current;
+    List<Long> parseLines(List<String> lines){
+        return lines.stream().map(s -> s.charAt(0) == '-' ? Long.parseLong(s.substring(1)) * -1 : Long.parseLong(s)).toList();
+    }
+
+    public Long solutionPart1(List<Long> values) {
+        return values.stream().reduce(0L, Long::sum);
     }
 
 
-    public Long solutionPart2(List<String> lines) {
+    public Long solutionPart2(List<Long> values) {
         Long current = 0L;
-        List<Long> previousFrequencies = new ArrayList<>();
+        Set<Long> previousFrequencies = new HashSet<>();
         previousFrequencies.add(current);
         while(true) {
-            for (String line : lines) {
-                if (line.substring(0, 1).equals("-")) {
-                    current -= Integer.parseInt(line.substring(1));
-                } else {
-                    current += Integer.parseInt(line.substring(1));
-                }
+            for (Long value : values) {
+                current += value;
                 if (previousFrequencies.contains(current)) {
                     return current;
                 }

@@ -2,6 +2,7 @@ package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,12 +52,13 @@ public class TheSumOfItsParts extends AoCDay {
     }
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day07/input.txt");
-        String part1 = solutionPart1(lines);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        Integer part2 = solutionPart2(lines, 5, 60);
-        System.out.println(String.format("Part 2 Answer: %d",part2)); //253 -- too low
-
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,7,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines, 5, 60);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String solutionPart1(List<String> lines) {
