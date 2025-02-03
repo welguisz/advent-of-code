@@ -24,18 +24,19 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AoCClient {
-    private static String SESSION_ID = "53616c7465645f5fc2d415e9fd5facbee2c017f6e6a962da68d9bad559c6ec79f4a4e63217c0a6ee8eeb7d2cfd7699f0b3b399f756ef412cf6c5a916596b135c";
     private static String RESOURCE_DIRECTORY = "/Users/davidwelguisz/coding/advent-of-code/src/resources/";
 
     int year;
     int day;
     ClassLoader classLoader;
     HttpClient client;
+    String cookie;
 
     public AoCClient(int year, int day, ClassLoader classLoader) throws URISyntaxException {
         this.year = year;
         this.day = day;
         this.classLoader = classLoader;
+        this.cookie = getCookie();
         this.client = createClient();
     }
 
@@ -64,7 +65,7 @@ public class AoCClient {
     private HttpClient createClient() throws URISyntaxException {
         CookieHandler.setDefault(new CookieManager());
 
-        HttpCookie sessionCookie = new HttpCookie("session", SESSION_ID);
+        HttpCookie sessionCookie = new HttpCookie("session", cookie);
         sessionCookie.setPath("/");
         sessionCookie.setVersion(0);
 
@@ -75,6 +76,25 @@ public class AoCClient {
                 .cookieHandler(CookieHandler.getDefault())
                 .connectTimeout(Duration.ofSeconds(10))
                 .build();
+    }
+
+    private String getCookie() {
+        InputStream inputStream = classLoader.getResourceAsStream("cookie_session_id.txt");
+        if (inputStream == null) {
+            throw new RuntimeException("Couldn't find cookie_session_id.txt");
+        }
+        List<String> lines = new ArrayList<>();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to read file" + e);
+        }
+        return lines.get(0);
     }
 
     private Instant allowedTime() {
