@@ -1,5 +1,12 @@
 # Advent of Code
 
+## Download Script
+From the [wiki about Automation](https://old.reddit.com/r/adventofcode/wiki/faqs/automation), the download script does the following:
+* Download logic is located at [AoCClient.java](src/com/dwelguisz/base/AoCClient.java)
+* Outbound calls are throttled to every 15 minutes. Next allowed time is stored locally. Done with `allowedTime`
+* When input has been gathered, cached locally in a `.gitignore` folder under `resources`.
+* The `User-Agent` header is set to me since I maintain this tool.
+
 ## Overview
 After completing all puzzles, I am going through my repo and trying to clean it 
 up to make it more readable. As I go through it, I will be updating my thoughts

@@ -1,10 +1,13 @@
 package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ChocolateCharts extends AoCDay {
 
@@ -13,10 +16,13 @@ public class ChocolateCharts extends AoCDay {
     }
 
     public void solve() {
-        String part1 = solutionPart1(633601);
-        System.out.println(String.format("Part 1 Answer: %s", part1));
-        Integer part2 = solutionPart2("633601");
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,14,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(Integer.parseInt(lines.get(0)));
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines.get(0));
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public String solutionPart1(Integer count) {

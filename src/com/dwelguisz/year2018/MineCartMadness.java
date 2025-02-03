@@ -3,10 +3,12 @@ package com.dwelguisz.year2018;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -122,15 +124,17 @@ public class MineCartMadness extends AoCDay {
 
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day13/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,13,false,0);
         Character[][] mineMap = createMineMap(lines);
         List<Cart> carts = findCarts(mineMap);
-        Pair<Integer, Integer> part1 = solutionPart1(mineMap, carts);
-        System.out.println(String.format("Part 1 Answer: %s",part1)); //11,71 is wrong
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(mineMap, carts);
+        timeMarkers[2] = Instant.now().toEpochMilli();
         mineMap = createMineMap(lines);
         carts = findCarts(mineMap);
-        Pair<Integer, Integer> part2 = solutionPart2(mineMap, carts);
-        System.out.println(String.format("Part 2 Answer: %s",part2)); //Right answer: 70,129
+        part2Answer = solutionPart2(mineMap, carts);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Pair<Integer, Integer> solutionPart1(Character[][] map, List<Cart> carts) {

@@ -1,17 +1,33 @@
 package com.dwelguisz.base;
 
 import com.dwelguisz.utilities.Coord2D;
+import lombok.Setter;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.HttpCookie;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -19,6 +35,12 @@ import java.util.stream.Stream;
 import static java.lang.Integer.parseInt;
 
 public class AoCDay {
+    private static String SESSION_ID = "53616c7465645f5fc2d415e9fd5facbee2c017f6e6a962da68d9bad559c6ec79f4a4e63217c0a6ee8eeb7d2cfd7699f0b3b399f756ef412cf6c5a916596b135c";
+
+    private static String RESOURCE_DIRECTORY = "/Users/davidwelguisz/coding/advent-of-code/src/resources/";
+
+    @Setter
+    private AoCClient aoCClient;
 
     public Long timeMarkers[] = new Long[]{0L,0L,0L,0L};
     public Object part1Answer;
@@ -26,6 +48,8 @@ public class AoCDay {
     public void solve() {
         System.out.println("Not yet implemented");
     }
+
+
 
     public void run() {
         run(true);
@@ -63,7 +87,13 @@ public class AoCDay {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(resourceFile);
         if (inputStream == null) {
-            throw new IllegalArgumentException("file not found! " + resourceFile);
+            try {
+                this.aoCClient = new AoCClient(year, day, classLoader);
+                aoCClient.fetchData();
+                inputStream = classLoader.getResourceAsStream(resourceFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return inputStream;
     }
