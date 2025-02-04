@@ -1,45 +1,45 @@
 package com.dwelguisz.year2019;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.utilities.Coord2D;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class CrossedWires extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2019/day03/input.txt");
-        Map<Pair<Integer, Integer>, Map<Integer, List<Integer>>> circuitBoard = createCircuitBoard(lines);
-        Integer part1 = solutionPart1(circuitBoard);
-        Integer part2 = solutionPart2(circuitBoard);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2019,3,false,0);
+        Map<Coord2D, Map<Integer, List<Integer>>> circuitBoard = createCircuitBoard(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(circuitBoard);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(circuitBoard);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    public Map<Pair<Integer, Integer>, Map<Integer, List<Integer>>> createCircuitBoard(List<String> lines) {
-        Map<Pair<Integer, Integer>, Map<Integer, List<Integer>>> circuitBoard = new HashMap<>();
-        Map<String, Pair<Integer, Integer>> deltas = new HashMap<>();
-        deltas.put("U",Pair.of(0,1));
-        deltas.put("R",Pair.of(1,0));
-        deltas.put("D",Pair.of(0,-1));
-        deltas.put("L",Pair.of(-1,0));
+    public Map<Coord2D, Map<Integer, List<Integer>>> createCircuitBoard(List<String> lines) {
+        Map<Coord2D, Map<Integer, List<Integer>>> circuitBoard = new HashMap<>();
+        Map<String, Coord2D> deltas = new HashMap<>();
+        deltas.put("U",new Coord2D(0,1));
+        deltas.put("R",new Coord2D(1,0));
+        deltas.put("D",new Coord2D(0,-1));
+        deltas.put("L",new Coord2D(-1,0));
         Integer lineNumber = 0;
         for (String line : lines) {
             int stepNumber = 1;
-            Pair<Integer,Integer> currentPos = Pair.of(0,0);
-            List<String> instructions = Arrays.stream(line.split(",")).collect(Collectors.toList());
+            Coord2D currentPos = new Coord2D(0,0);
+            List<String> instructions = Arrays.stream(line.split(",")).toList();
             for (String instruction : instructions) {
                 String direction = instruction.substring(0,1);
-                Pair<Integer, Integer> step = deltas.get(direction);
+                Coord2D step = deltas.get(direction);
                 Integer steps = Integer.parseInt(instruction.substring(1));
                 for (int i = 0; i < steps; i++) {
-                    currentPos = Pair.of(currentPos.getLeft() + step.getLeft(), currentPos.getRight() + step.getRight());
-                    Map<Integer, List<Integer>> value = circuitBoard.getOrDefault(currentPos,new HashMap<>());
-                    List<Integer> valueList = value.getOrDefault(lineNumber, new ArrayList<>());
-                    valueList.add(stepNumber);
-                    value.put(lineNumber, valueList);
-                    circuitBoard.put(currentPos,value);
+                    currentPos = currentPos.add(step);
+                    circuitBoard.computeIfAbsent(currentPos, k -> new HashMap<>())
+                            .computeIfAbsent(lineNumber, k -> new ArrayList<>()).add(stepNumber);
                     stepNumber++;
                 }
             }
@@ -48,21 +48,21 @@ public class CrossedWires extends AoCDay {
         return circuitBoard;
     }
 
-    public Integer solutionPart1(Map<Pair<Integer, Integer>, Map<Integer, List<Integer>>> circuitBoard) {
+    public Integer solutionPart1(Map<Coord2D, Map<Integer, List<Integer>>> circuitBoard) {
         List<Integer> crossPoints = new ArrayList<>();
-        for(Map.Entry<Pair<Integer,Integer>, Map<Integer, List<Integer>>> entry : circuitBoard.entrySet()) {
+        for(Map.Entry<Coord2D, Map<Integer, List<Integer>>> entry : circuitBoard.entrySet()) {
             if (entry.getValue().size() == 2) {
-                crossPoints.add(Math.abs(entry.getKey().getRight()) + Math.abs(entry.getKey().getLeft()));
+                crossPoints.add(Math.abs(entry.getKey().y) + Math.abs(entry.getKey().x));
             }
         }
         return Collections.min(crossPoints);
     }
 
-    public Integer solutionPart2(Map<Pair<Integer, Integer>, Map<Integer, List<Integer>>> circuitBoard) {
+    public Integer solutionPart2(Map<Coord2D, Map<Integer, List<Integer>>> circuitBoard) {
         Map<Integer, Integer> stepCount = new HashMap<>();
-        for(Map.Entry<Pair<Integer,Integer>, Map<Integer, List<Integer>>> entry : circuitBoard.entrySet()) {
+        for(Map.Entry<Coord2D, Map<Integer, List<Integer>>> entry : circuitBoard.entrySet()) {
             if (entry.getValue().size() == 2) {
-                Integer manhattanDistance = Math.abs(entry.getKey().getRight()) + Math.abs(entry.getKey().getLeft());
+                Integer manhattanDistance = Math.abs(entry.getKey().y) + Math.abs(entry.getKey().x);
                 Integer stepCountNow = Collections.min(entry.getValue().get(0)) + Collections.min(entry.getValue().get(1));
                 stepCount.put(stepCountNow, manhattanDistance);
             }
