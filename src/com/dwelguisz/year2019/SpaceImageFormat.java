@@ -2,6 +2,7 @@ package com.dwelguisz.year2019;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,13 +10,14 @@ import java.util.Map;
 
 public class SpaceImageFormat extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2019/day08/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2019,8,false,0);
         List<String> layers = createLayers(lines, 25, 6);
-        Integer part1 = solutionPart1(layers);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        String part2 = solutionPart2(layers,25,6);
-        System.out.println(String.format("Part 2 Answer:"));
-        System.out.println(part2);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(layers);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(layers, 25, 6);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public List<String> createLayers(List<String> lines, Integer wide, Integer tall) {
@@ -60,7 +62,7 @@ public class SpaceImageFormat extends AoCDay {
                 }
             }
         }
-        String finalPicture = "";
+        String finalPicture = "\n";
         for (int i = 0; i < (width*tall); i++) {
             if (chars[i] == '0') {
                 finalPicture += " ";

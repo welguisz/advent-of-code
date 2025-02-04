@@ -2,6 +2,7 @@ package com.dwelguisz.year2019;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,12 +53,14 @@ public class UniversalOrbitMap extends AoCDay {
     Map<String, OrbitMapNode> map;
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2019/day06/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2019,6,false,0);
         Map<String, OrbitMapNode> map = createOrbitMap(lines);
-        Integer part1 = solutionPart1(map);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = solutionPart2(map);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(map);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(map);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     Integer solutionPart1(Map<String, OrbitMapNode> map) {
