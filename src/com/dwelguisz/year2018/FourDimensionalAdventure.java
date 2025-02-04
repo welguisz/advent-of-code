@@ -2,30 +2,27 @@ package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord4D;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FourDimensionalAdventure extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day25/input.txt");
-        Long parseTime = Instant.now().toEpochMilli();
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,25,false,0);
         List<Coord4D> coordinates = parsedLines(lines);
-        Long startTime = Instant.now().toEpochMilli();
-        Integer part1 = solutionPart1(coordinates);
-        Long part1Time = Instant.now().toEpochMilli();
-        Integer part2 = solutionPart2();
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(coordinates);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = "Press Link to continue";
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public List<Coord4D> parsedLines(List<String> lines) {

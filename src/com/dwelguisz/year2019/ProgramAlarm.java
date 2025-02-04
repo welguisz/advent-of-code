@@ -3,15 +3,19 @@ package com.dwelguisz.year2019;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2019.IntCodeComputer.IntCodeComputer;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProgramAlarm extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2019/day02/input.txt");
-        Long part1 = solutionPart1(lines, 12L, 2L);
-        Long part2 = solutionPart2(lines);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 1 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2019,2,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines, 12L, 2L);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Long solutionPart1(List<String> lines, Long noun, Long verb) {

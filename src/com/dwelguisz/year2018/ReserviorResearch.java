@@ -2,33 +2,30 @@ package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ReserviorResearch extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day17/input.txt");
-        Long parseTime = Instant.now().toEpochMilli();
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,17,false,0);
         Set<Coord2D> clayLocation = parseLines(lines);
-        Long startTime = Instant.now().toEpochMilli();
         Integer maxY = clayLocation.stream().mapToInt(p -> p.x).max().getAsInt();
         Set<Coord2D> stoppedWater = new HashSet<>();
         Set<Coord2D> flowingWater = new HashSet<>();
         addWater(new Coord2D(0,500), new Coord2D(1,0),clayLocation,stoppedWater, flowingWater, maxY);
         final Integer minY = clayLocation.stream().mapToInt(p -> p.x).min().getAsInt();
-        Integer part1 = solutionPart1(stoppedWater, flowingWater, minY);
-        Long part1Time = Instant.now().toEpochMilli();
-        Integer part2 = solutionPart2(stoppedWater);
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(stoppedWater, flowingWater, minY);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(stoppedWater);;
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Set<Coord2D> parseLines(List<String> lines) {

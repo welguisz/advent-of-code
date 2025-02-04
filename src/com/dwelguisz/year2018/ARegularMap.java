@@ -2,6 +2,7 @@ package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -19,19 +20,14 @@ public class ARegularMap extends AoCDay {
     public static Map<String, Coord2D> MOVES = Map.of("N",NORTH,"E",EAST,"S",SOUTH,"W",WEST);
 
     public void solve() {
-        Long parseTime = Instant.now().toEpochMilli();
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2018/day20/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,20,false,0);
         Map<Coord2D,Long> map = parseLines(lines.get(0));
-        Long startTime = Instant.now().toEpochMilli();
-        Long part1 = solutionPart1(map);
-        Long part1Time = Instant.now().toEpochMilli();
-        Long part2 = solutionPart2(map);
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(map);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(map);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     Map<Coord2D, Long> parseLines(String line) {

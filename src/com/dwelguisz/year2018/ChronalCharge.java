@@ -65,9 +65,6 @@ public class ChronalCharge extends AoCDay {
         Coord3D location = new Coord3D(-1,-1, -1);
         Integer maxPower = Integer.MIN_VALUE;
         for (int h = 300; h > 0; h--) {
-            if (h % 10 == 0) {
-                System.out.println("Checking squares with a length of " + h);
-            }
             int maxPossibleValue = h * h * 4;
             if (maxPossibleValue < maxPower) {
                 break;

@@ -2,6 +2,7 @@ package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ModeMaze extends AoCDay {
@@ -117,22 +120,35 @@ public class ModeMaze extends AoCDay {
         }
     }
 
+    Integer getDepth(String line) {
+        Pattern pattern = Pattern.compile("(?<depth>\\d+)");
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            return Integer.parseInt(matcher.group("depth"));
+        }
+        return null;
+    }
+
+    Coord2D getTarget(String line) {
+        Pattern pattern = Pattern.compile("(?<xCoord>\\d+),(?<yCoord>\\d+)");
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find()) {
+            return new Coord2D(Integer.parseInt(matcher.group("xCoord")), Integer.parseInt(matcher.group("yCoord")));
+        }
+        return null;
+    }
+
     public void solve() {
-        Boolean test = false;
-        Integer depth = test ? 510 : 4080;
-        Coord2D target = test ? new Coord2D(10,10) : new Coord2D (785,14);
-        Long parseTime = Instant.now().toEpochMilli();
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2018,22,false,0);
+        Integer depth = getDepth(lines.get(0));
+        Coord2D target = getTarget(lines.get(1));
         createMaze(depth, target);
-        Long startTime = Instant.now().toEpochMilli();
-        Long part1 = solutionPart1(target);
-        Long part1Time = Instant.now().toEpochMilli();
-        Long part2 = solutionPart2(target, depth);
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(target);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = "Not yet implemented"; //solutionPart2(target, depth);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     //1100 too high
@@ -141,8 +157,8 @@ public class ModeMaze extends AoCDay {
         geologicIndex = new HashMap<>();
         erosionLevel = new HashMap<>();
         riskLevel = new HashMap<>();
-        for (Integer y = 0; y < 1100; y++) {
-            for (Integer x = 0; x < 1100; x++) {
+        for (Integer y = 0; y < 1600; y++) {
+            for (Integer x = 0; x < 1600; x++) {
                 Coord2D currentLoc = new Coord2D(y,x);
                 if (x.equals(0) && y.equals(0)) {
                     geologicIndex.put(currentLoc,0);

@@ -128,7 +128,6 @@ public class WristDevice {
                 }
                 if (cycleCount + 100 > stopCount) {
                     List<Long> regs = LongStream.range(0,6).boxed().map(r -> registers.get(r)).collect(Collectors.toList());
-                    System.out.println(String.format("%d: %s (%s)",cycleCount,regs,instr));
                 }
                 if (stopCount > 0) {
                     Long tmp = heatMap.remove(programCounter.intValue());
