@@ -58,11 +58,15 @@ public class AmplicationCircuit extends AoCDay {
                 computers.add(computer);
             }
             computers.get(0).setInputValue(0L);
+            Thread[] threads = new Thread[computers.size()];
             for (int i = 0; i < 5; i++) {
-                new Thread(computers.get(i)).start();
+                threads[i] = new Thread(computers.get(i));
+                threads[i].start();
             }
             while (!computers.stream().allMatch(c -> c.isDone()));
-
+            for (int i = 0; i < 5; i++) {
+                threads[i].interrupt();
+            }
             thrustOutput.add(computers.get(4).getDebugValue());
         }
         return thrustOutput.stream().mapToLong(i -> i).max().getAsLong();

@@ -23,10 +23,6 @@ public class SecureContainer extends AoCDay {
         timeMarkers[2] = Instant.now().toEpochMilli();
         part2Answer = solutionPart2();
         timeMarkers[3] = Instant.now().toEpochMilli();
-        Integer part1 = solutionPart1(153517,630395);
-        Integer part2 = solutionPart2();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
     }
 
     public List<Integer> parseLine(String line) {

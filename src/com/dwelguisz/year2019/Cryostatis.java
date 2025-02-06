@@ -9,6 +9,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Cryostatis extends AoCDay {
@@ -19,12 +21,14 @@ public class Cryostatis extends AoCDay {
         Scanner in;
         byte[] program;
         Integer programPointer;
+        String santaVoice;
 
         public ReindeerDroid() {
             super();
             finalAnswer = 0L;
             in = new Scanner(System.in);
             programPointer = 0;
+            santaVoice = "";
         }
 
         public void setFunctions(List<String> instructions) {
@@ -47,7 +51,8 @@ public class Cryostatis extends AoCDay {
                 finalAnswer = outputValue;
             } else {
                 Character tmp = (char) outputValue.intValue();
-                System.out.print(tmp);
+                //System.out.print(tmp);
+                santaVoice += tmp;
             }
 
 
@@ -55,14 +60,14 @@ public class Cryostatis extends AoCDay {
     }
 
     public void solve() {
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2019,25,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = "Click on link to complete";
+        timeMarkers[3] = Instant.now().toEpochMilli();
         Long parseTime = Instant.now().toEpochMilli();
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2019/day25/input.txt");
-        Long startTime = Instant.now().toEpochMilli();
-        Long part1 = solutionPart1(lines);
-        Long part1Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
     }
 
     public Long solutionPart1(List<String> lines) {
@@ -93,6 +98,12 @@ public class Cryostatis extends AoCDay {
         droid.setFunctions(functions);
         droid.run();
         // Inventory needed to be wreath, space heater, pointer, dehydrated water
+        String tmp = droid.santaVoice;
+        Pattern pattern = Pattern.compile("You should be able to get in by typing (?<code>\\d+) on the keypad at the main airlock");
+        Matcher matcher = pattern.matcher(tmp);
+        if (matcher.find()) {
+            return Long.parseLong(matcher.group("code"));
+        }
         return droid.finalAnswer;
     }
 

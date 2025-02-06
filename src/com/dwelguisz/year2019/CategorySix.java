@@ -17,7 +17,11 @@ public class CategorySix extends AoCDay {
         ArrayDeque<Long> natQueue;
         Boolean part2;
         private boolean done;
-        public NetworkSwitch(ArrayDeque<Long> iQueues[], ArrayDeque<Long> oQueues[], ArrayDeque natQueue, Boolean part2){
+        private boolean running = true;
+        Long part1Answer;
+        Long part2Answer;
+
+        public NetworkSwitch(ArrayDeque<Long> iQueues[], ArrayDeque<Long> oQueues[], ArrayDeque<Long>natQueue, Boolean part2){
             this.inputQueues = iQueues;
             this.outputQueues = oQueues;
             this.natQueue = natQueue;
@@ -30,10 +34,9 @@ public class CategorySix extends AoCDay {
         }
 
         public void run() {
-            boolean continueToRun = true;
             Long lastX = 0L;
             Long lastY = 0L;
-            while(continueToRun) {
+            while(running) {
                 for (int i = 0; i < 50; i++) {
                     if (outputQueues[i].size() > 2) {
                         Long address = outputQueues[i].pollFirst();
@@ -43,14 +46,13 @@ public class CategorySix extends AoCDay {
                             natQueue.add(natX);
                             natQueue.add(natY);
                             if (!part2) {
-                                System.out.println(String.format("Part 1 answer: %d", natY));
+                                part1Answer = natY;
                                 part2 = true;
                             }
                             if (allInputQueuesEmpty()) {
                                 if (natY.equals(lastY)) {
-                                    System.out.println(String.format("Part 2 answer: %d", natY));
-                                    System.out.println("End program by pressing Ctrl-C now");
-                                    continueToRun = false;
+                                    part2Answer = natY;
+                                    running = false;
                                 }
                                 inputQueues[0].add(natX);
                                 inputQueues[0].add(natY);
@@ -73,6 +75,10 @@ public class CategorySix extends AoCDay {
                 }
             }
             return true;
+        }
+
+        public void shutdown() {
+            running = false;
         }
 
     }
@@ -100,18 +106,17 @@ public class CategorySix extends AoCDay {
 
 
     public void solve() {
-        Long parseTime = Instant.now().toEpochMilli();
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2019/day23/input.txt");
-        Long startTime = Instant.now().toEpochMilli();
-        Long part1 = solutionPart1(lines);
-        Long part1Time = Instant.now().toEpochMilli();
-        Long part2 = solutionPart2(lines);
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2019,23,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        solutionPart1(lines);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     Long solutionPart1(List<String> lines) {
@@ -141,15 +146,28 @@ public class CategorySix extends AoCDay {
             nics[i].setUncaughtExceptionHandler(h);
         }
         netWorkSwitch.setUncaughtExceptionHandler(h);
+        Thread[] nicThreads = new Thread[50];
         for (int i = 0; i < 50; i++) {
-            new Thread(nics[i]).start();
+            nicThreads[i] = new Thread(nics[i]);
+            nicThreads[i].start();
         }
-        new Thread(netWorkSwitch).start();
-        while (!netWorkSwitch.isDone()) {};
+        Thread runningThread = new Thread(netWorkSwitch);
+        runningThread.start();
+        while (!netWorkSwitch.done) {
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        netWorkSwitch.shutdown();
+        runningThread.interrupt();
+        for (int i = 0; i < 50; i++) {
+            nics[i].shutdown();
+            nicThreads[i].interrupt();
+        }
+        part1Answer = netWorkSwitch.part1Answer;
+        part2Answer = netWorkSwitch.part2Answer;
         return natQueue.getLast();
-    }
-
-    Long solutionPart2(List<String> lines) {
-        return 0L;
     }
 }

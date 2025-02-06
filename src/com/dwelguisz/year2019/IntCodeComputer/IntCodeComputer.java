@@ -16,6 +16,7 @@ public class IntCodeComputer extends Thread implements Runnable {
     public ArrayDeque<Long> outputValues;
     Long id;
     public Boolean done;
+    private volatile boolean running = true;
     private boolean exit;
     Long debugValue;
 
@@ -223,7 +224,7 @@ public class IntCodeComputer extends Thread implements Runnable {
         Long currentInstructionWithMode = intCode.getOrDefault(instructionPointer,0L);
         Long currentInstruction = currentInstructionWithMode % 100;
         done = false;
-        while ((currentInstruction != 99) && (opCodes.containsKey(currentInstruction)) && !Thread.interrupted()) {
+        while ((currentInstruction != 99) && (opCodes.containsKey(currentInstruction)) && !Thread.interrupted() && running) {
             List<ParameterModes> modes = findModes(currentInstructionWithMode);
             doCalculation(currentInstruction, modes);
             currentInstructionWithMode = intCode.getOrDefault(instructionPointer, 0L);
@@ -232,4 +233,9 @@ public class IntCodeComputer extends Thread implements Runnable {
         done = true;
         exit = true;
     }
+
+    public void shutdown() {
+        running = false;
+    }
+
 }

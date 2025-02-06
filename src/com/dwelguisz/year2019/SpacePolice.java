@@ -79,7 +79,6 @@ public class SpacePolice extends AoCDay {
         int maxX = values.keySet().stream().mapToInt(c -> c.x).max().getAsInt();
         int minY = values.keySet().stream().mapToInt(c -> c.y).min().getAsInt();
         int maxY = values.keySet().stream().mapToInt(c -> c.y).max().getAsInt();
-        System.out.println("xRange: " + minX + "..." + maxX + ". yRange: " + minY + "..." + maxY + ".");
         String retVal = "\n";
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {

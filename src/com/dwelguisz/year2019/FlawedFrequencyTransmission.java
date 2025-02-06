@@ -15,19 +15,14 @@ public class FlawedFrequencyTransmission extends AoCDay {
     public static List<Integer> BASE_PATTERN = List.of(0,1,0,-1);
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2019/day16/input.txt");
-        Long parseTime = Instant.now().toEpochMilli();
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2019,16,false,0);
         List<Integer> values = parseLines(lines.get(0));
-        Long startTime = Instant.now().toEpochMilli();
-        String part1 = solutionPart1(values);
-        Long part1Time = Instant.now().toEpochMilli();
-        String part2 = solutionPart2(values);
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Part 1 Answer: %s",part1));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Part 2 Answer: %s",part2));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(values);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(values);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public List<Integer> parseLines (String line) {

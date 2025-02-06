@@ -177,7 +177,6 @@ public class TheNBodyProblem extends AoCDay {
             for(int i = 0; i < 3; i++) {
                 if (!period.containsKey(i)) {
                     if (reachedBeginningState(initialMoons, moons, i)) {
-                        System.out.println(String.format("Found for axis %d at %d", i, steps));
                         period.put(i, steps);
                     }
                 }
