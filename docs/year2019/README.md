@@ -6,9 +6,9 @@
 
 ## Run Times
 
-|Day #|              Puzzle name |        Parsing Time |     Part 1 Time(ms) |     Part 2 Time(ms) |       Part 1 Answer |            Part 2 Answer |
-|:-----:|:---|---:|---:|---:|---:|:|
-|   1 |           RocketEquation |                   7 |                   0 |                   1 |             3391707 |                  5084676 |
+|Day #|              Puzzle name |        Parsing Time |     Part 1 Time(ms) |     Part 2 Time(ms) |       Part 1 Answer |  Part 2 Answer |
+|:-----:|:---|---:|---:|---:|---:|------:|
+|   1 |           RocketEquation |                   7 |                   0 |                   1 |             3391707 |        5084676 |
 |   2 |             ProgramAlarm |                   1 |                   1 |                 100 |             5290681 |                     5741 |
 |   3 |             CrossedWires |                  50 |                  18 |                  18 |                 227 |                    20286 |
 |   4 |          SecureContainer |                   1 |                 233 |                   2 |                1729 |                     1172 |
@@ -33,4 +33,5 @@
 |  23 |              CategorySix |                   2 |                 478 |                   0 |               26464 |                    19548 |
 |  24 |          PlanetOfDiscord |                   1 |                   1 |                 225 |            30446641 |                     1985 |
 |  25 |               Cryostatis |                   1 |                 488 |                   0 |              196872 |Click on link to complete |
+
 Time to run all programs: 11285 ms.
