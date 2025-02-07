@@ -1,6 +1,7 @@
 package com.dwelguisz.year2020;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.year2020.helper.operation.order.Expression;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -68,19 +69,14 @@ public class MonsterMessages extends AoCDay {
     Map<Integer, MessageRule> rules;
     List<String> messages;
     public void solve() {
-        Long parseTime = Instant.now().toEpochMilli();
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2020/day19/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,19,false,0);
         parseLines(lines);
-        Long startTime = Instant.now().toEpochMilli();
-        Long part1 = solutionPart1();
-        Long part1Time = Instant.now().toEpochMilli();
-        Long part2 = solutionPart2();
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public void parseLines(List<String> lines) {

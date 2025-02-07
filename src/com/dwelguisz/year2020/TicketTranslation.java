@@ -2,6 +2,7 @@ package com.dwelguisz.year2020;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -15,12 +16,14 @@ public class TicketTranslation extends AoCDay {
     List<List<Integer>> validTickets;
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/personal/advent-of-code/src/resources/year2020/day16/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,16,false,0);
         parseLines(lines);
-        Long part1 = solutionPart1();
-        Long part2 = solutionPart2();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private void parseLines(List<String> lines) {
