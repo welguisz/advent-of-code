@@ -3,6 +3,7 @@ package com.dwelguisz.year2020;
 import com.dwelguisz.base.AoCDay;
 import org.json.JSONObject;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,13 +17,14 @@ import static java.lang.Integer.parseInt;
 
 public class PassportProcessing extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day04/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,4,false,0);
         List<Map<String, String>> passports = processLines(lines);
-        Long part1 = solutionPart1(passports);
-        Long part2 = solutionPart2(passports);
-        System.out.println(String.format("Solution Part1: %d",part1));
-        System.out.println(String.format("Solution Part2: %d",part2));
-
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(passports);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(passports);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Long solutionPart1(List<Map<String,String>> passports) {

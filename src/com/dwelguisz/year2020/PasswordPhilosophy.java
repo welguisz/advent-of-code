@@ -2,20 +2,21 @@ package com.dwelguisz.year2020;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
 
 public class PasswordPhilosophy extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day02/input.txt");
-        validPassword("1-3 a: abcde",true);
-        validPassword("1-3 b: cdefg", true);
-        validPassword("2-9 c: cccccccccc", true);
-        Long part1 = lines.stream().filter(str -> validPassword(str, false)).count();
-        Long part2 = lines.stream().filter(str -> validPassword(str, true)).count();
-        System.out.println(String.format("Solution Part1: %d",part1));
-        System.out.println(String.format("Solution Part2: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,2,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = lines.stream().filter(str -> validPassword(str, false)).count();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = lines.stream().filter(str -> validPassword(str, true)).count();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private boolean validPassword(String str, boolean part2) {

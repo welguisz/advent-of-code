@@ -2,6 +2,7 @@ package com.dwelguisz.year2020;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +13,14 @@ import static java.lang.Integer.parseInt;
 
 public class TobogganTrajectory extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day03/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,3,false,0);
         Integer[][] sampleMap = createMap(lines);
-        Long part1 = solutionPart1(sampleMap);
-        Long part2 = solutionPart2(sampleMap);
-        System.out.println(String.format("Solution Part1: %d",part1));
-        System.out.println(String.format("Solution Part1: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(sampleMap);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(sampleMap);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Long solutionPart1(Integer[][] map) {

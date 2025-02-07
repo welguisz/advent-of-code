@@ -3,6 +3,7 @@ package com.dwelguisz.year2020;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.Tuple;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,26 +12,25 @@ import static java.lang.Integer.parseInt;
 //Year 2021, Day 01
 public class ReportRepair extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day01/input.txt");
-        List<Integer> values = lines.stream().map(str -> parseInt(str)).collect(Collectors.toList());
-        Tuple<Integer, Integer> answer = findValues(values);
-        Integer part1 = answer.y * answer.x;
-        Long part2 = findValuesPart2(values);
-        System.out.println(String.format("Solution Part1: %d",part1));
-        System.out.println(String.format("Solution Part2: %d",part2));
-
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,1,false,0);
+        List<Integer> values = lines.stream().map(Integer::parseInt).collect(Collectors.toList());
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = findValues(values);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = findValuesPart2(values);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    private Tuple<Integer, Integer> findValues(List<Integer> values) {
-        Tuple<Integer, Integer> answer = new Tuple(0,0);
+    private Long findValues(List<Integer> values) {
         for (int i = 0; i < values.size(); i++) {
             for (int j = i + 1; j < values.size(); j++) {
                 if (values.get(i) + values.get(j) == 2020) {
-                    answer = new Tuple(values.get(i),values.get(j));
+                    return (long) values.get(i) * values.get(j);
                 }
             }
         }
-        return answer;
+        return -1L;
     }
 
     private Long findValuesPart2(List<Integer> values) {

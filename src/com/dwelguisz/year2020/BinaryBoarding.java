@@ -2,7 +2,9 @@ package com.dwelguisz.year2020;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -10,12 +12,15 @@ import static java.lang.Integer.parseInt;
 
 public class BinaryBoarding extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day05/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,5,false,0);
         List<Integer> boardIds = BinaryCodeToInt(lines);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = boardIds.stream().mapToInt(v -> v).max().orElse(-5);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = findMySeatId(boardIds);
+        timeMarkers[3] = Instant.now().toEpochMilli();
         Integer part1 = boardIds.stream().mapToInt(v -> v).max().orElse(-5);
-        Integer part2 = findMySeatId(boardIds);
-        System.out.println(String.format("Solution Part1: %d",part1));
-        System.out.println(String.format("Solution Part1: %d",part2));
     }
 
     private Integer findMySeatId(List<Integer> boardIds) {
