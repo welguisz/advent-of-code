@@ -23,6 +23,7 @@ public class Snowverland extends AoCDay {
         timeMarkers[1] = Instant.now().toEpochMilli();
         part1Answer = solutionPart1();
         timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = "Click on the link to complete";
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 

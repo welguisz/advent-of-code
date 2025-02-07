@@ -54,7 +54,7 @@ public class AoCClient {
 
         String body = (client.send(req, HttpResponse.BodyHandlers.ofString()).body());
 
-        Instant nextAllowedTime = Instant.now().plus(15, TimeUnit.SECONDS.toChronoUnit());
+        Instant nextAllowedTime = Instant.now().minus(15, TimeUnit.MILLISECONDS.toChronoUnit());
 
         writeToCurrentResourceDirectory(body);
         writeToLongLivedResourceDirectory(body);

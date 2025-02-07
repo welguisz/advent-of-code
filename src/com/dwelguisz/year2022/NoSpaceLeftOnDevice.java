@@ -3,10 +3,12 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class NoSpaceLeftOnDevice extends AoCDay {
 
@@ -51,12 +53,14 @@ public class NoSpaceLeftOnDevice extends AoCDay {
 
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day07/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,7,false,0);
         Directory root = createDirectory(lines);
-        Long part1 = solutionPart1(root);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Long part2 = solutionPart2(root);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(root);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(root);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Directory createDirectory(List<String> lines) {
