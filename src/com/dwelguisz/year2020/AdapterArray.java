@@ -1,7 +1,9 @@
 package com.dwelguisz.year2020;
 
 import com.dwelguisz.base.AoCDay;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +12,14 @@ import java.util.stream.Collectors;
 
 public class AdapterArray extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day10/input.txt");
-        List<Long> sortedAdapters = lines.stream().map(str -> Long.parseLong(str)).sorted(Long::compareTo).collect(Collectors.toList());
-        Integer part1 = solutionPart1(sortedAdapters);
-        Long part2 = solutionPart2(sortedAdapters);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,10,false,0);
+        List<Long> sortedAdapters = lines.stream().map(Long::parseLong).sorted(Long::compareTo).collect(Collectors.toList());
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(sortedAdapters);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(sortedAdapters);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Integer solutionPart1(List<Long> values) {

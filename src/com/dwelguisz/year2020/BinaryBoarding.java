@@ -20,7 +20,6 @@ public class BinaryBoarding extends AoCDay {
         timeMarkers[2] = Instant.now().toEpochMilli();
         part2Answer = findMySeatId(boardIds);
         timeMarkers[3] = Instant.now().toEpochMilli();
-        Integer part1 = boardIds.stream().mapToInt(v -> v).max().orElse(-5);
     }
 
     private Integer findMySeatId(List<Integer> boardIds) {

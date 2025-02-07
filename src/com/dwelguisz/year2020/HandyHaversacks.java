@@ -2,6 +2,7 @@ package com.dwelguisz.year2020;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,12 +12,14 @@ import static java.lang.Integer.parseInt;
 
 public class HandyHaversacks extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day07/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,7,false,0);
         Map<String,Map<String,Integer>> rules = createBagRules(lines);
-        Integer part1 = solutionPart1(rules,"shiny gold").size();
-        Long part2 = solutionPart2(rules,"shiny gold");
-        System.out.println(String.format("Solution Part1: %d",part1));
-        System.out.println(String.format("Solution Part2: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(rules, "shiny gold").size();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(rules, "shiny gold");
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
    private Set<String> solutionPart1(Map<String,Map<String,Integer>> rules, String importantKey) {

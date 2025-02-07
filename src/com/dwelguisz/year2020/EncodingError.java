@@ -3,18 +3,22 @@ package com.dwelguisz.year2020;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class EncodingError extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2020/day09/input.txt");
-        List<Long> values = lines.stream().map(str -> Long.parseLong(str)).collect(Collectors.toList());
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,9,false,0);
+        List<Long> values = lines.stream().map(Long::parseLong).collect(Collectors.toList());
+        timeMarkers[1] = Instant.now().toEpochMilli();
         Pair<Integer, Long> part1 = solutionPart1(values, 25);
-        Long part2 = solutionPart2(values, part1);
-        System.out.println(String.format("Solution Part1: %d",part1.getRight()));
-        System.out.println(String.format("Solution Part2: %d",part2));
+        part1Answer = part1.getRight();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(values, part1);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Pair<Integer, Long> solutionPart1(List<Long> values, Integer preambleSize) {

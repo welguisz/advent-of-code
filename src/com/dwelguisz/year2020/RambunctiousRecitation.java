@@ -2,6 +2,7 @@ package com.dwelguisz.year2020;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +13,13 @@ import java.util.stream.Collectors;
 public class RambunctiousRecitation extends AoCDay {
 
     public void solve() {
-        String line = "2,0,6,12,1,3";
-        Integer part1 = solutionPart1(line, 2019);
-        Integer part2 = solutionPart1(line, 30000000-1);
-        System.out.println(String.format("Part 1 Answer: %d", part1));
-        System.out.println(String.format("Part 2 Answer: %d", part2));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,15,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines.get(0), 2019);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart1(lines.get(0), 30000000-1);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private Integer solutionPart1(String line, int turns) {
