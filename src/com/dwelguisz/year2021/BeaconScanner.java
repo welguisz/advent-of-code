@@ -5,6 +5,7 @@ import com.dwelguisz.year2021.helper.Tuple;
 import com.dwelguisz.year2021.helper.day19.Coordinate;
 import com.dwelguisz.year2021.helper.day19.Scanner;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -21,13 +22,15 @@ public class BeaconScanner extends AoCDay {
     }
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day19/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021, 19, false, 0);
         parseLines(lines);
-        System.out.println(String.format("Number of scanners: %d", scannerList.size()));
         Tuple<Set<Coordinate>,Integer> answers = compare();
-        System.out.println("--------- Day 19: Beacon Scanner------------");
-        System.out.println(String.format("Solution Part1: %d",answers.x.size()));
-        System.out.println(String.format("Solution Part1: %d",answers.y));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = answers.x.size();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = answers.y;
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private void parseLines(List<String> lines) {

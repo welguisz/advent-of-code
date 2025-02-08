@@ -1,38 +1,64 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day13.Point;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.parseInt;
 
-public class AdventDay17 {
+public class AdventDay17 extends AoCDay {
 
     public static Integer minX;
     public static Integer maxX;
     public static Integer minY;
     public static Integer maxY;
 
-    public static void main(String[] args) {
-        String myTargetArea = "target area: x=57..116, y=-198..-148";
-        String sampleArea = "target area: x=20..30, y=-10..-5";
-        String line = myTargetArea;
-        String[] coordinates = line.split(": ")[1].split(", ");
-        String[] xNumbers = coordinates[0].split("=")[1].split("\\.\\.");
-        String[] yNumbers = coordinates[1].split("=")[1].split("\\.\\.");
-        minX = parseInt(xNumbers[0]);
-        maxX = parseInt(xNumbers[1]);
-        minY = parseInt(yNumbers[0]);
-        maxY = parseInt(yNumbers[1]);
-        System.out.println(String.format("Solution Part1: %d",solutionPart1()));
-        System.out.println(String.format("Solution Part2: %d",solutionPart2()));
+    public void solve() {
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021, 17, false, 0);
+        parseLine(lines.get(0));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
+
+    void parseLine(String line) {
+        Pattern pattern = Pattern.compile("x=(?<minX>-?\\d+)..(?<maxX>-?\\d+), y=(?<minY>-?\\d+)..(?<maxY>-?\\d+)");
+        Matcher matcher = pattern.matcher(line);
+        if(matcher.find()) {
+            minX = parseInt(matcher.group("minX"));
+            maxX = parseInt(matcher.group("maxX"));
+            minY = parseInt(matcher.group("minY"));
+            maxY = parseInt(matcher.group("maxY"));
+        }
+    }
+//
+//    public static void main(String[] args) {
+//        String myTargetArea = "target area: x=57..116, y=-198..-148";
+//        String sampleArea = "target area: x=20..30, y=-10..-5";
+//        String line = myTargetArea;
+//        String[] coordinates = line.split(": ")[1].split(", ");
+//        String[] xNumbers = coordinates[0].split("=")[1].split("\\.\\.");
+//        String[] yNumbers = coordinates[1].split("=")[1].split("\\.\\.");
+//        minX = parseInt(xNumbers[0]);
+//        maxX = parseInt(xNumbers[1]);
+//        minY = parseInt(yNumbers[0]);
+//        maxY = parseInt(yNumbers[1]);
+//        System.out.println(String.format("Solution Part1: %d",solutionPart1()));
+//        System.out.println(String.format("Solution Part2: %d",solutionPart2()));
+//    }
 
     // Logic here:
     // What comes up, must come down.  The y coordinates going up will be the same going down.
