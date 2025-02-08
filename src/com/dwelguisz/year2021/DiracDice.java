@@ -4,10 +4,13 @@ import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.Tuple;
 import com.dwelguisz.year2021.helper.day21.Multiverse;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.counting;
@@ -26,15 +29,25 @@ public class DiracDice extends AoCDay {
     }
 
     public void solve() {
-        Integer player1SP = 8;
-        Integer player2SP = 1;
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021, 21, false, 0);
+        Pattern pattern = Pattern.compile("starting position: (?<position>\\d+)");
+        Matcher matcher = pattern.matcher(lines.get(0));
+        Integer player1SP = 0;
+        if (matcher.find()) {
+            player1SP = Integer.parseInt(matcher.group("position"));
+        }
+        matcher = pattern.matcher(lines.get(1));
+        Integer player2SP = 0;
+        if (matcher.find()) {
+            player2SP = Integer.parseInt(matcher.group("position"));
+        }
         createDiracUniverseDistribution();
-        Long part1 = playGame(player1SP, player2SP);
-        Long part2 = playQuantumGame(player1SP, player2SP);
-        System.out.println("--------- Day 21: Dirac Dice------------");
-        System.out.println(String.format("Solution Part1: %d",part1));
-        System.out.println(String.format("Solution Part2: %d",part2));
-
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = playGame(player1SP, player2SP);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = playQuantumGame(player1SP, player2SP);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private void createDiracUniverseDistribution() {
@@ -85,8 +98,6 @@ public class DiracDice extends AoCDay {
             }
             multiverse = newMultiverse;
         }
-        System.out.println(String.format("Player 1 wins: %d",player1Wins));
-        System.out.println(String.format("Player 2 wins: %d",player2Wins));
         return Math.max(player1Wins, player2Wins);
     }
 
@@ -109,9 +120,6 @@ public class DiracDice extends AoCDay {
             playerRoll ^= true;
             dieRoll +=3 ;
         }
-        System.out.println(String.format("Player 1 Score: %d", p1Score));
-        System.out.println(String.format("Player 2 Score: %d", p2Score));
-        System.out.println(String.format("Die Roll: %d", dieRoll));
         Long loserScore = (p1Score < 1000L) ? p1Score : p2Score;
         return (loserScore * (dieRoll-1));
     }

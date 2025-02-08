@@ -1,7 +1,9 @@
 package com.dwelguisz.year2021;
 
+import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day24.ArithmeticLogicUnit;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -9,15 +11,19 @@ import java.util.Stack;
 import static com.dwelguisz.year2021.helper.ReadFile.readFile;
 import static java.lang.Integer.parseInt;
 
-public class AdventDay24 {
-    public static void main(String[] args) {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day24/input.txt");
+public class AdventDay24 extends AoCDay {
+
+    public void solve() {
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,24,false,0);
         List<List<String>> differentInputs = parseInputs(lines);
         Integer[][]differentValues = differentInstructions(differentInputs);
         printDifferentValues(differentValues);
-        String part1 = solutionPart1(differentValues);
-        System.out.println(String.format("Solution Part1: \n%s",part1));
-        checkSolution();
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(differentValues);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = "To work on";
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
 //    input[2] + 13 + (-13) = input[3]
@@ -48,7 +54,7 @@ public class AdventDay24 {
             for (int i = 0; i < differentValues.length; i++) {
                 sb.append(String.format("%1$3s:::", differentValues[i][j]));
             }
-            System.out.println(sb.toString());
+            //System.out.println(sb.toString());
         }
     }
 
@@ -70,11 +76,11 @@ public class AdventDay24 {
         return inputs;
     }
 
-    public static Integer[][] differentInstructions(List<List<String>> inputs) {
+    public Integer[][] differentInstructions(List<List<String>> inputs) {
         List<Integer> differentLines = new ArrayList<>();
         for (int i = 0; i < inputs.get(0).size(); i++) {
             if (!inputs.get(0).get(i).equals(inputs.get(1).get(i))) {
-                System.out.println(String.format("Diff Line from ALU pass 0: %s", inputs.get(0).get(i)));
+                //System.out.println(String.format("Diff Line from ALU pass 0: %s", inputs.get(0).get(i)));
                 differentLines.add(i);
             }
         }
@@ -90,14 +96,14 @@ public class AdventDay24 {
         return diffValues;
     }
 
-    public static void checkSolution() {
+    public  void checkSolution(List<String> lines) {
         ArithmeticLogicUnit alu = new ArithmeticLogicUnit(0,0,0,0);
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day24/input_work.txt");
+        //List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day24/input_work.txt");
         for (String line : lines) {
             String[] parsedLine = line.split(" ");
             alu.runInstruction(parsedLine[0], parsedLine[1], parsedLine[2], false);
         }
-        System.out.println(String.format("z is %d", alu.z));
+        //System.out.println(String.format("z is %d", alu.z));
 
     }
 

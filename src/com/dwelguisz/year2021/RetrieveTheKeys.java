@@ -8,9 +8,8 @@ public class RetrieveTheKeys extends AoCYear {
             new HydrothermalVenture(), new LanternFish(), new TreacheryOfWhales(), new SevenSegmentSearch(),
             new SmokeBasin(), new SyntaxScoring(), new DumboOctopus(), new PassagePathing(),
             new TransparentOrigami(), new ExtendedPolymerization(), new Chiton(), new PacketDecoder(),
-            new AdventDay17(),
-            new Snailfish(), new BeaconScanner(), new TrenchMap(), new DiracDice(), new ReactorReboot(),
-            new SeaCucumber()};
+            new AdventDay17(), new Snailfish(), new BeaconScanner(), new TrenchMap(), new DiracDice(),
+            new ReactorReboot(), new AdventDay23(), new AdventDay24(), new SeaCucumber()};
 
 
     public RetrieveTheKeys(int year) {

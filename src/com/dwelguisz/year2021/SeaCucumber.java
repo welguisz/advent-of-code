@@ -3,6 +3,7 @@ package com.dwelguisz.year2021;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,10 +20,14 @@ public class SeaCucumber extends AoCDay {
     }
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day25/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021, 25, false, 0);
         grid = createGrid(lines);
-        Integer part1 = solutionPart1();
-        System.out.println(String.format("Solution Part1: %d",part1));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1() {
@@ -81,4 +86,9 @@ public class SeaCucumber extends AoCDay {
         }
         return grid;
     }
+
+    String solutionPart2() {
+        return "Press link to complete.";
+    }
+
 }

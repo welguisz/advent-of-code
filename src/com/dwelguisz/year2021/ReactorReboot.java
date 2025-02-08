@@ -4,6 +4,7 @@ import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.year2021.helper.day19.Coordinate;
 import com.dwelguisz.year2021.helper.day22.Cubiod;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,13 +17,14 @@ public class ReactorReboot extends AoCDay {
     public static Integer MAX_RANGE_PART1 = 50;
 
     public void solve() {
-        List<String> lines = readFile("/home/dwelguisz/advent-of-code/src/resources/year2021/day22/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2021,22,false,0);
         List<Cubiod> data = parseInput(lines);
-        Long part1 = elegantSolution(data, true);
-        Long part2 = elegantSolution(data, false);
-        System.out.println("--------- Day 22: Reactor Reboot------------");
-        System.out.println(String.format("Solution Part1 using Part2: %d",part1));
-        System.out.println(String.format("Solution Part2: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = elegantSolution(data, true);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = elegantSolution(data, false);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     private List<Cubiod> parseInput(List<String> lines){
