@@ -128,7 +128,6 @@ public class TicketTranslation extends AoCDay {
                 }
             }
         }
-        System.out.println(finalSectionMap);
         Long product = 1L;
         for(Map.Entry<String, Integer> entry : finalSectionMap.entrySet()) {
             if (entry.getKey().startsWith("departure")) {

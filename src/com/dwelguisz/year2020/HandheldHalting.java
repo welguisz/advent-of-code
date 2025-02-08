@@ -63,7 +63,6 @@ public class HandheldHalting extends AoCDay {
             accumulator = value.getRight();
             lineNumber++;
         }
-        System.out.println(String.format("Line number changed: %d", lineNumber - 1));
         return accumulator;
     }
 

@@ -180,22 +180,14 @@ public class CrabCups extends AoCDay {
     }
 
     public void solve() {
-        Long parseTime = Instant.now().toEpochMilli();
-        String testString = "389125467";
-        String inputString = "952438716";
-        Boolean test = false;
-        String actualString = test ? testString : inputString;
-        CircleOfCups cups = parseString(actualString, 9);
-        Long startTime = Instant.now().toEpochMilli();
-        Long part1 = solutionPart1(cups);
-        Long part1Time = Instant.now().toEpochMilli();
-        Long part2 = solutionPart2(parseString(actualString,1000000));
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2020,23,false,0);
+        CircleOfCups cups = parseString(lines.get(0), 9);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(cups);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(parseString(lines.get(0), 1000000));
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public CircleOfCups parseString(String str, Integer maxValue) {
@@ -216,9 +208,6 @@ public class CrabCups extends AoCDay {
 
     public Long solutionPart2(CircleOfCups cups) {
         for (int i = 0; i < 10000000; i++) {
-            if (i % 100000 == 0) {
-                System.out.println(i);
-            }
             cups.move();
         }
         return cups.afterCup1Part2();
