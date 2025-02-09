@@ -3,6 +3,7 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -10,12 +11,14 @@ import java.util.stream.IntStream;
 public class TreetopTreeHouse extends AoCDay {
     List<Pair<Integer, Integer>> visibleTrees;
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day08/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,8,false,0);
         Integer[][] grid = createGrid(lines);
-        Integer part1 = solutionPart1(grid);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Long part2 = solutionPart2(grid);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(grid);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(grid);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     Integer[][] createGrid(List<String> lines) {
@@ -62,7 +65,6 @@ public class TreetopTreeHouse extends AoCDay {
                 treeLocation = Pair.of(tree.getLeft(), tree.getRight());
             }
         }
-        System.out.println("Best viewing tree is at: (" + treeLocation.getLeft() + ", " + treeLocation.getRight() + ")");
         return maxScore.longValue();
     }
 

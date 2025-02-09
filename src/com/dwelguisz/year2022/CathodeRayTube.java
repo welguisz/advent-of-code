@@ -3,23 +3,27 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CathodeRayTube extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day10/input.txt");
-        Pair<Integer, String> part1 = solutionPart1(lines);
-        System.out.println(String.format("Part 1 Answer: %d",part1.getLeft()));
-        System.out.println(String.format("Part 2 Answer:"));
-        System.out.println(part1.getRight());
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,10,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        Pair<Integer, String> answer = solutionPart1(lines);
+        part1Answer = answer.getLeft();
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = answer.getRight();
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     Pair<Integer,String> solutionPart1(List<String> lines) {
         Integer cycleCount = 0;
         Integer registerA = 1;
         List<Integer> values = new ArrayList<>();
-        String screen = "";
+        String screen = "\n";
         for (String l : lines) {
             String split[] = l.split(" ");
             String cmd = split[0];

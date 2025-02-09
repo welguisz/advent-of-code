@@ -3,6 +3,7 @@ package com.dwelguisz.year2022;
 import com.dwelguisz.base.AoCDay;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -10,13 +11,13 @@ import java.util.Set;
 
 public class RopeBridge extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day09/input.txt");
-        Integer part1 = solutionPart1(lines);
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        Integer part2 = solutionPart2(lines);
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        Integer tailDoesntMoved = solutionPart3(lines);
-        System.out.println(String.format("Number of knots needed so tail doesn't move: %d",tailDoesntMoved));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,9,false,0);
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(lines);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(lines);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     Pair<Integer, Integer> updateKnot(Pair<Integer,Integer> prevKnot, Pair<Integer,Integer> followingKnot) {

@@ -2,6 +2,7 @@ package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,13 +51,15 @@ public class MonkeyInTheMiddle extends AoCDay {
     }
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day11/input.txt");
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,11,false,0);
         List<Monkey> monkeys = parseLines(lines);
-        Long part1 = simulate(monkeys, 20, false);
-        System.out.println(String.format("Part 1 Answer: %s",part1));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = simulate(monkeys, 20, false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
         monkeys = parseLines(lines);
-        Long part2 = simulate(monkeys, 10000, true);
-        System.out.println(String.format("Part 2 Answer: %s",part2));
+        part2Answer = simulate(monkeys, 10000, true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public List<Monkey> parseLines(List<String> lines) {
