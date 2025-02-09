@@ -1,6 +1,7 @@
 package com.dwelguisz.year2022;
 
 import com.dwelguisz.base.AoCDay;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -45,19 +46,14 @@ public class BeaconExclusionZone extends AoCDay {
 
 
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day15/input.txt");
-        Long parseTime = Instant.now().toEpochMilli();
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,15,false,0);
         List<Sensor> sensors = parseLines(lines);
-        Long startTime = Instant.now().toEpochMilli();
-        Integer part1 = solutionPart1(sensors, 2000000);
-        Long part1Time = Instant.now().toEpochMilli();
-        Long part2 = solutionPart2(sensors);
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(sensors, 2000000);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer =  solutionPart2(sensors);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public List<Sensor> parseLines(List<String> lines) {
@@ -148,7 +144,6 @@ public class BeaconExclusionZone extends AoCDay {
             ranges = mergeIntervals(ranges);
             if (ranges.size() > 1) {
                 Integer hole = ranges.get(0).get(1) + 1;
-                System.out.println("Beacon is at (" + hole + ","+i+")");
                 Long val = 4000000L * hole;
                 return val + i;
             }

@@ -11,23 +11,14 @@ import java.util.regex.Pattern;
 
 public class MonkeyMath extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day21/input.txt");
-        Long parseTime = Instant.now().toEpochMilli();
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,21,false,0);
         Map<String, String> values = parsedLines(lines);
-        Long startTime = Instant.now().toEpochMilli();
-        Double part1Iterative = solutionPart1(values, false);
-        Double part1Recursion = solutionPart1(values, true);
-        Long part1Time = Instant.now().toEpochMilli();
-        Long part2Iterative = solutionPart2(values, false);
-        Long part2Recursion = solutionPart2(values, true);
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Part 1 Iterative Answer: %f",part1Iterative));
-        System.out.println(String.format("Part 2 Recursion Answer: %f",part1Recursion));
-        System.out.println(String.format("Part 2 Iterative Answer: %d",part2Iterative));
-        System.out.println(String.format("Part 2 Recursion Answer: %d",part2Recursion));
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(values, false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(values, false);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Map<String, String> parsedLines(List<String> lines) {

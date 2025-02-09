@@ -12,17 +12,14 @@ import java.util.stream.Collectors;
 
 public class DistressSignal extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day13/input.txt");
-        List<String> pairs = Arrays.stream(lines.stream().collect(Collectors.joining("t")).split("tt")).collect(Collectors.toList());
-        Long startTime = Instant.now().toEpochMilli();
-        Integer part1 = solutionPart1(pairs);
-        Long part1Time = Instant.now().toEpochMilli();
-        Integer part2 = solutionPart2(pairs);
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,13,false,0);
+        List<String> pairs = Arrays.stream(String.join("t", lines).split("tt")).collect(Collectors.toList());
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = solutionPart1(pairs);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer = solutionPart2(pairs);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Integer solutionPart1(List<String> pairs) {

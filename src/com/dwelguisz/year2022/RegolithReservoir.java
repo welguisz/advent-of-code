@@ -13,19 +13,14 @@ import java.util.stream.Collectors;
 
 public class RegolithReservoir extends AoCDay {
     public void solve() {
-        List<String> lines = readFile("/Users/dwelguisz/personal/advent-of-code/src/resources/year2022/day14/input.txt");
-        Long parseTime = Instant.now().toEpochMilli();
+        timeMarkers[0] = Instant.now().toEpochMilli();
+        List<String> lines = readResoruceFile(2022,14,false,0);
         Set<Pair<Integer,Integer>> cave = createCave(lines);
-        Long startTime = Instant.now().toEpochMilli();
-        Integer part1 = simulateSand(new HashSet<>(cave), false);
-        Long part1Time = Instant.now().toEpochMilli();
-        Integer part2 = simulateSand(cave, true);
-        Long part2Time = Instant.now().toEpochMilli();
-        System.out.println(String.format("Part 1 Answer: %d",part1));
-        System.out.println(String.format("Part 2 Answer: %d",part2));
-        System.out.println(String.format("Parsing Time: %d ms.", startTime - parseTime));
-        System.out.println(String.format("Time to do Part 1: %d ms.", part1Time - startTime));
-        System.out.println(String.format("Time to do Part 2: %d ms.", part2Time - part1Time));
+        timeMarkers[1] = Instant.now().toEpochMilli();
+        part1Answer = simulateSand(new HashSet<>(cave), false);
+        timeMarkers[2] = Instant.now().toEpochMilli();
+        part2Answer =  simulateSand(new HashSet<>(cave), true);
+        timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
     public Set<Pair<Integer,Integer>> createCave(List<String> lines) {
