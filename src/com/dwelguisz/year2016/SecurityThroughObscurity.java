@@ -72,33 +72,16 @@ public class SecurityThroughObscurity extends AoCDay {
     }
 
     public Integer solutionPart2() {
-        List<String> easterWords = new ArrayList<>();
-        easterWords.add("rabbit");
-        easterWords.add("flower");
-        easterWords.add("basket");
-        easterWords.add("grass");
-        easterWords.add("chocolate");
-        easterWords.add("dye");
-        easterWords.add("egg");
-        easterWords.add("candy");
-        easterWords.add("bunny");
         for(Pair<Integer, String> validRoom : validRooms) {
             Integer sectorId = validRoom.getLeft();
             String encryptedName = validRoom.getRight();
             Integer shiftNum = sectorId % 26;
             String decryptedName = deCrypt(encryptedName, shiftNum);
-        }
-        return validRooms.get(0).getLeft();
-    }
-
-    private boolean doesNotContainEasterWords(String targetStr, List<String> easterWords) {
-        List<String> words = Arrays.stream(targetStr.split(" ")).collect(Collectors.toList());
-        for (String word : words) {
-            if (easterWords.contains(word)) {
-                return false;
+            if (decryptedName.equals("northpole object storage")) {
+                return sectorId;
             }
         }
-        return true;
+        return validRooms.get(0).getLeft();
     }
 
     private String deCrypt(String encryptedName, Integer shiftNum) {
