@@ -1,17 +1,23 @@
 package com.dwelguisz.year2015;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.utilities.Coord2D;
+import lombok.Value;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.PriorityQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WizardSimulator20XX extends AoCDay {
 
-    public static Integer MAX_MANA = 1500;
+    public static Integer MAX_MANA = 50000;
     public static class Spell {
         String name;
         int cost;
@@ -60,20 +66,13 @@ public class WizardSimulator20XX extends AoCDay {
 
         static Player copyOf(Player original) {
             Player copy = new Player(original.name, original.hitPoints, original.baseDamage, original.baseArmor, original.mana, original.spent);
-            for (Spell c : original.spellsCast) {
-                copy.spellsCast.add(c);
-            }
-            for (Map.Entry<Spell, Integer> sc : original.spellsInEffect.entrySet()) {
-                copy.spellsInEffect.put(sc.getKey(), sc.getValue());
-            }
+            copy.spellsCast.addAll(original.spellsCast);
+            copy.spellsInEffect.putAll(original.spellsInEffect);
             return copy;
         }
         public boolean spellInEffect(Spell spell) {
             Integer count = spellsInEffect.getOrDefault(spell,0);
-            if (count.equals(0)) {
-                return false;
-            }
-            return true;
+            return (count > 1);
         }
 
         public void startSpell(Spell spell) {
@@ -81,7 +80,7 @@ public class WizardSimulator20XX extends AoCDay {
                 spellsInEffect.put(spell, spell.activeTurns);
             }
         }
-        public List<Integer> getAttack(Spell spell) {
+        public Pair<List<Integer>, Spell> getAttack(Spell spell) {
             Integer attack = 0;
             Integer healing = 0;
             Integer protection = 0;
@@ -92,8 +91,10 @@ public class WizardSimulator20XX extends AoCDay {
             if ("Drain".equals(spell.name)) {
                 healing += 2;
             }
+            Spell canUse = null;
             for (Map.Entry<Spell, Integer> currentSpell : spellsInEffect.entrySet()) {
                 if (currentSpell.getValue().equals(0)) {
+                    canUse = currentSpell.getKey();
                     continue;
                 }
                 attack += currentSpell.getKey().damage;
@@ -110,7 +111,89 @@ public class WizardSimulator20XX extends AoCDay {
             values.add(recharge);
             values.add(protection);
             startSpell(spell);
-            return values;
+            return Pair.of(values, canUse);
+        }
+    }
+
+    @Value
+    public class Game {
+        Player player;
+        Player boss;
+        boolean hardMode;
+        boolean playerWon;
+        boolean bossWon;
+
+        List<Spell> spellsAllowedToCast() {
+            return spells.stream().filter(s -> s.cost <= player.mana)
+                    .filter(s -> !s.name.equals("Nothing"))
+                    .filter(s -> !player.spellInEffect(s))
+                    .toList();
+        }
+
+        boolean ableToCastSpell() {
+            return !spellsAllowedToCast().isEmpty();
+        }
+
+        Integer manaSpent() {
+            return player.spent;
+        }
+
+        public List<Game> nextRound() {
+            if (hardMode) {
+                player.hitPoints--;
+                if (player.hitPoints <= 0) {
+                    return List.of(new Game(player, boss, true, false, true));
+                }
+            }
+            if (!ableToCastSpell()) {
+                return List.of(new Game(player, boss, hardMode, false, true));
+            }
+            List<Spell> goodSpells = spellsAllowedToCast();
+            List<Game> nextRound = new ArrayList<>();
+            for (Spell spellCast : goodSpells) {
+                Game result = nextGame(spellCast);
+                nextRound.add(result);
+            }
+            return nextRound;
+        }
+
+        Game nextGame(Spell spellCast) {
+            Spell toReturn = null;
+            //Copy information for all possible scenarios.
+            Player newPlayer = Player.copyOf(player);
+            Player newBoss = Player.copyOf(boss);
+
+            newPlayer.spellsCast.add(spellCast);
+            newPlayer.spent += spellCast.cost;
+            newPlayer.mana -= spellCast.cost;
+
+            Pair<List<Integer>, Spell> results = newPlayer.getAttack(spellCast);
+            if (results.getRight() != null) {
+                toReturn = results.getRight();
+            }
+            List<Integer> effects = results.getLeft();
+            newBoss.hitPoints -= effects.get(0);
+            newPlayer.hitPoints += effects.get(1);
+            newPlayer.mana += effects.get(2);
+            if (newBoss.hitPoints <= 0) {
+                return new Game(newPlayer, newBoss, hardMode, true, false);
+            }
+
+            //Boss Turn -- Boss can't use magic, so automatically get spells[0]
+            results = newPlayer.getAttack(spells.get(0));
+            effects = results.getLeft();
+            newBoss.hitPoints -= effects.get(0);
+            newPlayer.hitPoints += effects.get(1);
+            newPlayer.mana += effects.get(2);
+            Integer bossAttack = Integer.max(1,newBoss.baseDamage - effects.get(3));
+            if (newBoss.hitPoints <= 0) {
+                return new Game(newPlayer, newBoss, hardMode, true, false);
+            }
+            newPlayer.hitPoints -= bossAttack;
+            if (newPlayer.hitPoints <= 0) {
+                return new Game(newPlayer, newBoss, hardMode, false, true);
+            }
+            return new Game(newPlayer, newBoss, hardMode, false, false);
         }
     }
 
@@ -118,76 +201,48 @@ public class WizardSimulator20XX extends AoCDay {
 
     public void solve(){
         timeMarkers[0] = Instant.now().toEpochMilli();
-        List<String> lines = readResoruceFile(2015,21,false,0);
+        List<String> lines = readResoruceFile(2015,22,false,0);
+        Coord2D bossInfo = parseLines(lines);
         setupItems();
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(false);
+        part1Answer = solutionPart1(false, bossInfo);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart1(true);
+        part2Answer = solutionPart1(true, bossInfo);
         timeMarkers[3] = Instant.now().toEpochMilli();
     }
 
-    public Integer solutionPart1(Boolean hardMode) {
+    Coord2D parseLines(List<String> lines) {
+        Pattern pattern = Pattern.compile(":\\s+(?<value>\\d+)");
+        List<Integer> values = new ArrayList<>();
+        for (String line : lines) {
+            Matcher matcher = pattern.matcher(line);
+            if (matcher.find()) {
+                values.add(Integer.valueOf(matcher.group("value")));
+            }
+        }
+        return new Coord2D(values.get(0), values.get(1));
+    }
+
+    public Integer solutionPart1(Boolean hardMode, Coord2D bossInfo) {
         Player player1 = new Player("me", 50,0,0,500,0);
-        Player boss = new Player("boss",55,8,0,0,0);
-        List<Integer> results = doesPlayer1Win(player1, boss, hardMode);
-        return results.stream().min(Integer::compareTo).get();
-    }
-
-    public List<Integer> doesPlayer1Win(Player player, Player boss1, Boolean hardMode) {
-        List<Spell> goodSpells = availableSpells(player);
-        //If unable to cast spells on Player's turn, die.
-        //MAX_MANA is to prevent the simulator getting in an infinite loop
-        if ((goodSpells.size() == 0) || (player.spent > MAX_MANA)) {
-            return new ArrayList<>();
+        Player boss = new Player("boss",bossInfo.x,bossInfo.y,0,0,0);
+        Game game = new Game(player1, boss, hardMode, false, false);
+        PriorityQueue<Game> pq = new PriorityQueue<>(300, Comparator.comparingInt(Game::manaSpent));
+        pq.add(game);
+        PriorityQueue<Integer> manaSpent = new PriorityQueue<>();
+        while (!pq.isEmpty()) {
+            Game current = pq.poll();
+            List<Game> nextRound = current.nextRound();
+            List<Game> validGames = nextRound.stream().filter(g -> !g.bossWon).toList();
+            validGames.stream().filter(g -> g.playerWon).forEach(g -> manaSpent.add(g.manaSpent()));
+            final Integer manaSpentMax = manaSpent.isEmpty() ? MAX_MANA : manaSpent.peek() + 100;
+            pq.addAll(
+                    validGames.stream()
+                            .filter(g -> !g.playerWon)
+                            .filter(g -> g.manaSpent() <= manaSpentMax).toList()
+            );
         }
-        //If hard mode, decrement player's hitPoints. If it goes to 0, player is dead.
-        if (hardMode) {
-            player.hitPoints--;
-            if (player.hitPoints <= 0) {
-                return new ArrayList<>();
-            }
-        }
-        List<Integer> results = new ArrayList<>();
-        for (Spell spellCast : goodSpells) {
-            //Copy information for all possible scenarios.
-            Player player1 = Player.copyOf(player);
-            Player boss = Player.copyOf(boss1);
-            player1.spellsCast.add(spellCast);
-            player1.spent += spellCast.cost;
-            player1.mana -= spellCast.cost;
-            List<Integer> effects = player1.getAttack(spellCast);
-            boss.hitPoints -= effects.get(0);
-            player1.hitPoints += effects.get(1);
-            player1.mana += effects.get(2);
-            if (boss.hitPoints <= 0) {
-                results.add(player1.spent);
-                continue;
-            }
-            //Boss Turn -- Boss can't use magic, so automatically get spells[0]
-            effects = player1.getAttack(spells.get(0));
-            boss.hitPoints -= effects.get(0);
-            player1.hitPoints += effects.get(1);
-            player1.mana += effects.get(2);
-            Integer bossAttack = Integer.max(1,boss.baseDamage - effects.get(3));
-            if (boss.hitPoints <= 0) {
-                results.add(player1.spent);
-                continue;
-            }
-            player1.hitPoints -= bossAttack;
-            if (player1.hitPoints <= 0) {
-                continue;
-            }
-            results.addAll(doesPlayer1Win(player1,boss,hardMode));
-        }
-        return results;
-    }
-
-    public List<Spell> availableSpells(Player player) {
-        return spells.stream().filter(s -> s.cost <= player.mana)
-                .filter(s -> !s.name.equals("Nothing"))
-                .filter(s -> !player.spellInEffect(s))
-                .collect(Collectors.toList());
+        return manaSpent.poll();
     }
 
     public void setupItems() {
