@@ -1,160 +1,132 @@
 package com.dwelguisz.year2016;
 
 import com.dwelguisz.base.AoCDay;
+import com.dwelguisz.utilities.Coord2D;
+import com.dwelguisz.utilities.Coord3D;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class RadioisotepeThermoelectricGenerators extends AoCDay {
 
-    public static class State {
-        Integer distance;
-        Integer stepNo;
-        Integer elevator;
-        List<List<String>> floors;
-        Long timestamp;
+    @Value
+    public class Floor {
+        Set<String> microchips;
+        Set<String> generators;
 
-        public State() {
-            distance = 0;
-            stepNo = 0;
-            elevator = 0;
-            floors = new ArrayList<>();
-            timestamp = Instant.now().toEpochMilli();
+        public int size() {
+            return microchips.size() + generators.size();
         }
 
-        public boolean isEquivalent(State other) {
-            for(int i = 0; i < 4; i++) {
-                List<String> thisFloor = this.floors.get(i);
-                List<String> otherFloor = other.floors.get(i);
-                Pair<Integer, Integer> thisFloorSetup = numberOfPairsAndNonPairs(thisFloor);
-                Pair<Integer, Integer> otherFloorSetup = numberOfPairsAndNonPairs(otherFloor);
-                if ( (!thisFloorSetup.getRight().equals(otherFloorSetup.getRight())) ||(!thisFloorSetup.getLeft().equals(otherFloorSetup.getLeft()))) {
-                    return false;
-                }
-            }
-            return this.elevator == other.elevator;
+        public boolean isEmpty() {
+            return size() == 0;
         }
 
-        public boolean isEqual(State other) {
-            for(int i = 0; i < 4; i++) {
-                List<String> thisFloor = this.floors.get(i);
-                List<String> otherFloor = other.floors.get(i);
-                List<String> diffs = thisFloor.stream().filter(t -> !otherFloor.contains(t)).collect(Collectors.toList());
-                List<String> diffs1 = otherFloor.stream().filter(t -> !thisFloor.contains(t)).collect(Collectors.toList());
-                if (!diffs.isEmpty() || !diffs1.isEmpty()) {
-                    return false;
-                }
-            }
-            return this.elevator == other.elevator;
+        public void addMicrochips(Collection<String> microchips) {
+            this.microchips.addAll(microchips);
         }
 
-        public boolean isValidState() {
-            if (floors.get(elevator).isEmpty()) {
-                return false;
-            }
-            for (List<String> floor : floors) {
-                List<String> generators = floor.stream().filter(s -> s.substring(1).equals("G")).map(s -> s.substring(0,1)).collect(Collectors.toList());
-                List<String> microchips = floor.stream().filter(s -> s.substring(1).equals("M")).map(s -> s.substring(0,1)).collect(Collectors.toList());
-                if (!validFloor(generators, microchips)) {
-                    return false;
-                }
-            }
-            return true;
+        public void removeMicrochips(Collection<String> microchips) {
+            this.microchips.removeAll(microchips);
         }
 
-        public boolean validFloor(List<String> generators, List<String> microchips) {
-            if (!generators.isEmpty() && microchips.isEmpty()) {
+        public void removeGenerators(Collection<String> generators) {
+            this.generators.removeAll(generators);
+        }
+
+        public void addGenerators(Collection<String> generators) {
+            this.generators.addAll(generators);
+        }
+
+        public boolean isValid() {
+            if (generators.isEmpty() || microchips.isEmpty()) {
                 return true;
             }
-            if (generators.isEmpty() && !microchips.isEmpty()) {
-                return true;
-            }
-            for (String m : microchips) {
-                if (!generators.contains(m)) {
-                    return false;
-                }
+            for (String microchip : microchips) {
+               if (!generators.contains(microchip)) {
+                   return false;
+               }
             }
             return true;
         }
+    }
 
-        public boolean notInPreviousStates(List<State> previousStates, State newState) {
-            for (State ps : previousStates) {
-                if (ps.isEquivalent(newState)) {
+    @Value
+    public class State {
+        List<Floor> floors;
+        Integer current_floor;
+        Integer max_floor;
+        @EqualsAndHashCode.Exclude int stepNumber;
+
+        List<Integer> nextFloors() {
+            List<Integer> nextFloors = new ArrayList<>();
+            int lower_floor = current_floor-1;
+            if (lower_floor >= 0) {
+                nextFloors.add(lower_floor);
+            }
+            int higher_floor = current_floor+1;
+            if (higher_floor < max_floor) {
+                nextFloors.add(higher_floor);
+            }
+            return nextFloors;
+        }
+
+
+        public boolean isValid() {
+            return floors.stream().allMatch(Floor::isValid);
+        }
+
+        public boolean isDone() {
+            for (int i = 0; i < floors.size()-1; i++) {
+                if (!floors.get(i).isEmpty()) {
                     return false;
                 }
             }
-            return true;
+            return current_floor == max_floor-1;
         }
 
-        public List<State> getNextStates(List<State> previousStates) {
-            List<List<String>> combinations = moveCombinations();
-            List<State> nextStates = new ArrayList<>();
-            for (List<String> combination : combinations) {
-                if (elevator > 0) {
-                    State newState = moveToNextState(elevator-1, combination);
-                    if ((newState.isValidState()) && (notInPreviousStates(previousStates, newState))) {
-                        previousStates.add(newState);
-                        nextStates.add(newState);
-                    }
+        private List<Pair<List<String>, List<String>>> createCombinations(List<String> microchips, List<String> generators) {
+            List<Pair<List<String>, List<String>>> combinations = new ArrayList<>();
+            //One microchip
+            for (String microchip : microchips) {
+                combinations.add(Pair.of(List.of(microchip), new ArrayList<>()));
+            }
+            //One generator
+            for (String generator : generators) {
+                combinations.add(Pair.of(new ArrayList<>(), List.of(generator)));
+            }
+            //Two microchips
+            List<List<String>> twoMicrochips = combinations(microchips, 2);
+            for(List<String> twoMicrochip : twoMicrochips) {
+                combinations.add(Pair.of(twoMicrochip, new ArrayList<>()));
+            }
+            //Two generators
+            List<List<String>> twoGenerators = combinations(generators, 2);
+            for (List<String> twoGenerator : twoGenerators) {
+                combinations.add(Pair.of(new ArrayList<>(), twoGenerator));
+            }
+            //One microchip and one generator
+            for (String microchip : microchips) {
+                if (generators.contains(microchip)) {
+                    combinations.add(Pair.of(List.of(microchip), List.of(microchip)));
                 }
-                if (elevator < 3) {
-                    State newState = moveToNextState(elevator+1, combination);
-                    if ((newState.isValidState()) && (notInPreviousStates(previousStates, newState))) {
-                        previousStates.add(newState);
-                        nextStates.add(newState);
-                    }
-                }
             }
-            return nextStates;
-        }
-
-        public State moveToNextState(Integer nextFloor, List<String> load) {
-            State newState = new State();
-            newState.stepNo = stepNo + 1;
-            newState.elevator = nextFloor;
-            for (List<String> floor : floors) {
-                List<String> nf = new ArrayList<>(floor);
-                newState.floors.add(nf);
-            }
-            List<String> cur_floor = newState.floors.get(elevator)
-                    .stream()
-                    .filter(s -> !load.contains(s))
-                    .collect(Collectors.toList());
-            List<String> next_floor = new ArrayList<>(newState.floors.get(newState.elevator));
-            next_floor.addAll(load);
-            newState.updateFloor(elevator, cur_floor);
-            newState.updateFloor(newState.elevator, next_floor);
-            newState.calculateDistance();
-            return newState;
-        }
-
-        public void updateFloor(int floorNumber, List<String> values) {
-            int currentFloor = 0;
-            List<List<String>> newFloors = new ArrayList<>();
-            for (List<String> floor : floors) {
-                if (currentFloor == floorNumber) {
-                    newFloors.add(values);
-                } else {
-                    newFloors.add(floor);
-                }
-                currentFloor++;
-            }
-            this.floors = newFloors;
-        }
-
-        private List<List<String>> moveCombinations() {
-            List<String> currentFloor = floors.get(elevator);
-            List<List<String>> possibleMoves = new ArrayList<>();
-            for (int i = 1; i < 3; i++) {
-                possibleMoves.addAll(combinations(currentFloor,i));
-            }
-            return possibleMoves;
+            return combinations;
         }
 
         public List<List<String>> combinations(List<String> inputSet, int k) {
@@ -163,32 +135,11 @@ public class RadioisotepeThermoelectricGenerators extends AoCDay {
             return results;
         }
 
-        public boolean canBeOnElevator(List<String> values) {
-            if (values.size() == 0) {
-                return false;
-            }
-            if (values.size() == 1) {
-                return true;
-            }
-            if (values.size() > 2) {
-                return false;
-            }
-            List<String> generators = values.stream().filter(s -> s.substring(1).equals("G")).map(s -> s.substring(0,1)).collect(Collectors.toList());
-            List<String> microchips = values.stream().filter(s -> s.substring(1).equals("M")).map(s -> s.substring(0,1)).collect(Collectors.toList());
-            if (generators.isEmpty() || microchips.isEmpty()) {
-                return true;
-            }
-            List<String> tmp = microchips.stream().filter(m -> !generators.contains(m)).collect(Collectors.toList());
-            return tmp.isEmpty();
-        }
-
         public void combinationsInternal(List<String> inputSet, int k, List<List<String>> results, ArrayList<String> accumulator, int index) {
             int needToAccumulate = k - accumulator.size();
             int canAccumulate = inputSet.size() - index;
             if (accumulator.size() == k) {
-                if (canBeOnElevator(accumulator)) {
-                    results.add(new ArrayList<>(accumulator));
-                }
+                results.add(new ArrayList<>(accumulator));
             } else if (needToAccumulate <= canAccumulate) {
                 combinationsInternal(inputSet, k, results, accumulator, index + 1);
                 accumulator.add(inputSet.get(index));
@@ -197,149 +148,105 @@ public class RadioisotepeThermoelectricGenerators extends AoCDay {
             }
         }
 
-
-        public void calculateDistance() {
-            distance  = 3 - elevator;
-            Integer index = 0;
-            for(List<String> floor : floors) {
-                Pair<Integer, Integer> values = numberOfPairsAndNonPairs(floor);
-                Map<String, Integer> diffMap = findDistanceToPair(index);
-                Integer v = diffMap.entrySet().stream().map(e -> e.getValue()).reduce(0, (a,b)->a+b);
-                distance += (3 - index) * ((values.getLeft() * 2) + (values.getRight() * 3));
-                index++;
+        public Stream<State> nextState(Set<Pair<List<Coord2D>, Integer>> seenShapes) {
+            List<State> nextStates = new ArrayList<>();
+            List<Integer> nextFloors = nextFloors();
+            Floor currentFloor = floors.get(current_floor);
+            List<String> currentMicrochips = new ArrayList<>(currentFloor.microchips);
+            List<String> currentGenerators = new ArrayList<>(currentFloor.generators);
+            //getLeft -> microchips, getRight -> generators
+            List<Pair<List<String>, List<String>>> possibleCombinations = createCombinations(currentMicrochips, currentGenerators);
+            for (Integer nextFloor : nextFloors) {
+                for (Pair<List<String>, List<String>> combination : possibleCombinations) {
+                    List<Floor> newFloors = new ArrayList<>();
+                    for (int i = 0; i < max_floor; i++) {
+                        if (i == current_floor) {
+                            Floor tempFloor = new Floor(new HashSet<>(currentMicrochips), new HashSet<>(currentGenerators));
+                            tempFloor.removeMicrochips(combination.getLeft());
+                            tempFloor.removeGenerators(combination.getRight());
+                            newFloors.add(tempFloor);
+                        } else if (i == nextFloor) {
+                            Floor tempFloor = new Floor(new HashSet<>(floors.get(i).getMicrochips()), new HashSet<>(floors.get(i).getGenerators()));
+                            tempFloor.addMicrochips(combination.getLeft());
+                            tempFloor.addGenerators(combination.getRight());
+                            newFloors.add(tempFloor);
+                        } else {
+                            newFloors.add(new Floor(new HashSet<>(floors.get(i).getMicrochips()), new HashSet<>(floors.get(i).getGenerators())));
+                        }
+                    }
+                    State tmp = new State(newFloors, nextFloor, max_floor, stepNumber + 1);
+                    if (tmp.isValid() && !seenShapes.contains(tmp.getShape())) {
+                        nextStates.add(tmp);
+                    }
+                }
             }
+            return nextStates.stream();
         }
 
-        public Map<String, Integer> findDistanceToPair(int index) {
-            List<String> floor = floors.get(index);
-            List<String> generators = floor.stream().filter(s -> s.substring(1).equals("G")).map(s -> s.substring(0,1)).collect(Collectors.toList());
-            List<String> microchips = floor.stream().filter(s -> s.substring(1).equals("M")).map(s -> s.substring(0,1)).collect(Collectors.toList());
-            if (microchips.isEmpty()) {
-                return Map.of("ignore",0);
+        public Pair<List<Coord2D>, Integer> getShape() {
+            List<Coord2D> shape = new ArrayList<>();
+            for (Floor floor : floors) {
+                shape.add(new Coord2D(floor.getMicrochips().size(), floor.getGenerators().size()));
             }
-            List<String> diffs1 = microchips.stream().filter(m -> !generators.contains(m)).map(e -> e + "G").collect(Collectors.toList());
-            int floorIndex = 0;
-            Map<String, Integer> diffMap = new HashMap<>();
-            for (List<String> compareFloor : floors) {
-                if (index == floorIndex) {
-                    continue;
-                }
-                List<String> check = compareFloor.stream().filter(c -> diffs1.contains(c)).collect(Collectors.toList());
-                int diff = Math.abs(floorIndex - index);
-                for (String c : check) {
-                    diffMap.put(c,diff);
-                }
-                floorIndex++;
-            }
-            return diffMap;
-        }
-
-        private Pair<Integer, Integer> numberOfPairsAndNonPairs(List<String> floor) {
-            List<String> generators = floor.stream().filter(s -> s.substring(1).equals("G")).map(s -> s.substring(0,1)).collect(Collectors.toList());
-            List<String> microchips = floor.stream().filter(s -> s.substring(1).equals("M")).map(s -> s.substring(0,1)).collect(Collectors.toList());
-            if (generators.isEmpty() || microchips.isEmpty()) {
-                return Pair.of(0, microchips.size() + generators.size());
-            }
-            //Since generators and microchips have at least 1 and we know that this is a valid state, we can
-            //assume that microchips.size() <= generators.size()
-            return Pair.of(microchips.size(), Math.abs(generators.size() - microchips.size()));
-
-
+            return Pair.of(shape, current_floor);
         }
     }
-
 
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
-        List<String> lines = readResoruceFile(2016,7,false,0);
-        List<List<String>> testfloors = new ArrayList<>();
-        List<String> floor1 = new ArrayList<>();
-        List<String> floor2 = new ArrayList<>();
-        List<String> floor3 = new ArrayList<>();
-        List<String> floor4 = new ArrayList<>();
-        floor1.add("SM");
-        floor1.add("SG");
-        floor1.add("PM");
-        floor1.add("PG");
-        floor2.add("TG");
-        floor2.add("RG");
-        floor2.add("RM");
-        floor2.add("CG");
-        floor2.add("CM");
-        floor3.add("TM");
-        testfloors.add(floor1);
-        testfloors.add(floor2);
-        testfloors.add(floor3);
-        testfloors.add(floor4);
+        List<String> lines = readResoruceFile(2016,11,false,0);
+        State initialState = parseLines(lines, new ArrayList<>());
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(lines, new ArrayList<>(), true, testfloors);
+        part1Answer = solutionPart1(initialState);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        List <String> extraItems = new ArrayList<>();
-        extraItems.add("EG");
-        extraItems.add("EM");
-        extraItems.add("DG");
-        extraItems.add("DM");
-        part2Answer = solutionPart1(lines, extraItems, true, testfloors);
+        initialState = parseLines(lines, List.of("elerium", "dilithium"));
+        part2Answer = solutionPart1(initialState);
         timeMarkers[3] = Instant.now().toEpochMilli();
-        //Integer part2 = solutionPart1(lines, extraItems);
-        //System.out.println(String.format("Part 2 Answer: %d",part2));
     }
 
-    public Integer solutionPart1(List<String> lines, List<String> extraItems, boolean test, List<List<String>> floors) {
-        List<List<String>> initialFloors = test ? floors : setupInitialState(lines);
-
-        List<State> previousStates = new ArrayList<>();
-        State initialState = new State();
-        initialState.elevator = 0;
-        initialState.floors.addAll(initialFloors);
-        List<String> newFloor = new ArrayList<>(initialFloors.get(0));
-        newFloor.addAll(extraItems);
-        initialState.updateFloor(0, newFloor);
-        initialState.calculateDistance();
-        previousStates.add(initialState);
-        PriorityQueue<Pair<Integer, State>> states = new PriorityQueue<>(500,
-                (a,b) -> {
-                    int value = a.getLeft() - b.getLeft();
-                    if (value == 0) {
-                        return (int) (a.getRight().timestamp - b.getRight().timestamp);
-                    }
-                    return value;
+    State parseLines(List<String> lines, List<String> items) {
+        List<Floor> floors = new ArrayList<>();
+        int floorNumber = 0;
+        for (String line : lines) {
+            Set<String> generators = (floorNumber == 0) ? new HashSet<>(items) : new HashSet<>();
+            Set<String> microchips = (floorNumber == 0) ? new HashSet<>(items) : new HashSet<>();
+            if (line.contains("generator")) {
+                Pattern pattern = Pattern.compile("a (?<element>\\w+) generator");
+                Matcher matcher = pattern.matcher(line);
+                while (matcher.find()) {
+                    generators.add(matcher.group("element"));
                 }
-                );
-        states.add(Pair.of(initialState.distance, initialState));
-        while (!states.isEmpty()) {
-            Pair<Integer, State> temp = states.poll();
-            List<State> newStates = temp.getRight().getNextStates(previousStates);
-            for (State newState : newStates) {
-                if (newState.distance.equals(0)) {
-                    return newState.stepNo;
-                }
-                states.add(Pair.of(newState.distance, newState));
             }
+            if (line.contains("microchip")) {
+                Pattern pattern = Pattern.compile("a (?<element>\\w+)-compatible microchip");
+                Matcher matcher = pattern.matcher(line);
+                while (matcher.find()) {
+                    microchips.add(matcher.group("element"));
+                }
+            }
+            floors.add(new Floor(microchips, generators));
+            floorNumber++;
+        }
+        return new State(floors, 0, 4, 0);
+    }
+
+    public Integer solutionPart1(State initialState) {
+        PriorityQueue<State> queue = new PriorityQueue<>(5000, Comparator.comparingInt(State::getStepNumber));
+        queue.add(initialState);
+        Set<Pair<List<Coord2D>, Integer>> seenShapes = new HashSet<>();
+        int counter = 0;
+        while (counter < 1000000) {
+            State state = queue.poll();
+            if (seenShapes.contains(state.getShape())) {
+                continue;
+            }
+            if (state.isDone()) {
+                return state.getStepNumber();
+            }
+            seenShapes.add(state.getShape());
+            queue.addAll(state.nextState(seenShapes).filter(s -> !queue.contains(s)).collect(Collectors.toSet()));
+            counter++;
         }
         return -1;
-    }
-
-    public List<List<String>> setupInitialState(List<String> lines) {
-        List<List<String>> currentState = new ArrayList<>();
-        for (String line : lines) {
-            List<String> onThisFloor = new ArrayList<>();
-            String lineSplit[] = line.split(" ");
-            Integer i = 0;
-            for (String ls : lineSplit) {
-                if (ls.contains("microchip")) {
-                    String element = lineSplit[i-1].substring(0,1);
-                    String mc = element.toUpperCase()+"M";
-                    onThisFloor.add(mc);
-                } else if (ls.contains("generator")) {
-                    String element = lineSplit[i-1].substring(0,1);
-                    String gen = element.toUpperCase()+"G";
-                    onThisFloor.add(gen);
-                }
-                i++;
-            }
-            currentState.add(onThisFloor);
-        }
-        return currentState;
     }
 }
