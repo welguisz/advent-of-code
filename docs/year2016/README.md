@@ -1,8 +1,6 @@
 # Year 2016
 
 ## Puzzles to look at more closely
-* Day 4 (Security Through Obscurity), Part 2
-* Day 11 (Radioisotepe Thermoelectric Generators), Both Parts
 * Day 16 (Dragon Checksum), Part 2
 
 ## Overall Solution and Times
