@@ -1,8 +1,5 @@
 # Year 2016
 
-## Puzzles to look at more closely
-* Day 16 (Dragon Checksum), Part 2
-
 ## Overall Solution and Times
 
 |Day #|              Puzzle name |        Parsing Time |     Part 1 Time(ms) |     Part 2 Time(ms) |       Part 1 Answer |       Part 2 Answer |
