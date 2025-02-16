@@ -59,20 +59,20 @@ public class FractalArt extends AoCDay {
     }
 
     public String combineGrid(List<String> grids, Integer outputSize) {
-        String combined = "";
-        Integer outerSize = (int)Math.sqrt(grids.size());
-        Integer matrixSize = grids.get(0).replace("/","").length();
-        Integer innerSize = (int)Math.sqrt(matrixSize);
-        Integer totalSize = outerSize * innerSize;
+        StringBuffer combined = new StringBuffer();
+        int outerSize = (int)Math.sqrt(grids.size());
+        int matrixSize = grids.get(0).replace("/","").length();
+        int innerSize = (int)Math.sqrt(matrixSize);
+        int totalSize = outerSize * innerSize;
         for (int i = 0; i < totalSize; i++) {
             for(int j = 0; j < totalSize; j++) {
-                Integer matrixNum = ((i / outputSize) * outerSize) + (j / outputSize);
-                Integer rowNumber = i % outputSize;
-                Integer colNumber = j % outputSize;
+                int matrixNum = ((i / outputSize) * outerSize) + (j / outputSize);
+                int rowNumber = i % outputSize;
+                int colNumber = j % outputSize;
                 String grid = grids.get(matrixNum);
-                combined += grid.charAt(rowNumber * (outputSize+1) + colNumber);
+                combined.append(grid.charAt(rowNumber * (outputSize+1) + colNumber));
             }
-            combined += "/";
+            combined.append('/');
         }
         return combined.substring(0, combined.length()-1);
     }
@@ -81,6 +81,9 @@ public class FractalArt extends AoCDay {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 2; j++) {
                 if (transformer.containsKey(matrix)) {
+                    if (!transformer.containsKey(input)) {
+                        transformer.put(input, transformer.get(matrix));
+                    }
                     return transformer.get(matrix);
                 }
                 matrix = (size == 2) ? flipMatrixSize2(matrix) : flipMatrixSize3(matrix);
