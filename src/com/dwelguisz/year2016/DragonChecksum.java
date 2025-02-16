@@ -5,11 +5,13 @@ import com.dwelguisz.base.AoCDay;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Stack;
 
 public class DragonChecksum extends AoCDay {
-    public static String MY_INPUT = "10111011111001111";
     public static Integer MY_LENGTH = 272;
     public static Integer SECOND_LENGTH = 35651584;
 
@@ -33,13 +35,12 @@ public class DragonChecksum extends AoCDay {
     }
 
     public String createNewInformation(String initialString) {
-        String partBorig = initialString;
-        String partB = "";
-        for (int i = partBorig.length()-1; i >= 0; i--) {
-            if (partBorig.charAt(i) == '0') {
-                partB = partB.concat("1");
+        StringBuffer partB = new StringBuffer();
+        for (int i = initialString.length()-1; i >= 0; i--) {
+            if (initialString.charAt(i) == '0') {
+                partB.append('1');
             } else {
-                partB = partB.concat("0");
+                partB.append('0');
             }
         }
         return initialString + "0" + partB;
@@ -48,15 +49,15 @@ public class DragonChecksum extends AoCDay {
     public String createChecksum(String disk) {
         String checksum = disk;
         while (checksum.length() %2 == 0) {
-            String newChecksum = "";
+            StringBuffer newChecksum = new StringBuffer();
             for (int i = 0; i < checksum.length() / 2; i++) {
                 if (checksum.charAt(i*2) == checksum.charAt(i*2+1)) {
-                    newChecksum = newChecksum.concat("1");
+                    newChecksum.append('1');
                 } else {
-                    newChecksum = newChecksum.concat("0");
+                    newChecksum.append('0');
                 }
             }
-            checksum = newChecksum;
+            checksum = newChecksum.toString();
         }
         return checksum;
     }
@@ -80,7 +81,7 @@ public class DragonChecksum extends AoCDay {
         // Step 3: 0010011
         // Step 4: 001001100011011
         // So the expansion just has to be on the character 0
-        Integer currentLength = input.length() * 2  + 1;
+        int currentLength = input.length() * 2  + 1;
         String newStr = "0";
         while (currentLength < length) {
             newStr = createNewInformation(newStr);
@@ -112,9 +113,8 @@ public class DragonChecksum extends AoCDay {
     }
 
     public String checkSumUsingAdvanceStep(String a, String b, String newStr, Map<String, String> map, Integer length) {
-        Integer divisor = 16;
+        int divisor = 16;
         String composedString = composeStr(a,b,newStr,map,length);
-        System.out.println("Composed String Length: " + composedString.length());
         while (composedString.length() % divisor != 0) {
             divisor >>= 1;
         }
@@ -134,16 +134,16 @@ public class DragonChecksum extends AoCDay {
     }
 
     public String easierMap(String str, Map<String, String> map, Integer step) {
-        String newStr = "";
+        StringBuffer newStr = new StringBuffer();
         for (int i = 0; i < str.length(); i += step) {
-            newStr = newStr.concat(map.get(str.substring(i,i+step)));
+            newStr.append(map.get(str.substring(i,i+step)));
         }
-        return newStr;
+        return newStr.toString();
     }
     public String composeStr(String a, String b, String newStr, Map<String, String> map, Integer length) {
-        Integer currentPos = 0;
-        Integer newStrLoc = 0;
-        String tmp = "";
+        int currentPos = 0;
+        int newStrLoc = 0;
+        StringBuffer tmp = new StringBuffer();
         while (currentPos < length) {
             String splice = "";
             String possibleChar = newStr.substring(newStrLoc, newStrLoc+1);
@@ -193,9 +193,9 @@ public class DragonChecksum extends AoCDay {
                     break;
                 }
             }
-            tmp = tmp.concat(map.get(splice));
+            tmp.append(map.get(splice));
             currentPos += 16;
         }
-        return tmp;
+        return tmp.toString();
     }
 }

@@ -63,25 +63,25 @@ public class GridComputing extends AoCDay {
         Node emptyNode = null;
         Node[][] nodes = new Node[xSize+1][ySize+1];
         gridNodes.entrySet().forEach(n -> nodes[n.getValue().x][n.getValue().y] = n.getValue());
-//        for (int x = 0; x < nodes.length; x++) {
-//            for (int y = 0; y < nodes[x].length; y++) {
-//                Node n = nodes[x][y];
-//                if (x == 0 && y == 0) {
+        for (int x = 0; x < nodes.length; x++) {
+            for (int y = 0; y < nodes[x].length; y++) {
+                Node n = nodes[x][y];
+                if (x == 0 && y == 0) {
 //                    System.out.print("S");
-//                } else if (x == xSize && y == 0) {
+                } else if (x == xSize && y == 0) {
 //                    System.out.print("G");
-//                } else if (n.used == 0L) {
-//                    emptyNode = n;
+                } else if (n.used == 0L) {
+                    emptyNode = n;
 //                    System.out.print("E");
-//                } else if (n.size > 250 * TERABYTE) {
-//                    wall.add(n);
+                } else if (n.size > 250 * TERABYTE) {
+                    wall.add(n);
 //                    System.out.print("#");
-//                } else {
+                } else {
 //                    System.out.print(".");
-//                }
-//            }
-//            System.out.println();
-//        }
+                }
+            }
+//           System.out.println();
+        }
         Integer minX = wall.stream().map(n -> n.x).min(Integer::compareTo).get() - 1;
         Node wallNode = nodes[minX][wall.get(0).y];
         int result = Math.abs(emptyNode.x - wallNode.x) + Math.abs(emptyNode.y - wallNode.y);
