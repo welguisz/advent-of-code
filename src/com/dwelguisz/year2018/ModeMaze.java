@@ -2,10 +2,12 @@ package com.dwelguisz.year2018;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
-import org.apache.commons.lang3.tuple.Pair;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,9 +21,8 @@ import java.util.stream.Collectors;
 
 public class ModeMaze extends AoCDay {
 
-    Map<Coord2D, Integer> geologicIndex;
-    Map<Coord2D, Integer> erosionLevel;
-    Map<Coord2D, Integer> riskLevel;
+    Map<Coord2D, MazePoint> caveMap;
+    Coord2D currentCaveEndpoint;
     public static Coord2D NORTH = new Coord2D(-1,0);
     public static Coord2D EAST = new Coord2D(0,1);
     public static Coord2D SOUTH = new Coord2D(1,0);
@@ -31,87 +32,60 @@ public class ModeMaze extends AoCDay {
     // 1-> wet // 0,2 -> climbing gear, nothing
     // 2-> narrow // 1,2 -> torch, nothing
     public static List<List<Integer>> ALLOWED_TOOLS = List.of(List.of(0,1),List.of(0,2),List.of(1,2));
-    public static List<String> TOOL = List.of("Climbing gear", "Torch", "Nothing");
 
-    public static class SeenNode {
-        Coord2D location;
-        Integer tool;
-        public final int hashCode;
-        public SeenNode(Coord2D location, Integer tool) {
-            this.location = location;
-            this.tool = tool;
-            this.hashCode = Objects.hash(location, tool);
-        }
-
-        @Override
-        public int hashCode() {
-            return this.hashCode;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null | getClass() != o.getClass()) return false;
-            SeenNode other = (SeenNode) o;
-            return (this.location.equals(other.location)) && (this.tool.equals(other.tool));
-        }
+    @Value
+    public static class MazePoint {
+        Coord2D coord;
+        int geologicIndex;
+        int erosionLevel;
+        int riskLevel;
     }
 
+    @Value
     public static class ModeMazeNode {
         Coord2D location;
-        Integer time;
-        Integer tool;
-        final int hashCode;
+        @EqualsAndHashCode.Exclude int time;
+        int tool;
+        @EqualsAndHashCode.Exclude List<ModeMazeNode> previousNodes;
 
 
-        public ModeMazeNode(Coord2D location, Integer tool, Integer time) {
+        public ModeMazeNode(Coord2D location, int tool, int time, List<ModeMazeNode> previousNodes) {
             this.location = location;
             this.time = time;
             this.tool = tool;
-            this.hashCode = Objects.hash(location, tool);
+            this.previousNodes = previousNodes;
         }
 
-        @Override
-        public int hashCode() {
-            return this.hashCode;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null | getClass() != o.getClass()) return false;
-            ModeMazeNode other = (ModeMazeNode) o;
-            return (this.location.equals(other.location)) && (this.tool.equals(other.tool));
-        }
-
-        List<ModeMazeNode> getNextNodes(Integer depth, Map<Coord2D, Integer> riskLevel, Set<SeenNode> seen) {
+        List<ModeMazeNode> getNextNodes(int depth, Set<ModeMazeNode> seen, ModeMaze maze, Coord2D target) {
             List<ModeMazeNode> nextNodes = new ArrayList<>();
             List<Coord2D> nextLocs = NEIGHBORS.stream()
-                    .map(n -> location.add(n))
+                    .map(location::add)
                     .filter(n -> n.x >= 0)
                     .filter(n -> n.y >= 0)
-                    .filter(n -> n.x < depth)
-                    .filter(n -> n.y < depth)
-                    .collect(Collectors.toList());
+                    .filter(n -> n.x < target.x+50)
+                    .filter(n -> n.y < target.y+50)
+                    .toList();
             for (Coord2D n : nextLocs) {
-                Integer terrian = riskLevel.get(n);
+                if (!maze.caveMap.containsKey(n)) {
+                    System.out.println("Building to " + n);
+                    maze.createMaze(depth, n);
+                }
+                int terrian = maze.caveMap.get(n).riskLevel;
                 List<Integer> allowedTools = ALLOWED_TOOLS.get(terrian);
+                List<ModeMazeNode> nextPrevious = new ArrayList<>(previousNodes);
+                nextPrevious.add(this);
                 if (allowedTools.contains(this.tool)) {
-                    nextNodes.add(new ModeMazeNode(n, tool, this.time + 1));
-                } else {
-                    for (Integer tool : allowedTools) {
-                        Integer currentRiskLevel = riskLevel.get(location);
-                        if (ALLOWED_TOOLS.get(currentRiskLevel).contains(tool)) {
-                            nextNodes.add(new ModeMazeNode(n, tool, time + 8));
-                        }
-                    }
+                    nextNodes.add(new ModeMazeNode(n, tool, this.time + 1, nextPrevious));
                 }
             }
-            return nextNodes.stream().filter(n -> !seen.contains(new SeenNode(n.location, n.tool))).collect(Collectors.toList());
+            for (int tool : ALLOWED_TOOLS.get(maze.caveMap.get(location).riskLevel)) {
+                List<ModeMazeNode> nextPrevious = new ArrayList<>(previousNodes);
+                nextPrevious.add(this);
+                if (tool != this.tool) {
+                    nextNodes.add(new ModeMazeNode(location, tool, this.time + 7, nextPrevious));
+                }
+            }
+            return nextNodes.stream().filter(n -> !seen.contains(n)).collect(Collectors.toList());
         }
 
         @Override
@@ -141,94 +115,86 @@ public class ModeMaze extends AoCDay {
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2018,22,false,0);
-        Integer depth = getDepth(lines.get(0));
+        caveMap = new HashMap<>();
+        currentCaveEndpoint = new Coord2D(0,0);
+        int depth = getDepth(lines.get(0));
         Coord2D target = getTarget(lines.get(1));
-        createMaze(depth, target);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(target);
+        part1Answer = solutionPart1(depth, target);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = "Not yet implemented"; //solutionPart2(target, depth);
+        part2Answer = solutionPart2(target, depth);
         timeMarkers[3] = Instant.now().toEpochMilli();
+    }
+
+    public MazePoint addMazePoint(int x, int y, int depth, Coord2D target) {
+        int geologicIndex = 0;
+        if (x == 0 && y == 0) {
+            geologicIndex = 0;
+        } else if (x == 0) {
+            geologicIndex = y * 48271;
+        } else if (y == 0) {
+            geologicIndex = x * 16807;
+        } else if (y == target.y && (x == target.x)) {
+            geologicIndex = 0;
+        } else {
+            geologicIndex = caveMap.get(new Coord2D(x - 1, y)).erosionLevel * caveMap.get(new Coord2D(x, y - 1)).erosionLevel;
+        }
+        int erosionLevel = (geologicIndex + depth) % 20183;
+        int riskLevel = erosionLevel % 3;
+        return new MazePoint(new Coord2D(x,y), geologicIndex, erosionLevel, riskLevel);
     }
 
     //1100 too high
     //1083 too high
     public void createMaze(Integer depth, Coord2D target) {
-        geologicIndex = new HashMap<>();
-        erosionLevel = new HashMap<>();
-        riskLevel = new HashMap<>();
-        for (Integer y = 0; y < 1600; y++) {
-            for (Integer x = 0; x < 1600; x++) {
-                Coord2D currentLoc = new Coord2D(y,x);
-                if (x.equals(0) && y.equals(0)) {
-                    geologicIndex.put(currentLoc,0);
-                } else if (x.equals(0)) {
-                    geologicIndex.put(currentLoc,y * 48271);
-                } else if (y.equals(0)) {
-                    geologicIndex.put(currentLoc, x * 16807);
-                } else if (y.equals(target.x) && (x.equals(target.y))) {
-                    geologicIndex.put(currentLoc,0);
-                } else {
-                    geologicIndex.put(currentLoc,erosionLevel.get(new Coord2D(y-1,x))*erosionLevel.get(new Coord2D(y,x-1)));
+        for (int y = 0; y <= target.y+50; y++) {
+            for (int x = 0; x <= target.x+50; x++) {
+                Coord2D currentLoc = new Coord2D(x, y);
+                if (!caveMap.containsKey(currentLoc)) {
+                    caveMap.put(currentLoc, addMazePoint(x, y, depth, target));
                 }
-                erosionLevel.put(currentLoc, (geologicIndex.get(currentLoc)+depth) % 20183);
-                riskLevel.put(currentLoc, erosionLevel.get(currentLoc) % 3);
             }
         }
     }
 
-    public Long solutionPart1(Coord2D target) {
-        Long riskCount = 0L;
-        for (Integer y = 0; y <= target.x; y++) {
-            for (Integer x = 0; x <= target.y; x++) {
-                riskCount += riskLevel.get(new Coord2D(y,x));
-            }
-        }
-        return riskCount;
+    public Long solutionPart1(int depth, Coord2D target) {
+        createMaze(depth, target);
+        return caveMap.entrySet().stream()
+                .filter(e -> e.getKey().x <= target.x && e.getKey().y <= target.y)
+                .mapToLong(e -> e.getValue().riskLevel)
+                .sum();
     }
 
-    public Long solutionPart2(Coord2D target, Integer depth) {
-        ModeMazeNode initialNode = new ModeMazeNode(new Coord2D(0,0),1,0);
+    public Integer solutionPart2(Coord2D target, int depth) {
+        ModeMazeNode initialNode = new ModeMazeNode(new Coord2D(0,0),1,0, new ArrayList<>());
         PriorityQueue<ModeMazeNode> queue = new PriorityQueue<>(2000,
-                (a,b) -> {
-                    Integer diffLength = a.time - b.time;
-                    return diffLength;
-                }
+                Comparator.comparingInt(a -> a.time)
         );
         queue.add(initialNode);
-        Set<SeenNode> visitedNodes = new HashSet<>();
+        Set<ModeMazeNode> visitedNodes = new HashSet<>();
         Set<ModeMazeNode> currentlyInTheQueue = new HashSet<>();
         currentlyInTheQueue.add(initialNode);
-        Coord2D transpose = new Coord2D(target.y,target.x);
-        Integer step = 0;
         while (!queue.isEmpty()) {
             ModeMazeNode currentNode = queue.poll();
             currentlyInTheQueue.remove(currentNode);
-            if (visitedNodes.contains(new SeenNode(currentNode.location, currentNode.tool))) {
+            if (visitedNodes.contains(currentNode)) {
                 continue;
             }
-            if (step == 100) {
-                //break;
-            }
-            //System.out.println(currentNode.toString());
-            visitedNodes.add(new SeenNode(currentNode.location, currentNode.tool));
+            visitedNodes.add(currentNode);
 
-            if (currentNode.location.equals(transpose)  && currentNode.tool.equals(1)) {
-                if (currentNode.tool.equals(1)) {
-                    return currentNode.time.longValue();
+            if (currentNode.location.equals(target)) {
+                if (currentNode.tool == 1) {
+                    return currentNode.time;
                 } else {
-                    queue.add(new ModeMazeNode(currentNode.location, 1, currentNode.time+7));
+                    List<ModeMazeNode> previous = new ArrayList<>(currentNode.previousNodes);
+                    previous.add(currentNode);
+                    queue.add(new ModeMazeNode(currentNode.location, 1, currentNode.time+7,previous));
                     continue;
                 }
             }
-            List<ModeMazeNode> nextNodes = currentNode.getNextNodes(depth, riskLevel, visitedNodes);
-            for (ModeMazeNode nextNode : nextNodes) {
-                if (currentlyInTheQueue.add(nextNode)) {
-                    queue.add(nextNode);
-                }
-            }
-            step++;
+            List<ModeMazeNode> nextNodes = currentNode.getNextNodes(depth, visitedNodes, this, target);
+            queue.addAll(nextNodes);
         }
-        return -1L;
+        return -1;
     }
 }
