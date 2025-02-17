@@ -41,8 +41,8 @@ public class ChronalCoordinates extends AoCDay {
         Integer maxX = points.stream().mapToInt(p -> p.x).max().getAsInt();
         Integer maxY = points.stream().mapToInt(p -> p.y).max().getAsInt();
         Map<Coord2D, Integer> count = new HashMap<>();
-        for (int x = minX-50; x < maxX+50;x++) {
-            for (int y = minY-50; y < maxY+50;y++) {
+        for (int x = minX; x < maxX;x++) {
+            for (int y = minY; y < maxY;y++) {
                 Map<Integer, List<Coord2D>> minPoints = new HashMap<>();
                 Coord2D tmpPoint = new Coord2D(x,y);
                 Integer minKey = Integer.MAX_VALUE;
