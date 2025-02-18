@@ -71,6 +71,9 @@ public class ChronalCharge extends AoCDay {
             }
         }
         for (int currentSize = 0; currentSize < powerGrid.length; currentSize++) {
+            if (currentSize >= location.z + 10) {
+                continue;
+            }
             for (int x = 0; x < powerGrid.length-1; x++) {
                 if (x+currentSize >= powerGrid.length) {
                     continue;
@@ -78,9 +81,6 @@ public class ChronalCharge extends AoCDay {
                 for (int y = 0; y < powerGrid[x].length; y++) {
                     if (y+currentSize >= powerGrid[x].length-1) {
                         continue;
-                    }
-                    if (x == 232 && y == 291 && currentSize == 5) {
-                        System.out.println("break");
                     }
                     Coord2D sLocation = new Coord2D(x,y);
                     Coord2D tInfor = values.get(sLocation);
@@ -100,23 +100,10 @@ public class ChronalCharge extends AoCDay {
                     if (maxPower < sum) {
                         maxPower = sum;
                         location = new Coord3D(x+1,y+1,currentSize+1);
-                        System.out.println("location: " + location + ", power: " + maxPower);
                     }
                 }
             }
         }
-//        for (int h = 1; h < 300; h++) {
-//            for (int i = 0; i < powerGrid.length - h; i++) {
-//                for (int j = 0; j < powerGrid[i].length - h; j++) {
-//                    Integer value = calculatePower(powerGrid, i, j, h);
-//                    if (maxPower < value) {
-//                        maxPower = value;
-//                        location = new Coord3D(i + 1, j + 1, h);
-//                        System.out.println("location: " + location + ", power: " + maxPower);
-//                    }
-//                }
-//            }
-//        }
         return location;
     }
 

@@ -226,7 +226,6 @@ public class ImmuneSystemSimulator20XX extends AoCDay {
             unitsRemaining = fight(combatants);
             needMoreBoost = combatants.stream().filter(c -> c.numberOfUnits > 0).anyMatch(c -> c.group.equals("Infection"));
         }
-        System.out.println("Boost level: " + boost);
         return unitsRemaining;
     }
 }
