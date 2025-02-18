@@ -64,21 +64,59 @@ public class ChronalCharge extends AoCDay {
     public Coord3D solutionPart2(Integer[][] powerGrid) {
         Coord3D location = new Coord3D(-1,-1, -1);
         Integer maxPower = Integer.MIN_VALUE;
-        for (int h = 300; h > 0; h--) {
-            int maxPossibleValue = h * h * 4;
-            if (maxPossibleValue < maxPower) {
-                break;
+        Map<Coord2D, Coord2D> values = new HashMap<>();
+        for (int x = 0; x < powerGrid.length; x++) {
+            for (int y = 0; y < powerGrid[x].length; y++) {
+                values.put(new Coord2D(x,y), new Coord2D(0, 0));
             }
-            for (int i = 0; i < powerGrid.length - h; i++) {
-                for (int j = 0; j < powerGrid[i].length - h; j++) {
-                    Integer value = calculatePower(powerGrid, i, j, h);
-                    if (maxPower < value) {
-                        maxPower = value;
-                        location = new Coord3D(i + 1, j + 1, h);
+        }
+        for (int currentSize = 0; currentSize < powerGrid.length; currentSize++) {
+            for (int x = 0; x < powerGrid.length-1; x++) {
+                if (x+currentSize >= powerGrid.length) {
+                    continue;
+                }
+                for (int y = 0; y < powerGrid[x].length; y++) {
+                    if (y+currentSize >= powerGrid[x].length-1) {
+                        continue;
+                    }
+                    if (x == 232 && y == 291 && currentSize == 5) {
+                        System.out.println("break");
+                    }
+                    Coord2D sLocation = new Coord2D(x,y);
+                    Coord2D tInfor = values.get(sLocation);
+                    Integer sum = tInfor.x;
+                    Integer newX = x + currentSize;
+                    Integer newY = y + currentSize;
+                    for (int i = 0; i < tInfor.y; i++) {
+                        sum += powerGrid[newX][y+i];
+                        sum += powerGrid[x+i][newY];
+                    }
+                    if (x + tInfor.y >= powerGrid.length || y + tInfor.y >= powerGrid.length) {
+                        values.put(sLocation, new Coord2D(tInfor.x, currentSize+1));
+                        continue;
+                    }
+                    sum += powerGrid[x+tInfor.y][y+tInfor.y];
+                    values.put(new Coord2D(x,y), new Coord2D(sum, currentSize+1));
+                    if (maxPower < sum) {
+                        maxPower = sum;
+                        location = new Coord3D(x+1,y+1,currentSize+1);
+                        System.out.println("location: " + location + ", power: " + maxPower);
                     }
                 }
             }
         }
+//        for (int h = 1; h < 300; h++) {
+//            for (int i = 0; i < powerGrid.length - h; i++) {
+//                for (int j = 0; j < powerGrid[i].length - h; j++) {
+//                    Integer value = calculatePower(powerGrid, i, j, h);
+//                    if (maxPower < value) {
+//                        maxPower = value;
+//                        location = new Coord3D(i + 1, j + 1, h);
+//                        System.out.println("location: " + location + ", power: " + maxPower);
+//                    }
+//                }
+//            }
+//        }
         return location;
     }
 
