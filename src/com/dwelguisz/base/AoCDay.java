@@ -52,13 +52,13 @@ public class AoCDay {
     public String previousPuzzle(Integer year, Integer day) {
         int previousDay = (day == 1) ? 25 : day - 1;
         int previousYear = (day == 1) ? year - 1 : year;
-        return String.format("[Previous (Year %d, Day %d)](../../../year%d/day%2d/README.md)",previousYear,previousDay,previousYear,previousDay);
+        return String.format("[Previous (Year %d, Day %d)](../../year%d/day%2d/README.md)",previousYear,previousDay,previousYear,previousDay);
     }
 
     public String nextPuzzle(Integer year, Integer day) {
         int nextDay = (day == 25) ? 1 : day + 1;
         int nextYear = (day == 25) ? year + 1 : year;
-        return String.format("[Next (Year %d, Day %d)](../../../year%d/day%2d/README.md)",nextYear,nextDay,nextYear,nextDay).replaceAll("day ", "day0");
+        return String.format("[Next (Year %d, Day %d)](../../year%d/day%2d/README.md)",nextYear,nextDay,nextYear,nextDay).replaceAll("day ", "day0");
     }
 
 

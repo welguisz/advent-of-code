@@ -73,4 +73,4 @@ use a loop and return the position when the level is -1.
 
 | |
 |:---|
-[Next (Year 2015, Day 2)](../../../year2015/day02/README.md)
+[Next (Year 2015, Day 2)](../../year2015/day02/README.md)
