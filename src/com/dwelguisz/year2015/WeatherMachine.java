@@ -19,7 +19,7 @@ public class WeatherMachine extends AoCYear {
     @Override
     public void runOneDay(int day) {
         AoCDay aocDay = AOC_DAYS[day-1];
-        aocDay.run();
+        aocDay.run(true, year, day);
     }
 
     @Override

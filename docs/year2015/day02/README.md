@@ -1,15 +1,15 @@
-# Day 2: I Was Told There Would Be No Math
+# Day 2 I was Told There Would Be No Math
 
 [Back to Top README file](../../../README.md)
+
 ## Overview
-Difficult Level: Easy
 
-Input: Lines of Dimensions given as `l*w*h`
+* [Puzzle Prompt](https://adventofcode.com/2015/day/2)
+* Difficult Level: 1 out of 10
+* [Input](https://adventofcode.com/2015/day/2/input): List of dimensions of in the form of lxwxh
+* Skills/Knowledge: Streaming, min
 
-## Parsing the input
-For each line, split the line by the character `x`. Store each line as a list of integers.
-
-## Part 1
+## Part 1 Solution:
 
 ### Basic Approach
 For each line:
@@ -51,7 +51,9 @@ For each line:
     }
 ```
 
-## Part 2
+
+## Part 2 Solution:
+
 ### Basic Approach
 For each line:
 * Find the perimeter of the rectangle that is the smallest
@@ -89,10 +91,24 @@ For each line:
         return minimumPerimeter.stream().mapToInt(p->p).sum() + ribbonVolume.stream().mapToInt(v->v).sum();
 ```
 
+
 ## Notes about this puzzle
+
 * There is only 3 dimensions and luckily, 3 choose 2 results in 3 different combinations to worry about. If there were 14 different dimensions, there would have been 91 different combinations to think about.
 * Might be useful to have a general function that can do combinations.
 
-| | | 
-|:----|----:|
-|[Previous (Day 1)](../day01/README.md)|[Next (Day 3)](../day03/README.md)|
+
+## Times
+
+* Parsing: 11 ms
+* Part 1 Solve time: 8 ms
+* Part 2 Solve time: 2 ms
+
+## Solutions: 
+
+* Part 1: 1598415
+* Part 2: 3812909
+
+| | |
+|:---|---:|
+|[Previous (Year 2015, Day 1)](../../year2015/day 1/README.md)|[Next (Year 2015, Day 3)](../../year2015/day03/README.md)|
