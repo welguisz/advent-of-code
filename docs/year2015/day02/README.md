@@ -111,4 +111,4 @@ For each line:
 
 | | |
 |:---|---:|
-|[Previous (Year 2015, Day 1)](../../year2015/day 1/README.md)|[Next (Year 2015, Day 3)](../../year2015/day03/README.md)|
+|[Previous (Year 2015, Day 1)](../../year2015/day01/README.md)|[Next (Year 2015, Day 3)](../../year2015/day03/README.md)|
