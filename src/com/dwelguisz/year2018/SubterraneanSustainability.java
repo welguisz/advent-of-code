@@ -38,7 +38,6 @@ public class SubterraneanSustainability extends AoCDay {
             if (scorePointer > 100) {
                 if (lastScore - currentScore != difference) {
                     difference = lastScore - currentScore;
-                    System.out.println("Difference at location " + scorePointer + " changed to " + difference);
                 }
             }
             lastScore = currentScore;

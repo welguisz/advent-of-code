@@ -93,4 +93,6 @@ For each line:
 * There is only 3 dimensions and luckily, 3 choose 2 results in 3 different combinations to worry about. If there were 14 different dimensions, there would have been 91 different combinations to think about.
 * Might be useful to have a general function that can do combinations.
 
+| | | 
+|:----|----:|
 |[Previous (Day 1)](../day01/README.md)|[Next (Day 3)](../day03/README.md)|

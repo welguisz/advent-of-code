@@ -248,7 +248,6 @@ public class BeverageBandits extends AoCDay {
             elfAttackPower++;
             Pair<Integer, Integer> results = fight(grid, true);
             if (results.getLeft() > 0) {
-                System.out.println("Elf Attack Power: " + elfAttackPower);
                 return results.getLeft() * results.getRight();
             }
         }

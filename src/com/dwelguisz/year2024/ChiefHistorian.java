@@ -21,13 +21,13 @@ public class ChiefHistorian extends AoCYear {
 
     @Override
     public void runOneDay(int day) {
-        runOneDay(day, true);
+        runOneDay(year, day, true);
     }
 
     @Override
-    public void runOneDay(int day, boolean printStatements) {
+    public void runOneDay(int year, int day, boolean printStatements) {
         AoCDay aoCDay = AOC_DAYS[day-1];
-        aoCDay.run(printStatements);
+        aoCDay.run(printStatements, year, day);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class AoCYear {
         System.out.println("|:-----:|:---|---:|---:|---:|---:|---:|");
 
         for (int i = 1; i <= 25; i++) {
-            runOneDay(i, false);
+            runOneDay(year, i, false);
             getSummary(i);
         }
         Long diffTime = Instant.now().toEpochMilli() - startTime;
@@ -27,10 +27,10 @@ public class AoCYear {
 
 
     public void runOneDay(int day) {
-        runOneDay(day, true);
+        runOneDay(year, day, true);
     }
 
-    public void runOneDay(int day, boolean printStatements) {
+    public void runOneDay(int year, int day, boolean printStatements) {
         System.out.println(String.format("Day %d for year %d has not been written", day, year));
 
     }

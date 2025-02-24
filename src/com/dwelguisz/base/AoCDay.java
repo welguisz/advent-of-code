@@ -9,25 +9,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.HttpCookie;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -37,7 +25,10 @@ import static java.lang.Integer.parseInt;
 public class AoCDay {
     private static String SESSION_ID = "53616c7465645f5fc2d415e9fd5facbee2c017f6e6a962da68d9bad559c6ec79f4a4e63217c0a6ee8eeb7d2cfd7699f0b3b399f756ef412cf6c5a916596b135c";
 
-    private static String RESOURCE_DIRECTORY = "/Users/davidwelguisz/coding/advent-of-code/src/resources/";
+    private static String DOCS_DIRECTORY = "/Users/davidwelguisz/coding/advent-of-code/docs/";
+
+    private static Coord2D MIN_PUZZLE = new Coord2D(2015, 1);
+    private static Coord2D MAX_PUZZLE = new Coord2D (2024, 25);
 
     @Setter
     private AoCClient aoCClient;
@@ -45,17 +36,37 @@ public class AoCDay {
     public Long timeMarkers[] = new Long[]{0L,0L,0L,0L};
     public Object part1Answer;
     public Object part2Answer;
+    public String puzzleName = "Not yet implemented";
+    public String difficultLevel;
+    public String inputDescription;
+    public String part1Solution;
+    public String part2Solution;
+    public List<String> skills = new ArrayList<>();
+    public String notesAboutPuzzle = null;
+    public boolean printExplanation = false;
+
     public void solve() {
         System.out.println("Not yet implemented");
     }
 
+    public String previousPuzzle(Integer year, Integer day) {
+        int previousDay = (day == 1) ? 25 : day - 1;
+        int previousYear = (day == 1) ? year - 1 : year;
+        return String.format("[Previous (Year %d, Day %d)](../../../year%d/day%2d/README.md)",previousYear,previousDay,previousYear,previousDay);
+    }
+
+    public String nextPuzzle(Integer year, Integer day) {
+        int nextDay = (day == 25) ? 1 : day + 1;
+        int nextYear = (day == 25) ? year + 1 : year;
+        return String.format("[Next (Year %d, Day %d)](../../../year%d/day%2d/README.md)",nextYear,nextDay,nextYear,nextDay).replaceAll("day ", "day0");
+    }
 
 
     public void run() {
-        run(true);
+        run(true, MIN_PUZZLE.x, MIN_PUZZLE.y);
     }
 
-    public void run(boolean printStatements) {
+    public void run(boolean printStatements, int year, int day) {
         solve();
         if (printStatements) {
             System.out.println("---------" + getClass().getName() + "------------");
@@ -64,7 +75,43 @@ public class AoCDay {
             System.out.println("Part 1 Answer: " + part1Answer);
             System.out.println("Part 2 Answer: " + part2Answer);
         }
+        if (printExplanation) {
+            StringBuffer markdown = new StringBuffer("# Day " + day + " " + puzzleName + "\n\n");
+            markdown.append("[Back to Top README file](../../../README.md)\n\n");
+            markdown.append("## Overview\n\n* [Puzzle Prompt](")
+                    .append(aocPuzzlePrompt(year,day))
+                    .append(")\n* Difficult Level: ").append(difficultLevel)
+                    .append("\n* [Input](").append(aocPuzzlePrompt(year,day)).append("/input): ").append(inputDescription)
+                    .append("\n* Skills/Knowledge: ").append(String.join(", ", skills))
+                    .append("\n\n");
+            markdown.append("## Part 1 Solution:\n\n").append(part1Solution).append("\n\n");
+            markdown.append("## Part 2 Solution:\n\n").append(part2Solution).append("\n\n");
+            if (notesAboutPuzzle != null) {
+                markdown.append("## Notes about this puzzle\n\n").append(notesAboutPuzzle).append("\n\n");
+            }
+            markdown.append("## Times\n\n");
+            markdown.append("* Parsing: ").append(timeMarkers[1] - timeMarkers[0]).append(" ms\n");
+            markdown.append("* Part 1 Solve time: ").append(timeMarkers[2] - timeMarkers[1]).append(" ms\n");
+            markdown.append("* Part 2 Solve time: ").append(timeMarkers[3] - timeMarkers[2]).append(" ms\n\n");
+            markdown.append("## Solutions: \n\n");
+            markdown.append("* Part 1: ").append(part1Answer).append("\n");
+            markdown.append("* Part 2: ").append(part2Answer).append("\n\n");
+            if (MIN_PUZZLE.equals(new Coord2D(year, day))) {
+                markdown.append("| |\n|:---|\n").append(nextPuzzle(year, day));
+            } else if (MAX_PUZZLE.equals(new Coord2D(year, day))) {
+                markdown.append("| |\n|---:|\n").append(previousPuzzle(year, day));
+            } else {
+                markdown.append("| | |\n|:---|---:|\n|").append(previousPuzzle(year, day)).append("|").append(nextPuzzle(year, day)).append("|\n");
+            }
+            try {
+                writeToDocsDirectory(year, day, markdown.toString());
+            } catch (IOException ignored) {}
+        }
 
+    }
+
+    String aocPuzzlePrompt(int year, int day) {
+        return "https://adventofcode.com/" + year + "/day/" + day;
     }
 
     public void printSummary(int i) {
@@ -126,6 +173,19 @@ public class AoCDay {
             System.out.println("Exception caught\n" + e);
         }
         return instructions;
+    }
+
+    private void writeToDocsDirectory(int year, int day, String body) throws IOException {
+        String separator = FileSystems.getDefault().getSeparator();
+        String directories[] = new String[]{DOCS_DIRECTORY, String.format("year%d",year),String.format("day%2d",day).replace(" ","0")};
+        Files.createDirectories(Path.of(String.join(separator, directories)));
+        File newFile = new File(String.join(separator, directories) + "/README.md");
+        try (FileWriter writer = new FileWriter(newFile)){
+            writer.write(body);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public List<Integer> convertStringsToInts(List<String> lines) {

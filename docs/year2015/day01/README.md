@@ -1,15 +1,17 @@
-# Day 1: Not Quite Lisp
+# Day 1 Not Quite Lisp
 
 [Back to Top README file](../../../README.md)
+
 ## Overview
-Difficult Level: Easy
 
-Input: A string that contains `(` and `)`
+* [Puzzle Prompt](https://adventofcode.com/2015/day/1)
+* Difficult Level: 1 out of 10
+* [Input](https://adventofcode.com/2015/day/1/input): String containing many `(` and `)`
+* Skills/Knowledge: Streaming, while loops
 
-## Part 1 Solution
+## Part 1 Solution:
 
-### Basic Solution
-Go through each character in the string. If the character is `(`, add 1 to the count. 
+Go through each character in the string. If the character is `(`, add 1 to the count.
 If the character is `)`, then subtract 1. The basic solution would look like:
 
 ```java
@@ -36,7 +38,9 @@ The above logic can be translated easily to a stream, like
     }
 ```
 
-## Part 2
+
+## Part 2 Solution:
+
 For Part2, there is not a way to use streams to find the answer. A good solution will
 use a loop and return the position when the level is -1.
 
@@ -55,4 +59,18 @@ use a loop and return the position when the level is -1.
 
 ```
 
-[Next Day](../day02/README.md)
+
+## Times
+
+* Parsing: 4 ms
+* Part 1 Solve time: 1 ms
+* Part 2 Solve time: 2 ms
+
+## Solutions: 
+
+* Part 1: 74
+* Part 2: 1795
+
+| |
+|:---|
+[Next (Year 2015, Day 2)](../../../year2015/day02/README.md)

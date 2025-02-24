@@ -204,8 +204,10 @@ public class SetAndForget extends AoCDay {
         }
 
         public boolean isIntersection(Coord2D point) {
-            List<Coord2D> neighbors = neighbors(point);
-            return map.getOrDefault(point,".").equals("#") && neighbors.stream().allMatch(n -> map.getOrDefault(n,".").equals("#"));
+            List<Coord2D> points = neighbors(point);
+            points.add(point);
+            List<String> values = points.stream().map(p -> map.getOrDefault(p, ".")).toList();
+            return values.stream().allMatch(v -> v.equals("F"));
         }
 
         public Integer calculateAlignment() {
@@ -237,7 +239,7 @@ public class SetAndForget extends AoCDay {
         robot.run();
         List<String> path = robot.findPath();
         //robot.printMap();
-        System.out.println(path);
+        //System.out.println(path);
         return robot.calculateAlignment();
     }
 
