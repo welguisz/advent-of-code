@@ -37,6 +37,7 @@ public class AoCDay {
     public Object part1Answer;
     public Object part2Answer;
     public String puzzleName = "Not yet implemented";
+    public String setup = null;
     public String difficultLevel;
     public String inputDescription;
     public String part1Solution;
@@ -84,6 +85,9 @@ public class AoCDay {
                     .append("\n* [Input](").append(aocPuzzlePrompt(year,day)).append("/input): ").append(inputDescription)
                     .append("\n* Skills/Knowledge: ").append(String.join(", ", skills))
                     .append("\n\n");
+            if (setup != null) {
+                markdown.append("## Setup\n\n").append(setup).append("\n\n");
+            }
             markdown.append("## Part 1 Solution:\n\n").append(part1Solution).append("\n\n");
             markdown.append("## Part 2 Solution:\n\n").append(part2Solution).append("\n\n");
             if (notesAboutPuzzle != null) {
