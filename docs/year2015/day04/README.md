@@ -1,14 +1,16 @@
-# Day 4: The Ideal Stocking Stuffer
+# Day 4 The Ideal Stocking Stuffer
 
 [Back to Top README file](../../../README.md)
+
 ## Overview
-Difficult Level: Easy
 
-Input: 8 random letters
+* [Puzzle Prompt](https://adventofcode.com/2015/day/4)
+* Difficult Level: 2 out of 10
+* [Input](https://adventofcode.com/2015/day/4/input): 8 random letter
+* Skills/Knowledge: MD5 Encryption
 
-Find the lowest integer that produces a MD5 hash that has a certain characterization
+## Part 1 Solution:
 
-## Part 1
 * Start a counter at 0.
 * Create a string that contains your input string plus a counter.
 * Do a MD5 hash on the created String
@@ -34,8 +36,12 @@ Find the lowest integer that produces a MD5 hash that has a certain characteriza
     }
 ```
 
-## Part 2
-Same as Part 1, but the first 6 characters of the digest are zero.
+
+## Part 2 Solution:
+
+Same as Part 1, but the first 6 characters of the digest are zero. If you want, you can start from your answer in Part1 since
+for Part2 to be true, the first 5 characters have to be zero, so you can skip all the integers from
+0 to `Part1 Answer`.
 
 ```java
     public Integer solutionPart2(String input) {
@@ -57,4 +63,17 @@ Same as Part 1, but the first 6 characters of the digest are zero.
     }
 ```
 
-|[Previous (Day 3)](../day03/README.md)|[Next (Day 5)](../day05/README.md)|
+## Times
+
+* Parsing: 4 ms
+* Part 1 Solve time: 130 ms
+* Part 2 Solve time: 1803 ms
+
+## Solutions: 
+
+* Part 1: 346386
+* Part 2: 9958218
+
+| | |
+|:---|---:|
+|[Previous (Year 2015, Day 3)](../../year2015/day03/README.md)|[Next (Year 2015, Day 5)](../../year2015/day05/README.md)|
