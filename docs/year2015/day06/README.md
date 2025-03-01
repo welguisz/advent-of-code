@@ -1,12 +1,17 @@
-# Day 6: Probably a Fire Hazard
+# Day 6 Probably a Fire Hazard
 
 [Back to Top README file](../../../README.md)
+
 ## Overview
-Difficult Level: Easy/Medium
 
-Input: List of instructions to control lights
+* [Puzzle Prompt](https://adventofcode.com/2015/day/6)
+* Difficult Level: 2 out of 10
+* [Input](https://adventofcode.com/2015/day/6/input): List of instructions to turn on/off lights
+* Skills/Knowledge: Grid Operations, Processing instructions
 
-## Parsing
+## Setup
+
+### Parsing
 For the parsing portion, I created a class that holds the following information:
 * Toggle
 * Turn On
@@ -17,7 +22,9 @@ This class also includes a function that will return all points from the upper l
 corner of the square (starting coordinate) to the lower right corner of the 
 square (ending coordinate).
 
-## Part 1
+
+## Part 1 Solution:
+
 Create a Map that has a Key of the `Coord2D` and value of `Boolean`. Depending on
 the instruction, change the value to `true`, `false`, or flip the value.
 
@@ -44,7 +51,9 @@ the instruction, change the value to `true`, `false`, or flip the value.
     }
 ```
 
-## Part 2
+
+## Part 2 Solution:
+
 Similar to Part 1, but instead of Boolean, use Integer. The brightness of the lights
 can't be negative.
 
@@ -71,4 +80,18 @@ can't be negative.
     }
 ```
 
-|[Previous (Day 5)](../day05/README.md)|[Next (Day 7)](../day07/README.md)|
+
+## Times
+
+* Parsing: 10 ms
+* Part 1 Solve time: 3753 ms
+* Part 2 Solve time: 3414 ms
+
+## Solutions: 
+
+* Part 1: 543903
+* Part 2: 14687245
+
+| | |
+|:---|---:|
+|[Previous (Year 2015, Day 5)](../../year2015/day05/README.md)|[Next (Year 2015, Day 7)](../../year2015/day07/README.md)|

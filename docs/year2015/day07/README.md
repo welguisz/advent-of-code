@@ -1,10 +1,15 @@
-# Day 7: Some Assembly Required
+# Day 7 Some Assembly Required
 
 [Back to Top README file](../../../README.md)
-## Overview
-Difficult Level: Easy/Medium
 
-Input: List of logic gates
+## Overview
+
+* [Puzzle Prompt](https://adventofcode.com/2015/day/7)
+* Difficult Level: 3 out of 10
+* [Input](https://adventofcode.com/2015/day/7/input): List of gates that have inputs from previous levels. Have to solve one level before solving the next.
+* Skills/Knowledge: Logic Gates, Processing Gates when allowed
+
+## Setup
 
 ## Parsing
 For the parsing portion, I created a class that holds the following information:
@@ -26,7 +31,9 @@ The class also contains the following functions:
 
 By having this class, it will make the solution for both parts straightforward
 
-## Both Parts
+
+## Part 1 Solution:
+
 After we have parsed the input file, we can just keep track of known values in
 a Map. If we can process an instruction (all inputs are known), we can set the
 output in the Map and remove the instruction from instruction list.
@@ -50,6 +57,9 @@ output in the Map and remove the instruction from instruction list.
 
 For part1, we just call `part1Answer = part1(logicGates, new HashMap<>())`
 
+
+## Part 2 Solution:
+
 For part 2, we have to add the following to our code:
 ```java
 Map<String,Integer> values = new HashMap<>();
@@ -57,4 +67,18 @@ values.put("b",part1Answer);
 part2Answer = part1(logicGates, values);
 ```
 
-|[Previous (Day 6)](../day06/README.md)|[Next (Day 8)](../day08/README.md)|
+
+## Times
+
+* Parsing: 9 ms
+* Part 1 Solve time: 6 ms
+* Part 2 Solve time: 4 ms
+
+## Solutions: 
+
+* Part 1: 956
+* Part 2: 40149
+
+| | |
+|:---|---:|
+|[Previous (Year 2015, Day 6)](../../year2015/day06/README.md)|[Next (Year 2015, Day 8)](../../year2015/day08/README.md)|
