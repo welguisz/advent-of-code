@@ -1,10 +1,15 @@
-# Day 9: All In A Single Night
+# Day 9 Matchsticks
 
 [Back to Top README file](../../../README.md)
-## Overview
-Difficult Level: Easy
 
-Input: List of cities with distances between the cities
+## Overview
+
+* [Puzzle Prompt](https://adventofcode.com/2015/day/9)
+* Difficult Level: 2 out of 10
+* [Input](https://adventofcode.com/2015/day/9/input): lines of strings that have been encoded
+* Skills/Knowledge: regex
+
+## Setup
 
 ## Parsing
 Parsing is straightforward with each line being of the format `City1 to 
@@ -29,17 +34,35 @@ would use the following code:
         }
 ```
 
-## Part 1
+
+## Part 1 Solution:
+
 For part1, it asked for the minimum distance that Santa could travelled. So that would be:
 
 ```java
 return travelledDistance.stream().mapToInt(d -> d).min().getAsInt();
 ```
 
-## Part 2,
+
+## Part 2 Solution:
+
 For part2, just changed minimum to maximum and we get:
 ```java
 return travelledDistance.stream().mapToInt(d -> d).max().getAsInt();
 ```
 
-|[Previous (Day 8)](../day08/README.md)|[Next (Day 10)](../day10/README.md)|
+
+## Times
+
+* Parsing: 40 ms
+* Part 1 Solve time: 4 ms
+* Part 2 Solve time: 3 ms
+
+## Solutions: 
+
+* Part 1: 141
+* Part 2: 736
+
+| | |
+|:---|---:|
+|[Previous (Year 2015, Day 8)](../../year2015/day08/README.md)|[Next (Year 2015, Day 10)](../../year2015/day10/README.md)|

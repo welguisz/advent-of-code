@@ -26,6 +26,8 @@ public class AllInASingleNight extends AoCDay {
         timeMarkers[2] = Instant.now().toEpochMilli();
         part2Answer = solutionPart2(allDistances);
         timeMarkers[3] = Instant.now().toEpochMilli();
+        printExplanation = true;
+        documentation();
     }
 
     public List<Integer> findAllDistances(List<String> lines) {
@@ -58,4 +60,50 @@ public class AllInASingleNight extends AoCDay {
     public Integer solutionPart2(List<Integer> distances) {
         return distances.stream().mapToInt(d -> d).max().getAsInt();
     }
+
+    void documentation() {
+        puzzleName = "All In A Single Night";
+        difficultLevel = "2 out of 10";
+        inputDescription = "lines of strings that have been encoded";
+        skills = List.of("regex");
+        setup = """
+## Parsing
+Parsing is straightforward with each line being of the format `City1 to\s
+City2 = distance`. From this data, we can create a HashMap of distances between
+cities and a Set of cities.
+
+## General approach to both parts
+Since we know the distance from City1 to City2 and we need to visit all cities, we
+can create all permutations for how Santa would travel. For my input, there are 8
+cities, so there will be 8! different permutations. To find all distances, we
+would use the following code:
+
+```java
+        Collection<List<String>> permutations = Collections2.permutations(places);
+        List<Integer> travelledDistance = new ArrayList<>();
+        for (List<String> p : permutations) {
+            Integer distance = 0;
+            for(int i = 0; i < p.size()-1; i++) {
+                distance += distances.get(Pair.of(p.get(i),p.get(i+1)));
+            }
+            travelledDistance.add(distance);
+        }
+```
+""";
+
+        part1Solution = """
+For part1, it asked for the minimum distance that Santa could travelled. So that would be:
+
+```java
+return travelledDistance.stream().mapToInt(d -> d).min().getAsInt();
+```
+""";
+        part2Solution = """
+For part2, just changed minimum to maximum and we get:
+```java
+return travelledDistance.stream().mapToInt(d -> d).max().getAsInt();
+```
+""";
+    }
+
 }

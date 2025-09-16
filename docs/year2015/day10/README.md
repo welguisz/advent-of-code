@@ -1,42 +1,54 @@
-# Day 10: Elves Look, Elves Say
+# Day 10 Elves Look Elves Say
 
 [Back to Top README file](../../../README.md)
+
 ## Overview
-Difficult Level: Easy
 
-Input: An Integer
+* [Puzzle Prompt](https://adventofcode.com/2015/day/10)
+* Difficult Level: 3 out of 10
+* [Input](https://adventofcode.com/2015/day/10/input): A 10 digit number that has numbers repeating
+* Skills/Knowledge: positional, regex lookahead
 
+## Setup
+
+## Parsing
+Parsing is straightforward and is just a number that is given. The biggest thing is to count
+consecutive numbers.  So, if you have the number 112222111, it should be read as Two 1s (21), Four twos (42), Three 1s (31)
 
 ## General approach to both parts
-There might be an elegant solution, but I couldn't think of one.  The only thing
-that I could think was a while loop that counts the number of consecutive
-characters and when it encounters a difference, add to the next string. This
-produces the following function:
+There might be a way to do this with regex where you match the current position of the string and count the number of identical
+numbers. There might be a way to do with regex but the approach of just counting the numbers for each step works.
+This approach might fail if the number of steps gets too high. Right now, at 50 steps, it takes 125 ms. For 40 steps,
+it took 27 ms.
+
+
+## Part 1 Solution:
+
+For part1, it asked for the length of the string after 40 steps.
 
 ```java
-    String LookAndSay(String inputStr) {
-        char[] digits = inputStr.toCharArray();
-        int currentPos = 0;
-        StringBuffer newString = new StringBuffer();
-        Character currentNum = digits[0];
-        int currentCount = 0;
-        while (currentPos < digits.length) {
-            if (digits[currentPos] == currentNum) {
-                currentCount++;
-            } else if (currentCount > 0){
-                newString.append(currentCount).append(currentNum);
-                currentCount = 1;
-                currentNum = digits[currentPos];
-            }
-            currentPos++;
+        for (int i = 0; i < steps; i++) {
+            tmpStr = LookAndSay(tmpStr);
         }
-        if (currentCount > 0) {
-            newString.append(currentCount).append(currentNum);
-        }
-        return newString.toString();
-    }
 ```
 
-For both parts, run the string through the loop the requested time.
 
-|[Previous (Day 9)](../day09/README.md)|[Next (Day 11)](../day11/README.md)|
+## Part 2 Solution:
+
+Same as part1, but with 50 steps.
+
+
+## Times
+
+* Parsing: 5 ms
+* Part 1 Solve time: 23 ms
+* Part 2 Solve time: 135 ms
+
+## Solutions: 
+
+* Part 1: 252594
+* Part 2: 3579328
+
+| | |
+|:---|---:|
+|[Previous (Year 2015, Day 9)](../../year2015/day09/README.md)|[Next (Year 2015, Day 11)](../../year2015/day11/README.md)|
