@@ -35,12 +35,7 @@ public class SecretEntrance extends AoCDay {
         int hit = 0;
         for (int value : values) {
             current += value;
-            while (current >= 100) {
-                current -= 100;
-            }
-            while (current < 0) {
-                current += 100;
-            }
+            current = ((current % 100) + 100) % 100;
             if (current == 0)
                 hit++;
         }
