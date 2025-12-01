@@ -99,7 +99,7 @@ public class AoCClient {
 
     private Instant allowedTime() {
         InputStream inputStream = classLoader.getResourceAsStream("next_allowed_time_to_fetch_from_advent_of_code.txt");
-        Instant allowedTime = Instant.now().minus(1, TimeUnit.SECONDS.toChronoUnit());
+        Instant allowedTime = Instant.now().minus(15, TimeUnit.MINUTES.toChronoUnit());
         if (inputStream == null) {
 
         } else {

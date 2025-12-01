@@ -79,5 +79,4 @@ For part1, it asked for the length of the string after 40 steps.
 Same as part1, but with 50 steps.
 """;
     }
-
 }

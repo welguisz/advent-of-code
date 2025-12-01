@@ -22,6 +22,8 @@ public class CorporatePolicy extends AoCDay {
         timeMarkers[2] = Instant.now().toEpochMilli();
         part2Answer = solutionPart1((String) part1Answer);
         timeMarkers[3] = Instant.now().toEpochMilli();
+        printExplanation = true;
+        documentation();
     }
 
     public String solutionPart1(String oldPassword) {
@@ -75,5 +77,35 @@ public class CorporatePolicy extends AoCDay {
         List<List<Character>> characterGroups = IntStream.range(0,chars.length-1).boxed().map(i -> List.of(chars[i],chars[i+1])).collect(Collectors.toList());
         Set<List<Character>> doubleLetters = characterGroups.stream().filter(cg -> cg.get(0) == cg.get(1)).collect(Collectors.toSet());
         return (doubleLetters.size() == 2);
+    }
+
+    void documentation() {
+        puzzleName = "Corporate Policy";
+        difficultLevel = "3 out of 10";
+        inputDescription = "Santa's expired password";
+        skills = List.of("iterate until new valid password is found");
+        setup = """
+## Parsing
+Santa's password 
+
+## General approach to both parts
+There might be a way to do this with regex where you match the current position of the string and count the number of identical
+numbers. There might be a way to do with regex but the approach of just counting the numbers for each step works.
+This approach might fail if the number of steps gets too high. Right now, at 50 steps, it takes 125 ms. For 40 steps,
+it took 27 ms.
+""";
+
+        part1Solution = """
+For part1, it asked for the length of the string after 40 steps.
+
+```java
+        for (int i = 0; i < steps; i++) {
+            tmpStr = LookAndSay(tmpStr);
+        }
+```
+""";
+        part2Solution = """
+Same as part1, but with 50 steps.
+""";
     }
 }
