@@ -54,7 +54,7 @@ public class AoCClient {
 
         String body = (client.send(req, HttpResponse.BodyHandlers.ofString()).body());
 
-        Instant nextAllowedTime = Instant.now().plus(15, TimeUnit.SECONDS.toChronoUnit());
+        Instant nextAllowedTime = Instant.now().plus(15, TimeUnit.MINUTES.toChronoUnit());
 
         writeToCurrentResourceDirectory(body);
         writeToLongLivedResourceDirectory(body);
@@ -99,7 +99,7 @@ public class AoCClient {
 
     private Instant allowedTime() {
         InputStream inputStream = classLoader.getResourceAsStream("next_allowed_time_to_fetch_from_advent_of_code.txt");
-        Instant allowedTime = Instant.now().minus(15, TimeUnit.MINUTES.toChronoUnit());
+        Instant allowedTime = Instant.now().minus(1, TimeUnit.SECONDS.toChronoUnit());
         if (inputStream == null) {
 
         } else {

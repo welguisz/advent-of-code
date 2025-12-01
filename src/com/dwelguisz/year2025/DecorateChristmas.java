@@ -3,10 +3,10 @@ package com.dwelguisz.year2025;
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.base.AoCYear;
 
-public class AoCYear2025 extends AoCYear  {
-    AoCDay AOC_DAYS[] = {new AoC2025Day01()};
+public class DecorateChristmas extends AoCYear  {
+    AoCDay AOC_DAYS[] = {new SecretEntrance()};
 
-    public AoCYear2025(int year) { super(year); }
+    public DecorateChristmas(int year) { super(year); }
 
     @Override
     public void runOneDay(int day) {
