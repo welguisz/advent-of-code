@@ -4,7 +4,7 @@ import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.base.AoCYear;
 
 public class DecorateChristmas extends AoCYear  {
-    AoCDay AOC_DAYS[] = {new SecretEntrance()};
+    AoCDay AOC_DAYS[] = {new SecretEntrance(), new GiftShop()};
 
     public DecorateChristmas(int year) { super(year); }
 
