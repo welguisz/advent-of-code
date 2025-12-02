@@ -66,26 +66,11 @@ public class GiftShop extends AoCDay {
         // Maybe something of \d{size}\1
         for (int i = 1; i < size; i++) {
             if (size % i == 0) {
-                List<String> splits = new ArrayList<>();
-                for (int j = 0; j < size; j += i) {
-                    splits.add(newValue.substring(j, j + i));
-                }
-                boolean invalid = true;
-                int j = 0;
-                while(invalid) {
-                    while (invalid && (j < splits.size())) {
-                        int k = j + 1;
-                        while(invalid && (k < splits.size())) {
-                            if(!splits.get(j).equals(splits.get(k))) {
-                                invalid = false;
-                            }
-                            k++;
-                        }
-                        j++;
-                    }
-                    if (invalid) {
-                        return true;
-                    }
+                int replicateSize = size / i;
+                String base = newValue.substring(0, i);
+                String newString = base.repeat(replicateSize);
+                if(newString.toString().equals(newValue)) {
+                    return true;
                 }
             }
         }
