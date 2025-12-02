@@ -28,7 +28,7 @@ public class AoCDay {
     private static String DOCS_DIRECTORY = "/Users/davidwelguisz/coding/advent-of-code/docs/";
 
     private static Coord2D MIN_PUZZLE = new Coord2D(2015, 1);
-    private static Coord2D MAX_PUZZLE = new Coord2D (2024, 25);
+    private static Coord2D MAX_PUZZLE = new Coord2D (2025, 1);
 
     @Setter
     private AoCClient aoCClient;
