@@ -16,28 +16,16 @@ public class Lobby extends AoCDay {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2025, 3, false, 0);
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(lines);
+        part1Answer = solutionPart1(lines, 2);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(lines);
+        part2Answer = solutionPart1(lines, 12);
         timeMarkers[3] = Instant.now().toEpochMilli();
         printExplanation = true;
     }
 
 
-    public long solutionPart1(List<String> lines) {
-        long answer = 0l;
-        for (String line : lines) {
-            answer += getJolts(line, 2);
-        }
-        return answer;
-    }
-
-    public long solutionPart2(List<String> lines) {
-        long answer = 0l;
-        for (String line : lines) {
-            answer += getJolts(line, 12);
-        }
-        return answer;
+    public long solutionPart1(List<String> lines, final Integer battery_size) {
+        return lines.stream().map(l -> getJolts(l, battery_size)).reduce(0L, Long::sum);
     }
 
     long getJolts(String line, int size) {
