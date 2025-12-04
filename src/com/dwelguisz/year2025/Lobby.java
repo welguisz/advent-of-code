@@ -36,9 +36,7 @@ public class Lobby extends AoCDay {
             value *= 10;
             int maxValue = values.subList(position, values.size() - i).stream().mapToInt(Integer::intValue).max().getAsInt();
             value += maxValue;
-            int lastposition = position;
-            position = values.subList(position, values.size() - i).indexOf(maxValue);
-            position += lastposition + 1;
+            position = values.subList(position, values.size() - i).indexOf(maxValue) + position + 1;
         }
         return value;
     }
