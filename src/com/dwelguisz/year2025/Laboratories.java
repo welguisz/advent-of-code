@@ -2,20 +2,17 @@ package com.dwelguisz.year2025;
 
 import com.dwelguisz.base.AoCDay;
 import com.dwelguisz.utilities.Coord2D;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static com.dwelguisz.utilities.Grid.createCharGrid;
 import static com.dwelguisz.utilities.Grid.createCharGridMap;
 
-public class AoC2025Day07 extends AoCDay {
+public class Laboratories extends AoCDay {
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2025, 7, false, 0);
