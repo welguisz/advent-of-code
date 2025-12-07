@@ -12,35 +12,33 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.dwelguisz.utilities.Grid.createCharGridMap;
+import static com.dwelguisz.utilities.Grid.getStartingPoint;
 
 public class Laboratories extends AoCDay {
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
         List<String> lines = readResoruceFile(2025, 7, false, 0);
         int maxLine = lines.size();
-        Map<Coord2D, Character> fullgrid = createCharGridMap(lines);
-        Map<Coord2D, Character> grid = fullgrid.entrySet().stream()
-                .filter(e -> e.getValue() != '.')
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<Coord2D, Character> grid = createCharGridMap(lines);
+        Coord2D startingPoint = getStartingPoint(grid, 'S');
+        Set<Coord2D> splitters = grid.entrySet().stream().filter(e -> e.getValue() == '^')
+                .map(e -> e.getKey()).collect(Collectors.toSet());
         timeMarkers[1] = Instant.now().toEpochMilli();
-        part1Answer = solutionPart1(grid, maxLine);
+        part1Answer = solutionPart1(splitters, startingPoint, maxLine);
         timeMarkers[2] = Instant.now().toEpochMilli();
-        part2Answer = solutionPart2(grid, maxLine);
+        part2Answer = solutionPart2(splitters, startingPoint, maxLine);
         timeMarkers[3] = Instant.now().toEpochMilli();
         printExplanation = true;
     }
 
-    long solutionPart1(Map<Coord2D, Character> grid, int maxLine) {
-        Coord2D startingPoint = grid.entrySet().stream().filter(e -> e.getValue() == 'S')
-                .findFirst().get().getKey();
-
+    long solutionPart1(Set<Coord2D> splitters, Coord2D startingPoint, int maxLine) {
         Set<Coord2D> currentRow = new HashSet<>();
         currentRow.add(startingPoint);
         int split = 0;
         for(int i = 1; i < maxLine; i++) {
             Set<Coord2D> nextRow = new HashSet<>();
             for (Coord2D loc : currentRow) {
-                if (!grid.containsKey(new Coord2D(i, loc.y))) {
+                if (!splitters.contains(new Coord2D(i, loc.y))) {
                     nextRow.add(new Coord2D(i,loc.y));
                 } else {
                     split++;
@@ -53,9 +51,7 @@ public class Laboratories extends AoCDay {
         return split;
     }
 
-    long solutionPart2(Map<Coord2D, Character> grid, int maxLine) {
-        Coord2D startingPoint = grid.entrySet().stream().filter(e -> e.getValue() == 'S')
-                .findFirst().get().getKey();
+    long solutionPart2(Set<Coord2D> splitters, Coord2D startingPoint, int maxLine) {
         HashMap<Coord2D, Long> counts = new HashMap<>();
         Set<Coord2D> currentRow = new HashSet<>();
         currentRow.add(startingPoint);
@@ -63,15 +59,15 @@ public class Laboratories extends AoCDay {
         for(int i = 1; i < maxLine; i++) {
             Set<Coord2D> nextRow = new HashSet<>();
             for (Coord2D loc : currentRow) {
-                if (!grid.containsKey(new Coord2D(i,loc.y))) {
+                if (!splitters.contains(new Coord2D(i,loc.y))) {
                     Coord2D thisLoc = new Coord2D(i,loc.y);
                     nextRow.add(thisLoc);
-                    counts.put(thisLoc, counts.get(loc) + counts.getOrDefault(thisLoc, 0L));
+                    counts.merge(thisLoc, counts.get(loc), (a, b) -> a + b);
                 } else {
                     Coord2D thisRow = new Coord2D(i, loc.y-1);
-                    counts.put(thisRow, counts.get(loc) + counts.getOrDefault(thisRow, 0l));
+                    counts.merge(thisRow, counts.get(loc), (a, b) -> a + b);
                     thisRow = new Coord2D(i, loc.y+1);
-                    counts.put(thisRow, counts.get(loc) + counts.getOrDefault(thisRow, 0l));
+                    counts.merge(thisRow, counts.get(loc), (a, b) -> a + b);
                     nextRow.add(new Coord2D(i, loc.y - 1));
                     nextRow.add(new Coord2D(i, loc.y + 1));
                 }
