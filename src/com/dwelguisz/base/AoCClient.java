@@ -148,7 +148,7 @@ public class AoCClient {
     private void writeNewAllowedTimeToCurrentResourceDirectory(Instant allowedTime) {
         String resourcePath = classLoader.getResource("").getPath();
         String separator = FileSystems.getDefault().getSeparator();
-        try (FileWriter writer = new FileWriter(resourcePath+separator+"next_allowed_time_to_fetch_from_advent_of_code.txt")) {
+        try (FileWriter writer = new FileWriter(resourcePath+separator+ "next_allowed_time_to_fetch_from_advent_of_code.txt")) {
             writer.write(""+allowedTime.toEpochMilli());
         } catch (IOException e) {
             e.printStackTrace();
@@ -157,7 +157,7 @@ public class AoCClient {
 
     private void writeNewAllowedTimeToLongLivedResourceDirectory(Instant allowedTime) {
         String separator = FileSystems.getDefault().getSeparator();
-        try (FileWriter writer = new FileWriter(RESOURCE_DIRECTORY+separator+"next_allowed_time_to_fetch_from_advent_of_code.txt")) {
+        try (FileWriter writer = new FileWriter(RESOURCE_DIRECTORY+separator+ "next_allowed_time_to_fetch_from_advent_of_code.txt")) {
             writer.write(""+allowedTime.toEpochMilli());
         } catch (IOException e) {
             e.printStackTrace();

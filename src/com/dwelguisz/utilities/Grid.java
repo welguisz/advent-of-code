@@ -15,11 +15,15 @@ public class Grid {
 
 
     public static char[][] createCharGrid(List<String> lines) {
-        char[][] grid = new char[lines.size()][lines.get(0).length()];
+        int maxY = lines.stream().map(String::length).max(Integer::compare).get();
+        char[][] grid = new char[lines.size()][maxY];
         int i = 0;
         for(String line : lines) {
             for (int j = 0; j < line.length(); j++) {
                 grid[i][j] = line.charAt(j);
+            }
+            for(int j = line.length(); j < maxY; j++) {
+                grid[i][j] = ' ';
             }
             i++;
         }
