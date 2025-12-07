@@ -19,9 +19,9 @@ null
 
 ## Times
 
-* Parsing: 10 ms
-* Part 1 Solve time: 6 ms
-* Part 2 Solve time: 8 ms
+* Parsing: 14 ms
+* Part 1 Solve time: 3 ms
+* Part 2 Solve time: 4 ms
 
 ## Solutions: 
 
