@@ -14,47 +14,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 
 public class Playground extends AoCDay {
     List<Coord3D> points;
-
-    class BadUnionFind {
-        Integer[] sizes;
-        Integer[] parents;
-        public BadUnionFind(int size) {
-            sizes = new Integer[size];
-            parents = new Integer[size];
-            for(int i = 0; i < size; i++) {
-                parents[i] = i;
-                sizes[i] = 1;
-            }
-        }
-
-        public Integer find(Integer x) {
-            if (x.equals(parents[x]))
-                return x;
-            int parent = find(parents[x]);
-            parents[x] = parent;
-            return parent;
-        }
-
-        public void union(Integer a, Integer b) {
-            Integer f_a = find(a);
-            Integer f_b = find(b);
-            if (f_a.equals(f_b)) {
-                return;
-            }
-            if (sizes[f_a] <= sizes[f_b]) {
-                parents[f_a] = f_b;
-                sizes[f_b] += sizes[f_a];
-            } else {
-                parents[f_b] = f_a;
-                sizes[f_a] += sizes[f_b];
-            }
-        }
-    }
 
     public void solve() {
         timeMarkers[0] = Instant.now().toEpochMilli();
