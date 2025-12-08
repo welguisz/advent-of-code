@@ -40,6 +40,9 @@ public class Coord3D {
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y) + Math.abs(this.z - other.z);
     }
 
+    public Long euclideanDistance(Coord3D other) {
+        return (long) (this.x - other.x) * (this.x - other.x) + (long) (this.y - other.y) * (this.y - other.y) + (long) (this.z - other.z) * (this.z - other.z);
+    }
     public String toString() {
         return "["+x+","+y+","+z+"]";
     }
