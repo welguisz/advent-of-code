@@ -15,5 +15,6 @@
     <orderEntry type="library" name="google.guava" level="project" />
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" name="jgrapht.core" level="project" />
+    <orderEntry type="library" name="tools.aqua.z3.turnkey" level="project" />
   </component>
 </module>
