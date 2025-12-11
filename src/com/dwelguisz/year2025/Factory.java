@@ -67,7 +67,7 @@ public class Factory extends AoCDay {
             }
             return -10000000;
         }
-        
+
         public int solvePart2() {
             Context ctx = new Context();
             Optimize opt = ctx.mkOptimize();
