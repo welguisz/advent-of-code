@@ -66,6 +66,11 @@ public class Reactor extends AoCDay {
     }
 
     public long solutionPart1(Map<String, List<String>> values) {
+        memoizationCache = new HashMap<>();
+        return dfs("you", new HashSet<>(), Set.of(), values);
+    }
+
+    public long solutionPart1BFS(Map<String, List<String>> values) {
         Set<List<String>> completedPaths = new HashSet<>();
         Queue<ReactorPath> queue = new LinkedList<>();
         queue.add(new ReactorPath("you", new HashSet<>()));
@@ -90,16 +95,17 @@ public class Reactor extends AoCDay {
         }
         return completedPaths.size();
     }
+
+
     Map<ReactorPath, Long> memoizationCache;
     public long solutionPart2(Map<String, List<String>> values) {
         memoizationCache = new HashMap<>();
-        long value = dfs("svr", new HashSet<>(), values);
-        return value;
+        return dfs("svr", new HashSet<>(), Set.of("fft", "dac"), values);
     }
 
-    public long dfs(String node, Set<String> visited_node, Map<String, List<String>> values) {
+    public long dfs(String node, Set<String> visited_node, Set<String> mustIncludeNodes,Map<String, List<String>> values) {
         if (node.equals("out")) {
-            return (visited_node.containsAll(Set.of("dac", "fft"))) ? 1 : 0;
+            return (visited_node.containsAll(mustIncludeNodes)) ? 1 : 0;
         }
         ReactorPath key = new ReactorPath(node, visited_node);
         if (memoizationCache.containsKey(key)) {
@@ -109,10 +115,10 @@ public class Reactor extends AoCDay {
         for (String neighbor : values.get(node)) {
             if (!visited_node.contains(neighbor)) {
                 Set<String> newVisitedNode = new HashSet<>(visited_node);
-                if (neighbor.equals("dac") || neighbor.equals("fft")) {
+                if (mustIncludeNodes.contains(neighbor)) {
                     newVisitedNode.add(neighbor);
                 }
-                total_paths += dfs(neighbor, newVisitedNode, values);
+                total_paths += dfs(neighbor, newVisitedNode, mustIncludeNodes, values);
             }
         }
         memoizationCache.put(key, total_paths);
