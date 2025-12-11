@@ -99,10 +99,7 @@ public class Reactor extends AoCDay {
 
     public long dfs(String node, Set<String> visited_node, Map<String, List<String>> values) {
         if (node.equals("out")) {
-            if (visited_node.contains("dac") && visited_node.contains("fft")) {
-                return 1;
-            }
-            return 0;
+            return (visited_node.containsAll(Set.of("dac", "fft"))) ? 1 : 0;
         }
         ReactorPath key = new ReactorPath(node, visited_node);
         if (memoizationCache.containsKey(key)) {
@@ -118,7 +115,6 @@ public class Reactor extends AoCDay {
                 total_paths += dfs(neighbor, newVisitedNode, values);
             }
         }
-        System.out.println("Finished node " + node);
         memoizationCache.put(key, total_paths);
         return total_paths;
     }
